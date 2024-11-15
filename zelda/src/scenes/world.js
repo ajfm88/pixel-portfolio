@@ -5,7 +5,7 @@ export default async function world(k) {
     k.fixed(),
   ]);
   const mapData = await (await fetch("./assets/maps/world.json")).json();
-  const map = k.add([k.pos(0, 0), k.scale(4)]);
+  const map = k.add([k.pos(0, 0)]);
 
   const entities = {
     player: null,
@@ -28,6 +28,20 @@ export default async function world(k) {
       continue;
     }
 
+    if (layer.name === "CameraPositions") {
+      for (const object of layer.objects) {
+        map.add([
+          k.rect(object.width, object.height),
+          k.pos(object.x, object.y + 16),
+          k.area(),
+          k.opacity(0),
+          k.offscreen(),
+          "camPosition",
+        ]);
+      }
+      continue;
+    }
+
     if (layer.name === "SpawnPoints") {
       for (const object of layer.objects) {
         if (object.name === "player") {
@@ -40,9 +54,18 @@ export default async function world(k) {
             k.pos(object.x, object.y),
             {
               speed: 80,
-              prevPos: null,
             },
           ]);
+
+          entities.player.onCollide("camPosition", async (camPosition) => {
+            await k.tween(
+              k.camPos(),
+              camPosition.worldPos(),
+              1,
+              (val) => k.camPos(val),
+              k.easings.easeInSine
+            );
+          });
         }
       }
       continue;
@@ -70,45 +93,17 @@ export default async function world(k) {
     }
   }
 
-  // const player = k.add([
-  //   k.sprite("assets", { anim: "player-side" /* anim: "player-idle" */ }),
-  //   k.scale(4),
-  //   k.area(),
-  //   k.body(),
-  //   k.pos(500, 500),
-  //   {
-  //     speed: 500,
-  //   },
-  // ]);
-
   const player = entities.player;
 
   player.onCollide("door-entrance", () => k.go(2));
-  player.onBeforePhysicsResolve((collision) => {
-    //collision.preventResolution();
 
-    player.pos = player.prevPos;
-  });
-
+  k.camScale(4);
   k.camPos(player.worldPos());
   k.onUpdate(() => {
-    player.prevPos = player.pos;
-    const playerCollisions = player.getCollisions();
-
-    for (const collision of playerCollisions) {
-      if (Math.abs(collision.source.pos.x - collision.target.pos.x) > 20) {
-        k.camPos(player.worldPos());
-      }
-    }
+    k.camPos(player.worldPos());
   });
 
   k.onKeyDown("left", () => {
-    const playerCollisions = player.getCollisions();
-    if (playerCollisions.length > 0) {
-      const collision = playerCollisions[0];
-      console.log(Math.abs(collision.source.pos.x - collision.target.pos.x));
-    }
-
     player.flipX = true;
     if (player.curAnim() !== "player-side") {
       player.play("player-side");
