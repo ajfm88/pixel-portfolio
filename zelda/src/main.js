@@ -9,17 +9,19 @@ k.loadSprite("assets", "./assets/topdownasset.png", {
   sliceX: 39,
   sliceY: 31,
   anims: {
-    "player-idle": 936,
+    "player-idle-down": 936,
     "player-down": {
       from: 936,
       to: 939,
       loop: true,
     },
+    "player-idle-side": 976,
     "player-side": {
       from: 976,
       to: 978,
       loop: true,
     },
+    "player-idle-up": 1014,
     "player-up": {
       from: 1014,
       to: 1017,
@@ -28,9 +30,15 @@ k.loadSprite("assets", "./assets/topdownasset.png", {
   },
 });
 
-const scenes = [menu, world, house, gameOver, endGame];
-for (const [index, scene] of scenes.entries()) {
-  k.scene(index, () => scene(k));
+const scenes = {
+  menu,
+  world,
+  house,
+  gameOver,
+  endGame,
+};
+for (const sceneName in scenes) {
+  k.scene(sceneName, () => scenes[sceneName](k));
 }
 
-k.go(1);
+k.go("world");
