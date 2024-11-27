@@ -1,40 +1,32 @@
 import { playAnimIfNotPlaying } from "../utils.js";
 
+const slimeMovementStates = ["left", "right", "up", "down"];
+
 export function generateSlimeComponents(k, pos) {
   return [
     k.sprite("assets", { frame: 858 }),
-    k.area(),
+    k.area({ shape: new k.Rect(k.vec2(0, 4), 16, 10) }),
     k.body(),
     k.pos(pos),
     k.offscreen(),
     k.timer(),
-    k.state("idle", ["idle", "left", "right", "up", "down"]),
+    k.state("idle", ["idle", ...slimeMovementStates]),
     {
       speed: 50,
+      lineOfSight: 30,
     },
   ];
 }
 
 export function setSlimeAI(k, slime) {
-  slime.onStateEnter("idle", (previousState) => {
+  slime.onStateEnter("idle", () => {
     slime.stop();
     slime.wait(2, () => {
-      if (previousState === "left") {
-        slime.enterState("right");
-        return;
-      }
-
-      if (previousState === "up") {
-        slime.enterState("down");
-        return;
-      }
-
-      if (previousState === "right") {
-        slime.enterState("up");
-        return;
-      }
-
-      slime.enterState("left");
+      slime.enterState(
+        slimeMovementStates[
+          Math.floor(Math.random() * slimeMovementStates.length)
+        ]
+      );
     });
   });
 
@@ -43,9 +35,9 @@ export function setSlimeAI(k, slime) {
     playAnimIfNotPlaying(slime, "slime-side");
 
     let stop = false;
-    const movementUdate = k.onUpdate(() => {
+    const movementUpdate = k.onUpdate(() => {
       if (stop) {
-        movementUdate.cancel();
+        movementUpdate.cancel();
         return;
       }
 
@@ -54,7 +46,7 @@ export function setSlimeAI(k, slime) {
 
     slime.wait(3, () => {
       stop = true;
-      slime.enterState("idle", "left");
+      slime.enterState("idle");
     });
   });
 
@@ -63,9 +55,9 @@ export function setSlimeAI(k, slime) {
     playAnimIfNotPlaying(slime, "slime-side");
 
     let stop = false;
-    const movementUdate = k.onUpdate(() => {
+    const movementUpdate = k.onUpdate(() => {
       if (stop) {
-        movementUdate.cancel();
+        movementUpdate.cancel();
         return;
       }
 
@@ -74,7 +66,7 @@ export function setSlimeAI(k, slime) {
 
     slime.wait(3, () => {
       stop = true;
-      slime.enterState("idle", "right");
+      slime.enterState("idle");
     });
   });
 
@@ -83,9 +75,9 @@ export function setSlimeAI(k, slime) {
     playAnimIfNotPlaying(slime, "slime-up");
 
     let stop = false;
-    const movementUdate = k.onUpdate(() => {
+    const movementUpdate = k.onUpdate(() => {
       if (stop) {
-        movementUdate.cancel();
+        movementUpdate.cancel();
         return;
       }
 
@@ -94,7 +86,7 @@ export function setSlimeAI(k, slime) {
 
     slime.wait(3, () => {
       stop = true;
-      slime.enterState("idle", "up");
+      slime.enterState("idle");
     });
   });
 
@@ -103,9 +95,9 @@ export function setSlimeAI(k, slime) {
     playAnimIfNotPlaying(slime, "slime-down");
 
     let stop = false;
-    const movementUdate = k.onUpdate(() => {
+    const movementUpdate = k.onUpdate(() => {
       if (stop) {
-        movementUdate.cancel();
+        movementUpdate.cancel();
         return;
       }
 
@@ -114,7 +106,7 @@ export function setSlimeAI(k, slime) {
 
     slime.wait(3, () => {
       stop = true;
-      slime.enterState("idle", "down");
+      slime.enterState("idle");
     });
   });
 }
