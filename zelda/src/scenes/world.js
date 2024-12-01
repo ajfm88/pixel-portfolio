@@ -3,18 +3,16 @@ import {
   setPlayerControls,
 } from "../entities/player.js";
 import { generateSlimeComponents, setSlimeAI } from "../entities/slime.js";
+import {
+  colorizeBackground,
+  drawTiles,
+  fetchMapData,
+  drawBoundaries,
+} from "../utils.js";
 
-function drawSea(k) {
-  k.add([
-    k.rect(k.canvas.width, k.canvas.height),
-    k.color(76, 170, 255), //k.color(111, 106, 191), // k.color(76, 170, 255),
-    k.fixed(),
-  ]);
-}
-
-export default async function world(k) {
-  drawSea(k);
-  const mapData = await (await fetch("./assets/maps/world.json")).json();
+export default async function world(k, previousSceneData = null) {
+  colorizeBackground(k, 76, 170, 255);
+  const mapData = await fetchMapData("./assets/maps/world.json");
   const map = k.add([k.pos(0, 0)]);
 
   const entities = {
@@ -25,17 +23,7 @@ export default async function world(k) {
   const layers = mapData.layers;
   for (const layer of layers) {
     if (layer.name === "Boundaries") {
-      for (const object of layer.objects) {
-        map.add([
-          k.rect(object.width, object.height),
-          k.pos(object.x, object.y + 16),
-          k.area(),
-          k.body({ isStatic: true }),
-          k.opacity(0),
-          k.offscreen(),
-          object.name,
-        ]);
-      }
+      drawBoundaries(k, map, layer);
       continue;
     }
 
@@ -57,32 +45,14 @@ export default async function world(k) {
       continue;
     }
 
-    let nbOfDrawnTiles = 0;
-    const tilePos = k.vec2(0, 0);
-    for (const tile of layer.data) {
-      if (nbOfDrawnTiles % layer.width === 0) {
-        tilePos.x = 0;
-        tilePos.y += mapData.tileheight;
-      } else {
-        tilePos.x += mapData.tilewidth;
-      }
-
-      nbOfDrawnTiles++;
-
-      if (tile === 0) continue;
-
-      map.add([
-        k.sprite("assets", { frame: tile - 1 }),
-        k.pos(tilePos),
-        k.offscreen(),
-      ]);
-    }
+    drawTiles(k, map, layer, mapData.tileheight, mapData.tilewidth);
   }
 
   setPlayerControls(k, entities.player);
   entities.player.onCollide("door-entrance", () => k.go("house"));
+  entities.player.onCollide("dungeon-door-entrance", () => k.go("dungeon"));
 
-  k.camScale(4);
+  k.camScale(2.5);
   k.camPos(entities.player.worldPos());
   k.onUpdate(() => {
     k.camPos(entities.player.worldPos());
