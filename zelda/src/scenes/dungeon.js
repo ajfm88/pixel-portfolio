@@ -9,6 +9,7 @@ import {
   generatePlayerComponents,
   setPlayerControls,
 } from "../entities/player.js";
+import gameState from "../globalStateManager.js";
 
 export default async function dungeon(k) {
   colorizeBackground(k, 27, 29, 52);
@@ -42,7 +43,31 @@ export default async function dungeon(k) {
   }
 
   setPlayerControls(k, entities.player);
-  entities.player.onCollide("door-exit", () => k.go("world"));
+  entities.player.onCollide("door-exit", () => {
+    gameState.setPreviousScene("dungeon");
+    k.go("world");
+  });
+
+  async function slideCamY(k, range, duration) {
+    const currentCamPos = k.camPos();
+    await k.tween(
+      currentCamPos.y,
+      currentCamPos.y + range,
+      duration,
+      (newPosY) => k.camPos(currentCamPos.x, newPosY),
+      k.easings.linear
+    );
+  }
+
+  entities.player.onCollide("door-entrance", async () => {
+    await slideCamY(k, -180, 1);
+    entities.player.pos.y -= 50;
+  });
+
+  entities.player.onCollide("door-exit-2", async () => {
+    await slideCamY(k, 180, 1);
+    entities.player.pos.y += 50;
+  });
 
   k.camScale(4);
 }
