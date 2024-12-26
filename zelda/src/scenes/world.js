@@ -1,3 +1,4 @@
+import { healthBar } from "../uiComponents/healthbar.js";
 import {
   generatePlayerComponents,
   setPlayerControls,
@@ -81,4 +82,6 @@ export default async function world(k) {
   for (const slime of entities.slimes) {
     setSlimeAI(k, slime);
   }
+
+  healthBar(k, entities.player);
 }
