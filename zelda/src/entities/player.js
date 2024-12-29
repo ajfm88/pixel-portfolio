@@ -9,17 +9,25 @@ export function generatePlayerComponents(k, pos) {
     k.area({ shape: new k.Rect(k.vec2(2, 4), 12, 12) }),
     k.body(),
     k.pos(pos),
-    k.health(12),
+    k.opacity(),
     {
       speed: 80,
-      pushPower: 30,
+      attackPower: 1,
       direction: "down",
       isAttacking: false,
       isFrozen: false,
-      maxHealth: 12,
     },
     "player",
   ];
+}
+
+export function watchPlayerHealth(k) {
+  k.onUpdate(() => {
+    if (gameState.getHealth() <= 0) {
+      gameState.setHealth(gameState.getMaxHealth());
+      k.go("gameOver");
+    }
+  });
 }
 
 export function setPlayerControls(k, player) {
@@ -58,6 +66,33 @@ export function setPlayerControls(k, player) {
     if (gameState.getIsDialogOn()) return;
     if (!gameState.getIsSwordEquipped()) return;
     player.isAttacking = true;
+
+    if (k.get("swordHitBox").length === 0) {
+      const swordHitBoxPosX = {
+        left: player.worldPos().x - 10,
+        right: player.worldPos().x + 10,
+        up: player.worldPos().x,
+        down: player.worldPos().x,
+      };
+
+      const swordHitBoxPosY = {
+        left: player.worldPos().y,
+        right: player.worldPos().y,
+        up: player.worldPos().y - 10,
+        down: player.worldPos().y + 10,
+      };
+
+      k.add([
+        k.area({ shape: new k.Rect(k.vec2(0), 12, 12) }),
+        k.pos(
+          swordHitBoxPosX[player.direction],
+          swordHitBoxPosY[player.direction]
+        ),
+        "swordHitBox",
+      ]);
+      k.wait(0.1, () => k.destroyAll("swordHitBox"));
+    }
+
     playAnimIfNotPlaying(player, `player-attack-${player.direction}`);
   });
 
