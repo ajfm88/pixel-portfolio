@@ -11,7 +11,7 @@ export function generatePlayerComponents(k, pos) {
     k.pos(pos),
     k.opacity(),
     {
-      speed: 80,
+      speed: 100,
       attackPower: 1,
       direction: "down",
       isAttacking: false,
@@ -105,7 +105,6 @@ export function setPlayerControls(k, player) {
         }
         playAnimIfNotPlaying(player, `player-${player.direction}`);
         player.stop();
-        player.isAttacking = false;
       });
     }
 
@@ -113,6 +112,7 @@ export function setPlayerControls(k, player) {
   });
 
   k.onKeyRelease(() => {
+    player.isAttacking = false;
     player.stop();
   });
 }
