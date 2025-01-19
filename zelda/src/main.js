@@ -41,7 +41,6 @@ k.loadSprite("assets", "./assets/topdownasset.png", {
     "oldman-side": 907,
     "oldman-up": 905,
     "ghost-down": { from: 862, to: 863, loop: true },
-    "prison-key": 99,
   },
 });
 k.loadSpriteAtlas("./assets/topdownasset.png", {
@@ -75,4 +74,4 @@ for (const sceneName in scenes) {
   k.scene(sceneName, () => scenes[sceneName](k));
 }
 
-k.go("world");
+k.go("mainMenu");

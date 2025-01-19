@@ -11,6 +11,7 @@ const english = [
     "Please now go save my son before it's too late!",
   ],
   ["Please save my son!"],
+  ["As a reward for saving my son, you can keep the sword I gave you."],
 ];
 
 const spanish = [
@@ -26,6 +27,7 @@ const spanish = [
     "¡Por favor, salva a mi hijo antes de que sea demasiado tarde!",
   ],
   ["¡Por favor, salva a mi hijo!"],
+  ["Como recompensa por salvar a mi hijo, puedes quedarte con la espada que te di."],
 ];
 
 const oldmanLines = {
