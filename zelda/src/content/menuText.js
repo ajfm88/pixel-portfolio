@@ -6,7 +6,7 @@ const english = {
 
 const spanish = {
   title: "La Leyenda De JavaScript",
-  languageIndication: "Presione S para cambiar entre español e inglés.",
+  languageIndication: "Presione S para cambiar entre Español e Ingles.",
   playIndication: "Presione Enter para iniciar el juego",
 };
 
