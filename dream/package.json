@@ -12,6 +12,6 @@
     "vite": "^5.4.8"
   },
   "dependencies": {
-    "kaplay": "^4000.0.0-alpha.5"
+    "kaplay": "^3001.0.0-beta.3"
   }
 }
