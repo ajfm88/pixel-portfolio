@@ -1,14 +1,17 @@
 class DataManager {
-  setIsMobile(boolean) {
-    this.isMobile = boolean;
-  }
+  #deviceType = "desktop";
 
-  get(property) {
-    if (!this[property]) {
-      throw Error("Data property doesn't exist!");
+  set deviceType(type) {
+    const possibleTypes = ["mobile-vertical", "mobile-horizontal", "desktop"];
+    if (!possibleTypes.includes(type)) {
+      throw Error("Device type passed does not exist!");
     }
 
-    return this[property];
+    this.#deviceType = type;
+  }
+
+  get deviceType() {
+    return this.#deviceType;
   }
 }
 
