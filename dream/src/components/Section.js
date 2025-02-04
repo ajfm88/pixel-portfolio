@@ -8,5 +8,11 @@ export default class Section {
       color(200, 0, 0),
       sectionName,
     ]);
+
+    this.gameObj.add([
+      text(sectionName, { font: "mania" }),
+      anchor("center"),
+      pos(0, -150),
+    ]);
   }
 }

@@ -30,7 +30,15 @@ export default class Player {
         if (currentButton === "up-button") this.gameObj.move(0, -this.#speed);
         if (currentButton === "down-button") this.gameObj.move(0, this.#speed);
       });
+      return;
     }
+
+    this.gameObj.onUpdate(() => {
+      if (isButtonDown("left")) this.gameObj.move(-this.#speed, 0);
+      if (isButtonDown("right")) this.gameObj.move(this.#speed, 0);
+      if (isButtonDown("up")) this.gameObj.move(0, -this.#speed);
+      if (isButtonDown("down")) this.gameObj.move(0, this.#speed);
+    });
   }
 
   setCameraMovement() {

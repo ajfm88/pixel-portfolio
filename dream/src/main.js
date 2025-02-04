@@ -15,17 +15,33 @@ function initGame(width, height) {
     touchToMouse: true,
     debug: false,
     debugKey: "f1",
+    buttons: {
+      left: {
+        keyboard: ["a", "left"],
+      },
+      right: {
+        keyboard: ["d", "right"],
+      },
+      up: {
+        keyboard: ["w", "up"],
+      },
+      down: {
+        keyboard: ["s", "down"],
+      },
+    },
   });
   loadFont("mania", "/fonts/mania.ttf");
 
   scene("portfolio-land", () => {
-    new Section(vec2(center().x, center().y - 300));
-    new Section(vec2(center().x, center().y + 300));
-    new Section(vec2(center().x - 300, center().y));
-    new Section(vec2(center().x + 300, center().y));
+    new Section(vec2(center().x, center().y - 300), "About");
+    new Section(vec2(center().x, center().y + 300), "Projects");
+    new Section(vec2(center().x - 300, center().y), "Skills");
+    new Section(vec2(center().x + 300, center().y), "Work Experience");
 
     const player = new Player(vec2(center()), 700);
-    new Dpad(vec2(150, 1600));
+    if (dataManager.deviceType === "mobile-vertical") new Dpad(vec2(150, 1600));
+    if (dataManager.deviceType === "mobile-horizontal")
+      new Dpad(vec2(100, 750));
     player.setControls();
   });
 
