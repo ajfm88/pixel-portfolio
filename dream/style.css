@@ -6,6 +6,9 @@
 :root {
   font-family: "mania";
   font-size: 1em;
+  --color1: #272946;
+  --color2: #aaea6c;
+  --color3: #e7ffee;
 }
 
 body,
@@ -15,6 +18,7 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--color1);
 }
 
 #settings {
@@ -28,6 +32,7 @@ html {
   padding-left: 1vw;
   padding-right: 1vw;
   text-align: center;
+  color: var(--color2);
 }
 
 .settings-btn {
@@ -35,6 +40,11 @@ html {
   font-size: 1.5rem;
   margin-top: 1vh;
   height: 20vh;
+  background-color: var(--color2);
+  border-color: var(--color2);
+  border-radius: 5px;
+  color: var(--color1);
+  border: none;
 }
 
 @media screen and (max-width: 600px) {

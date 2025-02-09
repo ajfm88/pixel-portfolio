@@ -1,3 +1,5 @@
+import { PALETTE } from "../constants";
+
 export default class Section {
   constructor(posVec2, sectionName) {
     this.gameObj = add([
@@ -5,12 +7,13 @@ export default class Section {
       anchor("center"),
       area(),
       pos(posVec2),
-      color(200, 0, 0),
+      color(PALETTE.color1),
       sectionName,
     ]);
 
     this.gameObj.add([
-      text(sectionName, { font: "mania" }),
+      text(sectionName, { font: "mania", size: 64 }),
+      color(PALETTE.color1),
       anchor("center"),
       pos(0, -150),
     ]);

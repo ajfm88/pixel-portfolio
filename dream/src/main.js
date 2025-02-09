@@ -5,15 +5,16 @@ import Section from "./components/Section";
 import Button from "./components/Button";
 import dataManager from "./managers/DataManager";
 import { Dpad } from "./components/Dpad";
+import makeTiledBackground from "./components/TiledBackground";
 
 function initGame(width, height) {
-  kaplay({
+  const canvas = kaplay({
     width,
     height,
     letterbox: true,
     pixelDensity: devicePixelRatio,
     touchToMouse: true,
-    debug: false,
+    debug: true, // TODO: set this back to false in prod
     debugKey: "f1",
     buttons: {
       left: {
@@ -31,8 +32,11 @@ function initGame(width, height) {
     },
   });
   loadFont("mania", "/fonts/mania.ttf");
+  loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
 
   scene("portfolio-land", () => {
+    makeTiledBackground(canvas.width(), canvas.height(), "");
+
     new Section(vec2(center().x, center().y - 300), "About");
     new Section(vec2(center().x, center().y + 300), "Projects");
     new Section(vec2(center().x - 300, center().y), "Skills");

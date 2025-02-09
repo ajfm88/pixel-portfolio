@@ -4,7 +4,14 @@ export default class Player {
   #speed;
 
   constructor(posVec2, speed) {
-    this.gameObj = add([rect(60, 60), anchor("center"), body(), pos(posVec2)]);
+    this.gameObj = add([
+      rect(60, 60),
+      anchor("center"),
+      area(),
+      outline(6),
+      body(),
+      pos(posVec2),
+    ]);
     this.#speed = speed;
     this.setCameraMovement();
   }
