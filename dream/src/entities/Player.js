@@ -11,6 +11,7 @@ export default class Player {
       outline(6),
       body(),
       pos(posVec2),
+      "player",
     ]);
     this.#speed = speed;
     this.setCameraMovement();

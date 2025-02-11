@@ -1,14 +1,15 @@
 @font-face {
-  font-family: "mania";
-  src: url(fonts/mania.ttf);
+  font-family: "ibm-bold";
+  src: url(fonts/IBMPlexSans-Bold.ttf);
 }
 
 :root {
-  font-family: "mania";
+  font-family: "ibm-bold";
   font-size: 1em;
   --color1: #272946;
   --color2: #aaea6c;
   --color3: #e7ffee;
+  --color4: #3f416c;
 }
 
 body,
@@ -45,6 +46,51 @@ html {
   border-radius: 5px;
   color: var(--color1);
   border: none;
+}
+
+.modal {
+  display: none; /* display: flex; */
+  justify-content: center;
+  align-items: start;
+  position: fixed;
+  z-index: 1;
+
+  width: 90%;
+  height: 90%;
+  overflow: auto;
+  backdrop-filter: blur(2px);
+  margin: 2vw;
+}
+
+.modal-content {
+  background-color: var(--color2);
+  border-color: var(--color1);
+  border-style: solid;
+  margin: 15% auto;
+  border-radius: 5px;
+  padding: 20px;
+  max-width: 500px;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.confirm-btn {
+  font: inherit;
+  font-size: 1.5rem;
+  margin-top: 1vh;
+  height: 5vh;
+  background-color: var(--color1);
+  border-color: var(--color2);
+  border-radius: 5px;
+  color: var(--color2);
+  border: none;
+}
+
+.confirm-btn:active {
+  background-color: var(--color4);
 }
 
 @media screen and (max-width: 600px) {
