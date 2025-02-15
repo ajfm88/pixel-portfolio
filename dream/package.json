@@ -9,9 +9,16 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
     "vite": "^5.4.8"
   },
   "dependencies": {
-    "kaplay": "^4000.0.0-alpha.5"
+    "framer-motion": "^11.11.1",
+    "jotai": "^2.10.0",
+    "kaplay": "^4000.0.0-alpha.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

@@ -1,4 +1,5 @@
 import { PALETTE } from "../constants";
+import { isVisibleAtom, store } from "../state";
 
 export default class LinkIcon {
   constructor(root, posVec2, imageData, subtitle, link) {
@@ -32,8 +33,7 @@ export default class LinkIcon {
 
   setOpenLinkHandler(link) {
     this.switch.onCollide("player", (player) => {
-      const modal = document.querySelector(".modal");
-      modal.style.display = "flex";
+      store.set(isVisibleAtom, true);
     });
   }
 }

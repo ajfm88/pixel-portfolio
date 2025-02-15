@@ -2,14 +2,13 @@ import kaplay from "kaplay";
 import "kaplay/global";
 import Player from "./entities/Player";
 import Section from "./components/Section";
-import Button from "./components/Button";
 import dataManager from "./managers/DataManager";
 import { Dpad } from "./components/Dpad";
 import makeTiledBackground from "./components/TiledBackground";
 import { PALETTE } from "./constants";
 import LinkIcon from "./components/LinkIcon";
 
-function initGame(width, height) {
+export default function initGame(width, height) {
   const canvas = kaplay({
     width,
     height,
@@ -97,26 +96,3 @@ function initGame(width, height) {
 
   go("portfolio-land");
 }
-
-const settings = document.getElementById("settings");
-const desktopBtn = settings.children[1];
-const mobileVerticalBtn = settings.children[2];
-const mobileHorizontalBtn = settings.children[3];
-
-mobileVerticalBtn.addEventListener("click", () => {
-  dataManager.deviceType = "mobile-vertical";
-  initGame(1080, 1920);
-  settings.remove();
-});
-
-mobileHorizontalBtn.addEventListener("click", () => {
-  dataManager.deviceType = "mobile-horizontal";
-  initGame(1920, 1080);
-  settings.remove();
-});
-
-desktopBtn.addEventListener("click", () => {
-  dataManager.deviceType = "desktop";
-  initGame(1920, 1080);
-  settings.remove();
-});
