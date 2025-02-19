@@ -2,17 +2,11 @@ import kaplay from "kaplay";
 import "kaplay/global";
 import Player from "./entities/Player";
 import Section from "./components/Section";
-import dataManager from "./managers/DataManager";
-import { Dpad } from "./components/Dpad";
-import makeTiledBackground from "./components/TiledBackground";
 import { PALETTE } from "./constants";
 import LinkIcon from "./components/LinkIcon";
 
-export default function initGame(width, height) {
+export default function initGame() {
   const canvas = kaplay({
-    width,
-    height,
-    letterbox: true,
     pixelDensity: devicePixelRatio,
     touchToMouse: true,
     debug: true, // TODO: set this back to false in prod
@@ -42,7 +36,26 @@ export default function initGame(width, height) {
   loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
 
   scene("portfolio-land", () => {
-    makeTiledBackground(canvas.width(), canvas.height(), "");
+    const tiledBackground = add([
+      uvquad(canvas.width(), canvas.height()),
+      shader("tiledPattern", () => ({
+        u_time: time() / 20,
+        u_color1: Color.fromHex(PALETTE.color3),
+        u_color2: Color.fromHex(PALETTE.color2),
+        u_speed: vec2(1, -1),
+        u_angle: 45 / 2,
+        u_scale: 4,
+        u_aspect: canvas.width() / canvas.width(),
+      })),
+      pos(0, 0),
+      fixed(),
+    ]);
+
+    tiledBackground.onUpdate(() => {
+      tiledBackground.width = canvas.width();
+      tiledBackground.height = canvas.height();
+      tiledBackground.uniform.u_aspect = canvas.width() / canvas.height();
+    });
 
     new Section(vec2(center().x, center().y - 400), "About", (root) => {
       const newComponent = root.add([
@@ -53,7 +66,7 @@ export default function initGame(width, height) {
       ]);
 
       newComponent.add([
-        text("I'm a creative software developer", {
+        text("A creative software developer", {
           font: "ibm-bold",
           size: 48,
         }),
@@ -88,9 +101,6 @@ export default function initGame(width, height) {
     new Section(vec2(center().x + 400, center().y), "Work Experience");
 
     const player = new Player(vec2(center()), 700);
-    if (dataManager.deviceType === "mobile-vertical") new Dpad(vec2(150, 1600));
-    if (dataManager.deviceType === "mobile-horizontal")
-      new Dpad(vec2(100, 750));
     player.setControls();
   });
 

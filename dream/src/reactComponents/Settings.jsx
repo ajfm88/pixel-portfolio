@@ -22,7 +22,7 @@ export default function Settings() {
         <button
           className="settings-btn"
           onClick={() => {
-            dataManager.deviceType = "mobile-vertical";
+            dataManager.deviceType = "mobile";
             initGame(1080, 1920);
             setIsVisible(false);
           }}
