@@ -1,40 +1,42 @@
 import { PALETTE } from "../constants";
-import { isVisibleAtom, selectedLinkAtom, store } from "../state";
+import { isModalVisibleAtom, selectedLinkAtom, store } from "../state";
 
-export default class LinkIcon {
-  constructor(root, posVec2, imageData, subtitle, link) {
-    this.root = root;
-    this.logo = root.add([
-      sprite(imageData.name, {
-        width: imageData.width,
-        height: imageData.height,
-      }),
-      anchor("center"),
-      pos(posVec2),
-    ]);
+export default function makeLinkIcon(
+  k,
+  root,
+  posVec2,
+  imageData,
+  subtitle,
+  link
+) {
+  const linkIcon = root.add([
+    k.sprite(imageData.name, {
+      width: imageData.width,
+      height: imageData.height,
+    }),
+    k.anchor("center"),
+    k.pos(posVec2),
+  ]);
 
-    this.logo.add([
-      text(subtitle, { font: "ibm-bold", size: 32 }),
-      color(Color.fromHex(PALETTE.color1)),
-      anchor("center"),
-      pos(0, 100),
-    ]);
+  linkIcon.add([
+    k.text(subtitle, { font: "ibm-bold", size: 32 }),
+    k.color(k.Color.fromHex(PALETTE.color1)),
+    k.anchor("center"),
+    k.pos(0, 100),
+  ]);
 
-    this.switch = this.logo.add([
-      rect(60, 60),
-      color(Color.fromHex(PALETTE.color1)),
-      anchor("center"),
-      area(),
-      pos(0, 150),
-    ]);
+  const linkSwitch = linkIcon.add([
+    k.rect(60, 60),
+    k.color(k.Color.fromHex(PALETTE.color1)),
+    k.anchor("center"),
+    k.area(),
+    k.pos(0, 150),
+  ]);
 
-    this.setOpenLinkHandler(link);
-  }
+  linkSwitch.onCollide("player", () => {
+    store.set(isModalVisibleAtom, true);
+    store.set(selectedLinkAtom, link);
+  });
 
-  setOpenLinkHandler(link) {
-    this.switch.onCollide("player", (player) => {
-      store.set(isVisibleAtom, true);
-      store.set(selectedLinkAtom, link);
-    });
-  }
+  return linkIcon;
 }

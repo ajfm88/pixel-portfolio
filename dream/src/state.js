@@ -1,6 +1,6 @@
 import { atom, createStore } from "jotai";
 
-export const isVisibleAtom = atom(false);
+export const isModalVisibleAtom = atom(false);
 export const selectedLinkAtom = atom(null);
 
 export const DPadInputAtom = atom({

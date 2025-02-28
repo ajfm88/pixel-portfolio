@@ -1,51 +1,39 @@
-import dataManager from "../managers/DataManager";
-import { DPadInputAtom, isVisibleAtom, store } from "../state";
+import { DPadInputAtom, isModalVisibleAtom, store } from "../state";
 
-export default class Player {
-  #speed;
+export default function makePlayer(k, posVec2, speed) {
+  const player = k.add([
+    k.rect(60, 60),
+    k.anchor("center"),
+    k.area(),
+    k.outline(6),
+    k.body(),
+    k.pos(posVec2),
+    "player",
+  ]);
 
-  constructor(posVec2, speed) {
-    this.gameObj = add([
-      rect(60, 60),
-      anchor("center"),
-      area(),
-      outline(6),
-      body(),
-      pos(posVec2),
-      "player",
-    ]);
-    this.#speed = speed;
-    this.setCameraMovement();
-  }
+  player.onUpdate(() => {
+    k.camPos(player.pos);
 
-  setControls() {
-    this.gameObj.onUpdate(() => {
-      if (store.get(isVisibleAtom)) {
-        store.set(DPadInputAtom, {
-          isLeftPressed: false,
-          isRightPressed: false,
-          isUpPressed: false,
-          isDownPressed: false,
-        });
-        return;
-      }
+    if (store.get(isModalVisibleAtom)) {
+      store.set(DPadInputAtom, {
+        isLeftPressed: false,
+        isRightPressed: false,
+        isUpPressed: false,
+        isDownPressed: false,
+      });
+      return;
+    }
 
-      const DPadInput = store.get(DPadInputAtom);
+    const DPadInput = store.get(DPadInputAtom);
 
-      if (isButtonDown("left") || DPadInput.isLeftPressed)
-        this.gameObj.move(-this.#speed, 0);
-      if (isButtonDown("right") || DPadInput.isRightPressed)
-        this.gameObj.move(this.#speed, 0);
-      if (isButtonDown("up") || DPadInput.isUpPressed)
-        this.gameObj.move(0, -this.#speed);
-      if (isButtonDown("down") || DPadInput.isDownPressed)
-        this.gameObj.move(0, this.#speed);
-    });
-  }
+    if (k.isButtonDown("left") || DPadInput.isLeftPressed)
+      player.move(-speed, 0);
+    if (k.isButtonDown("right") || DPadInput.isRightPressed)
+      player.move(speed, 0);
+    if (k.isButtonDown("up") || DPadInput.isUpPressed) player.move(0, -speed);
+    if (k.isButtonDown("down") || DPadInput.isDownPressed)
+      player.move(0, speed);
+  });
 
-  setCameraMovement() {
-    this.gameObj.onUpdate(() => {
-      camPos(this.gameObj.pos);
-    });
-  }
+  return player;
 }

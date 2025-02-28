@@ -1,15 +1,15 @@
-import React from "react";
-import reactDom from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import ReactUI from "./ReactUI";
 import { Provider } from "jotai";
 import { store } from "./state";
 
 const ui = document.getElementById("ui");
-const root = reactDom.createRoot(ui);
+const root = createRoot(ui);
 root.render(
-  <React.StrictMode>
+  <StrictMode>
     <Provider store={store}>
       <ReactUI />
     </Provider>
-  </React.StrictMode>
+  </StrictMode>
 );

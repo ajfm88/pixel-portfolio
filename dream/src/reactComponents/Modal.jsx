@@ -1,51 +1,55 @@
 import { useAtom, useAtomValue } from "jotai";
-import { isVisibleAtom, selectedLinkAtom } from "../state";
-import { useEffect, useRef, useState } from "react";
+import { isModalVisibleAtom, selectedLinkAtom } from "../state";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Modal() {
   const canvasRef = useRef(null);
   const modalRef = useRef(null);
-  const yesBtnRef = useRef(null);
-  const noBtnRef = useRef(null);
-  const [isVisible, setIsVisible] = useAtom(isVisibleAtom);
+  const [isVisible, setIsVisible] = useAtom(isModalVisibleAtom);
   const selectedLink = useAtomValue(selectedLinkAtom);
 
-  const [activeBtn, setActiveBtn] = useState(null);
-  const activeBtnRef = useRef(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const buttons = ["Yes", "No"];
 
-  useEffect(() => {
-    console.log(yesBtnRef.current);
-    setActiveBtn(yesBtnRef.current);
-    activeBtnRef.current = yesBtnRef.current;
-  }, [isVisible]);
+  const handleClick = useCallback(
+    (index) => {
+      if (index === 0) {
+        window.open(selectedLink, "_blank");
+        setIsVisible(false);
+        canvasRef.current.focus();
+        return;
+      }
 
-  useEffect(() => {
-    setActiveBtn(activeBtnRef.current);
-  }, [activeBtnRef]);
-
-  useEffect(() => {
-    const keyboardControls = window.addEventListener("keydown", (e) => {
+      setIsVisible(false);
+      canvasRef.current.focus();
+    },
+    [selectedLink, setIsVisible]
+  );
+  const keyboardControls = useCallback(
+    (e) => {
       if (e.code === "KeyS" || e.code === "ArrowDown") {
-        activeBtnRef.current = noBtnRef.current;
+        setSelectedIndex(1);
         return;
       }
 
       if (e.code === "KeyW" || e.code === "ArrowUp") {
-        activeBtnRef.current = yesBtnRef.current;
+        setSelectedIndex(0);
       }
-    });
 
-    const confirmControl = window.addEventListener("keypress", (e) => {
       if (e.code === "Space") {
-        activeBtn.click();
+        handleClick(selectedIndex);
       }
-    });
+    },
+    [handleClick, selectedIndex]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", keyboardControls);
 
     return () => {
       window.removeEventListener("keydown", keyboardControls);
-      window.removeEventListener("keypress", confirmControl);
     };
-  }, [activeBtn]);
+  }, [selectedIndex, keyboardControls]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -60,31 +64,17 @@ export default function Modal() {
           <h1>Do you want to open this link?</h1>
           <span>{selectedLink}</span>
           <div className="modal-btn-container">
-            <button
-              ref={yesBtnRef}
-              className={`modal-btn ${
-                activeBtn?.innerText === "Yes" ? "active" : null
-              }`}
-              onClick={() => {
-                window.open(selectedLink, "_blank");
-                setIsVisible(false);
-                canvasRef.current.focus();
-              }}
-            >
-              Yes
-            </button>
-            <button
-              ref={noBtnRef}
-              className={`modal-btn ${
-                activeBtn?.innerText === "No" ? "active" : null
-              }`}
-              onClick={() => {
-                setIsVisible(false);
-                canvasRef.current.focus();
-              }}
-            >
-              No
-            </button>
+            {buttons.map((button, index) => (
+              <button
+                key={button}
+                className={`modal-btn ${
+                  selectedIndex === index ? "active" : null
+                }`}
+                onClick={() => handleClick(index)}
+              >
+                {button}
+              </button>
+            ))}
           </div>
         </div>
       </div>

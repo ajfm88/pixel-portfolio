@@ -1,30 +1,31 @@
 import { PALETTE } from "../constants";
 
-export default class Section {
-  #isExpanded = false;
+export default function makeSection(k, posVec2, sectionName, onCollide = null) {
+  let isExpanded = false;
 
-  constructor(posVec2, sectionName, onCollide) {
-    this.gameObj = add([
-      rect(200, 200),
-      anchor("center"),
-      area(),
-      pos(posVec2),
-      color(PALETTE.color1),
-      sectionName,
-    ]);
+  const section = k.add([
+    k.rect(200, 200),
+    k.anchor("center"),
+    k.area(),
+    k.pos(posVec2),
+    k.color(PALETTE.color1),
+    sectionName,
+  ]);
 
-    this.gameObj.add([
-      text(sectionName, { font: "ibm-bold", size: 64 }),
-      color(PALETTE.color1),
-      anchor("center"),
-      pos(0, -150),
-    ]);
+  section.add([
+    k.text(sectionName, { font: "ibm-bold", size: 64 }),
+    k.color(PALETTE.color1),
+    k.anchor("center"),
+    k.pos(0, -150),
+  ]);
 
-    this.gameObj.onCollide("player", () => {
-      if (!this.#isExpanded) {
-        onCollide(this.gameObj);
-        this.#isExpanded = true;
+  if (onCollide)
+    section.onCollide("player", () => {
+      if (!isExpanded) {
+        onCollide(section);
+        isExpanded = true;
       }
     });
-  }
+
+  return section;
 }
