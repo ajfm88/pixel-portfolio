@@ -2,7 +2,7 @@
 
 One third of a neat, walkable, 2D sprite developer portfolio.
 
-Live demo : https://pixel-portfolio.netlify.app
+Live Demo: https://zelda-ajfm88.netlify.app
 
 Tutorial on YouTube: https://www.youtube.com/watch?v=pVAmEJqK-3A
 
