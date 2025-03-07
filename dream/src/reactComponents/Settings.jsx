@@ -1,43 +1,34 @@
 import { useState } from "react";
 import initGame from "../initGame";
-import dataManager from "../managers/DataManager";
+import { useSetAtom } from "jotai";
+import { areTouchControlsEnabledAtom } from "../state";
 
 export default function Settings() {
   const [isVisible, setIsVisible] = useState(true);
+  const setAreTouchControlsEnabled = useSetAtom(areTouchControlsEnabledAtom);
 
   return (
     isVisible && (
       <div id="settings">
-        <h1 className="title">What device type are you using?</h1>
+        <h1 className="title">What control scheme do you prefer?</h1>
         <button
           className="settings-btn"
           onClick={() => {
-            dataManager.deviceType = "desktop";
-            initGame(1920, 1080);
+            initGame();
+            setAreTouchControlsEnabled(true);
             setIsVisible(false);
           }}
         >
-          Desktop
+          Touch Controls
         </button>
         <button
           className="settings-btn"
           onClick={() => {
-            dataManager.deviceType = "mobile";
-            initGame(1080, 1920);
+            initGame();
             setIsVisible(false);
           }}
         >
-          Mobile (Vertical Orientation)
-        </button>
-        <button
-          className="settings-btn"
-          onClick={() => {
-            dataManager.deviceType = "mobile-horizontal";
-            initGame(1920, 1080);
-            setIsVisible(false);
-          }}
-        >
-          Mobile (Horizontal Orientation)
+          Keyboard Controls
         </button>
       </div>
     )

@@ -36,13 +36,6 @@ html {
   color: var(--color2);
 }
 
-@media screen and (max-width: 600px) {
-  .settings-btn {
-    font-size: 2rem;
-    margin-top: 3vh;
-  }
-}
-
 .settings-btn {
   font: inherit;
   font-size: 1.5rem;
@@ -111,7 +104,60 @@ span {
 .dpad {
   display: flex;
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 60vh;
+  left: 15vw;
   z-index: 1;
+  opacity: 0.4;
+}
+
+.dpad-btn-color {
+  color: var(--color2);
+  background-color: var(--color1);
+  border: var(--color1);
+  border-style: solid;
+  border-radius: 12px;
+}
+
+.up {
+  position: absolute;
+  top: -5rem;
+  width: 5rem;
+  height: 5rem;
+  font-size: 2rem;
+}
+
+.down {
+  position: absolute;
+  top: 5rem;
+  width: 5rem;
+  height: 5rem;
+  font-size: 2rem;
+}
+
+.left {
+  position: absolute;
+  left: -5rem;
+  width: 5rem;
+  height: 5rem;
+  font-size: 2rem;
+}
+
+.right {
+  position: absolute;
+  left: 5rem;
+  width: 5rem;
+  height: 5rem;
+  font-size: 2rem;
+}
+
+@media screen and (max-width: 600px) {
+  .settings-btn {
+    font-size: 2rem;
+    margin-top: 3vh;
+  }
+
+  .dpad {
+    top: 70vh;
+    left: 25vw;
+  }
 }

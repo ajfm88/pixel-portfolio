@@ -10,4 +10,6 @@ export const DPadInputAtom = atom({
   isDownPressed: false,
 });
 
+export const areTouchControlsEnabledAtom = atom(false);
+
 export const store = createStore();
