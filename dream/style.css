@@ -80,7 +80,8 @@ html {
   font: inherit;
   font-size: 1.5rem;
   margin-top: 1vh;
-  height: 5vh;
+  min-height: 5vh;
+  max-height: 10vh;
   background-color: var(--color1);
   border-color: var(--color2);
   border-radius: 5px;

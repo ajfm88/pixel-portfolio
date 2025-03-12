@@ -18,6 +18,10 @@ export function VirtualDPad() {
             DPadInput.isUpPressed = false;
             setDpadInput(DPadInput);
           }}
+          onMouseLeave={() => {
+            DPadInput.isUpPressed = false;
+            setDpadInput(DPadInput);
+          }}
         >
           ▲
         </button>
@@ -28,6 +32,10 @@ export function VirtualDPad() {
             setDpadInput(DPadInput);
           }}
           onMouseUp={() => {
+            DPadInput.isDownPressed = false;
+            setDpadInput(DPadInput);
+          }}
+          onMouseLeave={() => {
             DPadInput.isDownPressed = false;
             setDpadInput(DPadInput);
           }}
@@ -44,6 +52,10 @@ export function VirtualDPad() {
             DPadInput.isLeftPressed = false;
             setDpadInput(DPadInput);
           }}
+          onMouseLeave={() => {
+            DPadInput.isLeftPressed = false;
+            setDpadInput(DPadInput);
+          }}
         >
           ◀
         </button>
@@ -54,6 +66,10 @@ export function VirtualDPad() {
             setDpadInput(DPadInput);
           }}
           onMouseUp={() => {
+            DPadInput.isRightPressed = false;
+            setDpadInput(DPadInput);
+          }}
+          onMouseLeave={() => {
             DPadInput.isRightPressed = false;
             setDpadInput(DPadInput);
           }}

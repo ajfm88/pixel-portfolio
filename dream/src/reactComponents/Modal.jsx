@@ -1,5 +1,9 @@
 import { useAtom, useAtomValue } from "jotai";
-import { isModalVisibleAtom, selectedLinkAtom } from "../state";
+import {
+  areTouchControlsEnabledAtom,
+  isModalVisibleAtom,
+  selectedLinkAtom,
+} from "../state";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Modal() {
@@ -7,6 +11,7 @@ export default function Modal() {
   const modalRef = useRef(null);
   const [isVisible, setIsVisible] = useAtom(isModalVisibleAtom);
   const selectedLink = useAtomValue(selectedLinkAtom);
+  const areTouchControlsEnabled = useAtomValue(areTouchControlsEnabledAtom);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const buttons = ["Yes", "No"];
@@ -44,12 +49,14 @@ export default function Modal() {
   );
 
   useEffect(() => {
+    if (areTouchControlsEnabled) return;
+
     window.addEventListener("keydown", keyboardControls);
 
     return () => {
       window.removeEventListener("keydown", keyboardControls);
     };
-  }, [selectedIndex, keyboardControls]);
+  }, [selectedIndex, keyboardControls, areTouchControlsEnabled]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -68,7 +75,9 @@ export default function Modal() {
               <button
                 key={button}
                 className={`modal-btn ${
-                  selectedIndex === index ? "active" : null
+                  selectedIndex === index && !areTouchControlsEnabled
+                    ? "active"
+                    : null
                 }`}
                 onClick={() => handleClick(index)}
               >
