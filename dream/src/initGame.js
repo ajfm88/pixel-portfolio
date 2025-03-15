@@ -2,7 +2,8 @@ import makeKaplayCtx from "./kaplayCtx";
 import makePlayer from "./entities/Player";
 import makeSection from "./components/Section";
 import { PALETTE } from "./constants";
-import makeLinkIcon from "./components/LinkIcon";
+import makeIcon from "./components/Icon";
+import { makeAppear } from "./utils";
 
 export default function initGame() {
   const k = makeKaplayCtx();
@@ -13,8 +14,11 @@ export default function initGame() {
   k.loadSprite("youtube-logo", "/logos/youtube-logo.png");
   k.loadSprite("x-logo", "/logos/x-logo.png");
   k.loadSprite("substack-logo", "/logos/substack-logo.png");
-  k.loadSprite("JavaScript-logo", "/logos/JavaScript-logo.png");
+  k.loadSprite("javascript-logo", "/logos/javascript-logo.png");
+  k.loadSprite("typescript-logo", "/logos/typescript-logo.png");
   k.loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
+
+  k.camScale(k.vec2(k.width() < 1000 ? 0.5 : 0.75));
 
   const tiledBackground = k.add([
     k.uvquad(k.width(), k.height()),
@@ -39,14 +43,14 @@ export default function initGame() {
   });
 
   makeSection(k, k.vec2(k.center().x, k.center().y - 400), "About", (root) => {
-    const newComponent = root.add([
+    const container = root.add([
       k.text("Hi, I'm JSLegendDev!", { font: "ibm-bold", size: 88 }),
       k.color(k.Color.fromHex(PALETTE.color1)),
       k.pos(10, -500),
       k.opacity(0),
     ]);
 
-    newComponent.add([
+    container.add([
       k.text("A creative software developer", {
         font: "ibm-bold",
         size: 48,
@@ -56,31 +60,18 @@ export default function initGame() {
       k.opacity(0),
     ]);
 
-    makeLinkIcon(
+    makeIcon(
       k,
-      newComponent,
+      container,
       k.vec2(300, 250),
       { name: "github-logo", width: 228.6, height: 179.5 },
       "GitHub",
       "https://github.com/jslegenddev"
     );
 
-    k.tween(
-      newComponent.opacity,
-      1,
-      0.5,
-      (val) => {
-        newComponent.opacity = val;
-        for (const child of newComponent.children) {
-          child.opacity = val;
-        }
-      },
-      k.easings.linear
-    );
-
-    makeLinkIcon(
+    makeIcon(
       k,
-      newComponent,
+      container,
       k.vec2(500, 250),
       {
         name: "linkedin-logo",
@@ -91,9 +82,9 @@ export default function initGame() {
       "https://www.linkedin.com/in/js-legenddev-203368332/"
     );
 
-    makeLinkIcon(
+    makeIcon(
       k,
-      newComponent,
+      container,
       k.vec2(700, 250),
       {
         name: "youtube-logo",
@@ -104,9 +95,9 @@ export default function initGame() {
       "https://youtube.com/@jslegenddev"
     );
 
-    makeLinkIcon(
+    makeIcon(
       k,
-      newComponent,
+      container,
       k.vec2(900, 250),
       {
         name: "x-logo",
@@ -117,9 +108,9 @@ export default function initGame() {
       "https://x.com/jslegenddev"
     );
 
-    makeLinkIcon(
+    makeIcon(
       k,
-      newComponent,
+      container,
       k.vec2(1100, 250),
       {
         name: "substack-logo",
@@ -130,16 +121,46 @@ export default function initGame() {
       "https://jslegenddev.substack.com/"
     );
 
-    newComponent.add([
+    container.add([
       k.text("Contact : jslegend@protonmail.com", {
         font: "ibm-bold",
       }),
       k.color(k.Color.fromHex(PALETTE.color1)),
       k.pos(400, 500),
     ]);
+
+    makeAppear(k, container);
   });
   makeSection(k, k.vec2(k.center().x, k.center().y + 400), "Projects");
-  makeSection(k, k.vec2(k.center().x - 400, k.center().y), "Skills");
+  makeSection(k, k.vec2(k.center().x - 400, k.center().y), "Skills", (root) => {
+    const container = root.add([k.opacity(0), k.pos(-300, 0)]);
+
+    makeIcon(
+      k,
+      container,
+      k.vec2(0, 0),
+      {
+        name: "javascript-logo",
+        width: 128,
+        height: 128,
+      },
+      "JavaScript"
+    );
+
+    makeIcon(
+      k,
+      container,
+      k.vec2(-200, 0),
+      {
+        name: "typescript-logo",
+        width: 128,
+        height: 128,
+      },
+      "TypeScript"
+    );
+
+    makeAppear(k, container);
+  });
   makeSection(k, k.vec2(k.center().x + 400, k.center().y), "Work Experience");
 
   makePlayer(k, k.vec2(k.center()), 700);

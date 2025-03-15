@@ -1,7 +1,7 @@
 import { PALETTE } from "../constants";
 
 export default function makeSection(k, posVec2, sectionName, onCollide = null) {
-  let isExpanded = false;
+  //let isExpanded = false;
 
   const section = k.add([
     k.rect(200, 200),
@@ -19,13 +19,12 @@ export default function makeSection(k, posVec2, sectionName, onCollide = null) {
     k.pos(0, -150),
   ]);
 
-  if (onCollide)
-    section.onCollide("player", () => {
-      if (!isExpanded) {
-        onCollide(section);
-        isExpanded = true;
-      }
+  if (onCollide) {
+    const onCollideHandler = section.onCollide("player", () => {
+      onCollide(section);
+      onCollideHandler.cancel();
     });
+  }
 
   return section;
 }

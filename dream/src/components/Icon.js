@@ -1,21 +1,22 @@
 import { PALETTE } from "../constants";
 import { isModalVisibleAtom, selectedLinkAtom, store } from "../state";
 
-export default function makeLinkIcon(
+export default function makeIcon(
   k,
-  root,
+  parent,
   posVec2,
   imageData,
   subtitle,
-  link
+  link = null
 ) {
-  const linkIcon = root.add([
+  const linkIcon = parent.add([
     k.sprite(imageData.name, {
       width: imageData.width,
       height: imageData.height,
     }),
     k.anchor("center"),
     k.pos(posVec2),
+    k.opacity(0),
   ]);
 
   linkIcon.add([
@@ -24,6 +25,8 @@ export default function makeLinkIcon(
     k.anchor("center"),
     k.pos(0, 100),
   ]);
+
+  if (!link) return linkIcon;
 
   const linkSwitch = linkIcon.add([
     k.rect(60, 60),
