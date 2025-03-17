@@ -10,7 +10,7 @@ export default function Settings() {
   return (
     isVisible && (
       <div id="settings">
-        <h1 className="title">What control scheme do you prefer?</h1>
+        <h1 className="title">Which control scheme do you prefer?</h1>
         <button
           className="settings-btn"
           onClick={() => {

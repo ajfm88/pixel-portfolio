@@ -1,8 +1,6 @@
 import { PALETTE } from "../constants";
 
 export default function makeSection(k, posVec2, sectionName, onCollide = null) {
-  //let isExpanded = false;
-
   const section = k.add([
     k.rect(200, 200),
     k.anchor("center"),

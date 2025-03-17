@@ -16,6 +16,9 @@ export default function initGame() {
   k.loadSprite("substack-logo", "/logos/substack-logo.png");
   k.loadSprite("javascript-logo", "/logos/javascript-logo.png");
   k.loadSprite("typescript-logo", "/logos/typescript-logo.png");
+  k.loadSprite("react-logo", "/logos/react-logo.png");
+  k.loadSprite("nextjs-logo", "/logos/nextjs-logo.png");
+  k.loadSprite("postgres-logo", "/logos/postgres-logo.png");
   k.loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
 
   k.camScale(k.vec2(k.width() < 1000 ? 0.5 : 0.75));
@@ -135,29 +138,63 @@ export default function initGame() {
   makeSection(k, k.vec2(k.center().x - 400, k.center().y), "Skills", (root) => {
     const container = root.add([k.opacity(0), k.pos(-300, 0)]);
 
-    makeIcon(
-      k,
-      container,
-      k.vec2(0, 0),
+    const skillsData = [
       {
-        name: "javascript-logo",
-        width: 128,
-        height: 128,
+        pos: { x: 0, y: 0 },
+        name: "JavaScript",
+        logoData: {
+          name: "javascript-logo",
+          width: 128,
+          height: 128,
+        },
       },
-      "JavaScript"
-    );
+      {
+        pos: { x: -200, y: 0 },
+        name: "TypeScript",
+        logoData: {
+          name: "typescript-logo",
+          width: 128,
+          height: 128,
+        },
+      },
+      {
+        pos: { x: 0, y: -200 },
+        name: "React",
+        logoData: {
+          name: "react-logo",
+          width: 148,
+          height: 128,
+        },
+      },
+      {
+        pos: { x: 0, y: 200 },
+        name: "Next.js",
+        logoData: {
+          name: "nextjs-logo",
+          width: 128,
+          height: 128,
+        },
+      },
+      {
+        pos: { x: -200, y: 200 },
+        name: "PostgreSQL",
+        logoData: {
+          name: "postgres-logo",
+          width: 128,
+          height: 128,
+        },
+      },
+    ];
 
-    makeIcon(
-      k,
-      container,
-      k.vec2(-200, 0),
-      {
-        name: "typescript-logo",
-        width: 128,
-        height: 128,
-      },
-      "TypeScript"
-    );
+    for (const skillData of skillsData) {
+      makeIcon(
+        k,
+        container,
+        k.vec2(skillData.pos.x, skillData.pos.y),
+        skillData.logoData,
+        skillData.name
+      );
+    }
 
     makeAppear(k, container);
   });
