@@ -1,0 +1,53 @@
+[
+  {
+    "pos": { "x": 300, "y": 250 },
+    "name": "GitHub",
+    "description": "",
+    "link": "https://github.com/jslegenddev",
+    "logoData": { "name": "github-logo", "width": 228.6, "height": 179.5 }
+  },
+  {
+    "pos": { "x": 500, "y": 250 },
+    "name": "Linkedin",
+    "description": "",
+    "link": "https://www.linkedin.com/in/js-legenddev-203368332/",
+    "logoData": {
+      "name": "linkedin-logo",
+      "width": 112,
+      "height": 100
+    }
+  },
+  {
+    "pos": { "x": 700, "y": 250 },
+    "name": "YouTube",
+    "description": "",
+    "link": "https://youtube.com/@jslegenddev",
+    "logoData": {
+      "name": "youtube-logo",
+      "width": 160,
+      "height": 110
+    }
+  },
+  {
+    "pos": { "x": 900, "y": 250 },
+    "name": "X",
+    "description": "",
+    "link": "https://x.com/jslegenddev",
+    "logoData": {
+      "name": "x-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": 1100, "y": 250 },
+    "name": "Substack",
+    "description": "",
+    "link": "https://jslegenddev.substack.com/",
+    "logoData": {
+      "name": "substack-logo",
+      "width": 128,
+      "height": 128
+    }
+  }
+]

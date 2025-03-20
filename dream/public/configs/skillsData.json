@@ -1,0 +1,83 @@
+[
+  {
+    "pos": { "x": 0, "y": 0 },
+    "name": "JavaScript",
+    "logoData": {
+      "name": "javascript-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": -200, "y": 0 },
+    "name": "TypeScript",
+    "logoData": {
+      "name": "typescript-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": 0, "y": -200 },
+    "name": "React",
+    "logoData": {
+      "name": "react-logo",
+      "width": 148,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": 0, "y": 200 },
+    "name": "Next.js",
+    "logoData": {
+      "name": "nextjs-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": -200, "y": 200 },
+    "name": "PostgreSQL",
+    "logoData": {
+      "name": "postgres-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": -200, "y": -200 },
+    "name": "HTML",
+    "logoData": {
+      "name": "html-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": -400, "y": -200 },
+    "name": "CSS",
+    "logoData": {
+      "name": "css-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": -400, "y": 0 },
+    "name": "Tailwind",
+    "logoData": {
+      "name": "tailwind-logo",
+      "width": 140,
+      "height": 110
+    }
+  },
+  {
+    "pos": { "x": -400, "y": 200 },
+    "name": "Python",
+    "logoData": {
+      "name": "python-logo",
+      "width": 128,
+      "height": 128
+    }
+  }
+]

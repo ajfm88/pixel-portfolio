@@ -4,8 +4,12 @@ import makeSection from "./components/Section";
 import { PALETTE } from "./constants";
 import makeIcon from "./components/Icon";
 import { makeAppear } from "./utils";
+import makeWorkExperienceCard from "./components/WorkExperienceCard";
 
-export default function initGame() {
+export default async function initGame() {
+  const skillsData = await (await fetch("/configs/skillsData.json")).json();
+  const socialsData = await (await fetch("/configs/socialsData.json")).json();
+
   const k = makeKaplayCtx();
   k.loadFont("ibm-regular", "/fonts/IBMPlexSans-Regular.ttf");
   k.loadFont("ibm-bold", "/fonts/IBMPlexSans-Bold.ttf");
@@ -19,9 +23,13 @@ export default function initGame() {
   k.loadSprite("react-logo", "/logos/react-logo.png");
   k.loadSprite("nextjs-logo", "/logos/nextjs-logo.png");
   k.loadSprite("postgres-logo", "/logos/postgres-logo.png");
+  k.loadSprite("html-logo", "/logos/html-logo.png");
+  k.loadSprite("css-logo", "/logos/css-logo.png");
+  k.loadSprite("tailwind-logo", "/logos/tailwind-logo.png");
+  k.loadSprite("python-logo", "/logos/python-logo.png");
   k.loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
 
-  k.camScale(k.vec2(k.width() < 1000 ? 0.5 : 0.75));
+  k.camScale(k.vec2(k.width() < 1000 ? 0.5 : 0.8));
 
   const tiledBackground = k.add([
     k.uvquad(k.width(), k.height()),
@@ -45,160 +53,101 @@ export default function initGame() {
     tiledBackground.uniform.u_aspect = k.width() / k.height();
   });
 
-  makeSection(k, k.vec2(k.center().x, k.center().y - 400), "About", (root) => {
-    const container = root.add([
-      k.text("Hi, I'm JSLegendDev!", { font: "ibm-bold", size: 88 }),
-      k.color(k.Color.fromHex(PALETTE.color1)),
-      k.pos(10, -500),
-      k.opacity(0),
-    ]);
+  makeSection(
+    k,
+    k.vec2(k.center().x, k.center().y - 400),
+    "About",
+    (parent) => {
+      const container = parent.add([
+        k.text("Hi, I'm JSLegendDev!", { font: "ibm-bold", size: 88 }),
+        k.color(k.Color.fromHex(PALETTE.color1)),
+        k.pos(10, -500),
+        k.opacity(0),
+      ]);
 
-    container.add([
-      k.text("A creative software developer", {
-        font: "ibm-bold",
-        size: 48,
-      }),
-      k.color(k.Color.fromHex(PALETTE.color1)),
-      k.pos(5, 100),
-      k.opacity(0),
-    ]);
+      container.add([
+        k.text("A creative software developer", {
+          font: "ibm-bold",
+          size: 48,
+        }),
+        k.color(k.Color.fromHex(PALETTE.color1)),
+        k.pos(5, 100),
+        k.opacity(0),
+      ]);
 
-    makeIcon(
-      k,
-      container,
-      k.vec2(300, 250),
-      { name: "github-logo", width: 228.6, height: 179.5 },
-      "GitHub",
-      "https://github.com/jslegenddev"
-    );
+      for (const socialData of socialsData) {
+        makeIcon(
+          k,
+          container,
+          k.vec2(socialData.pos.x, socialData.pos.y),
+          socialData.logoData,
+          socialData.name,
+          socialData.link
+        );
+      }
 
-    makeIcon(
-      k,
-      container,
-      k.vec2(500, 250),
-      {
-        name: "linkedin-logo",
-        width: 112,
-        height: 100,
-      },
-      "Linkedin",
-      "https://www.linkedin.com/in/js-legenddev-203368332/"
-    );
+      container.add([
+        k.text("Email : jslegend@protonmail.com", {
+          font: "ibm-bold",
+        }),
+        k.color(k.Color.fromHex(PALETTE.color1)),
+        k.pos(400, 500),
+      ]);
 
-    makeIcon(
-      k,
-      container,
-      k.vec2(700, 250),
-      {
-        name: "youtube-logo",
-        width: 160,
-        height: 110,
-      },
-      "YouTube",
-      "https://youtube.com/@jslegenddev"
-    );
-
-    makeIcon(
-      k,
-      container,
-      k.vec2(900, 250),
-      {
-        name: "x-logo",
-        width: 128,
-        height: 128,
-      },
-      "X",
-      "https://x.com/jslegenddev"
-    );
-
-    makeIcon(
-      k,
-      container,
-      k.vec2(1100, 250),
-      {
-        name: "substack-logo",
-        width: 128,
-        height: 128,
-      },
-      "Substack",
-      "https://jslegenddev.substack.com/"
-    );
-
-    container.add([
-      k.text("Contact : jslegend@protonmail.com", {
-        font: "ibm-bold",
-      }),
-      k.color(k.Color.fromHex(PALETTE.color1)),
-      k.pos(400, 500),
-    ]);
-
-    makeAppear(k, container);
-  });
-  makeSection(k, k.vec2(k.center().x, k.center().y + 400), "Projects");
-  makeSection(k, k.vec2(k.center().x - 400, k.center().y), "Skills", (root) => {
-    const container = root.add([k.opacity(0), k.pos(-300, 0)]);
-
-    const skillsData = [
-      {
-        pos: { x: 0, y: 0 },
-        name: "JavaScript",
-        logoData: {
-          name: "javascript-logo",
-          width: 128,
-          height: 128,
-        },
-      },
-      {
-        pos: { x: -200, y: 0 },
-        name: "TypeScript",
-        logoData: {
-          name: "typescript-logo",
-          width: 128,
-          height: 128,
-        },
-      },
-      {
-        pos: { x: 0, y: -200 },
-        name: "React",
-        logoData: {
-          name: "react-logo",
-          width: 148,
-          height: 128,
-        },
-      },
-      {
-        pos: { x: 0, y: 200 },
-        name: "Next.js",
-        logoData: {
-          name: "nextjs-logo",
-          width: 128,
-          height: 128,
-        },
-      },
-      {
-        pos: { x: -200, y: 200 },
-        name: "PostgreSQL",
-        logoData: {
-          name: "postgres-logo",
-          width: 128,
-          height: 128,
-        },
-      },
-    ];
-
-    for (const skillData of skillsData) {
-      makeIcon(
-        k,
-        container,
-        k.vec2(skillData.pos.x, skillData.pos.y),
-        skillData.logoData,
-        skillData.name
-      );
+      makeAppear(k, container);
     }
+  );
+  makeSection(k, k.vec2(k.center().x, k.center().y + 400), "Projects");
+  makeSection(
+    k,
+    k.vec2(k.center().x - 400, k.center().y),
+    "Skills",
+    (parent) => {
+      const container = parent.add([k.opacity(0), k.pos(-300, 0)]);
 
-    makeAppear(k, container);
-  });
-  makeSection(k, k.vec2(k.center().x + 400, k.center().y), "Work Experience");
+      for (const skillData of skillsData) {
+        makeIcon(
+          k,
+          container,
+          k.vec2(skillData.pos.x, skillData.pos.y),
+          skillData.logoData,
+          skillData.name
+        );
+      }
+
+      makeAppear(k, container);
+    }
+  );
+  makeSection(
+    k,
+    k.vec2(k.center().x + 400, k.center().y),
+    "Work Experience",
+    (parent) => {
+      const container = parent.add([k.opacity(0), k.pos(0)]);
+      makeWorkExperienceCard(k, container, k.vec2(150, -100), {
+        title: "Front-End Software Engineer",
+        description:
+          "Enhanced [REDACTED]'s interactive design platform by building and optimizing prototyping tools, empowering designers to create high-fidelity experiences and bridging the gap between design and development.",
+        company: {
+          name: "[REDACTED]",
+          startDate: "2024",
+          endDate: "Present",
+        },
+      });
+      makeWorkExperienceCard(k, container, k.vec2(150, 180), {
+        title: "Product Software Engineer",
+        description:
+          "Improved [REDACTED]'s real-time design collaboration tool by developing new components and refining existing features, enhancing workflow efficiency and creativity for design teams worldwide.",
+        company: {
+          name: "[REDACTED]",
+          startDate: "2021",
+          endDate: "2023",
+        },
+      });
+
+      makeAppear(k, container);
+    }
+  );
 
   makePlayer(k, k.vec2(k.center()), 700);
 }
