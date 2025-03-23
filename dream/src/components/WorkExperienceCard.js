@@ -1,4 +1,5 @@
 import { PALETTE } from "../constants";
+import { opacityTrickleDown } from "../utils";
 
 export default function makeWorkExperienceCard(k, parent, posVec2, roleData) {
   const card = parent.add([
@@ -37,12 +38,7 @@ export default function makeWorkExperienceCard(k, parent, posVec2, roleData) {
     k.opacity(0),
   ]);
 
-  parent.opacityTrickleDown = parent.onUpdate(() => {
-    card.opacity = parent.opacity;
-    title.opacity = parent.opacity;
-    history.opacity = parent.opacity;
-    description.opacity = parent.opacity;
-  });
+  opacityTrickleDown(parent, [title, history, description]);
 
   return card;
 }

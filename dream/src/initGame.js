@@ -92,6 +92,7 @@ export default async function initGame() {
         }),
         k.color(k.Color.fromHex(PALETTE.color1)),
         k.pos(400, 500),
+        k.opacity(0),
       ]);
 
       makeAppear(k, container);
