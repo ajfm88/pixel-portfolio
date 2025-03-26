@@ -1,5 +1,16 @@
-import makeIcon from "./Icon";
+import makeIcon from "../components/Icon";
+import { opacityTrickleDown } from "../utils";
 
 export default function makeSkillIcon(k, parent, posVec2, imageData, subtitle) {
-  return makeIcon(k, parent, posVec2, imageData, subtitle, null);
+  const [icon, subtitleText] = makeIcon(
+    k,
+    parent,
+    posVec2,
+    imageData,
+    subtitle
+  );
+
+  opacityTrickleDown(parent, [subtitleText]);
+
+  return icon;
 }

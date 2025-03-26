@@ -12,7 +12,15 @@ export default function makePlayer(k, posVec2, speed) {
   ]);
 
   player.onUpdate(() => {
-    k.camPos(player.pos);
+    if (!k.camPos().eq(player.pos)) {
+      k.tween(
+        k.camPos(),
+        player.pos,
+        0.2,
+        (newPos) => k.camPos(newPos),
+        k.easings.linear
+      );
+    }
 
     if (store.get(isModalVisibleAtom)) {
       store.set(DPadInputAtom, {

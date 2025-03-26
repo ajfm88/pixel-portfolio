@@ -1,16 +1,7 @@
 import { PALETTE } from "../constants";
-import { isModalVisibleAtom, selectedLinkAtom, store } from "../state";
-import { opacityTrickleDown } from "../utils";
 
-export default function makeIcon(
-  k,
-  parent,
-  posVec2,
-  imageData,
-  subtitle,
-  link = null
-) {
-  const linkIcon = parent.add([
+export default function makeIcon(k, parent, posVec2, imageData, subtitle) {
+  const icon = parent.add([
     k.sprite(imageData.name, {
       width: imageData.width,
       height: imageData.height,
@@ -20,7 +11,7 @@ export default function makeIcon(
     k.opacity(0),
   ]);
 
-  const subtitleText = linkIcon.add([
+  const subtitleText = icon.add([
     k.text(subtitle, { font: "ibm-bold", size: 32 }),
     k.color(k.Color.fromHex(PALETTE.color1)),
     k.anchor("center"),
@@ -28,26 +19,5 @@ export default function makeIcon(
     k.opacity(0),
   ]);
 
-  let linkSwitch;
-  if (link) {
-    linkSwitch = linkIcon.add([
-      k.rect(60, 60),
-      k.color(k.Color.fromHex(PALETTE.color1)),
-      k.anchor("center"),
-      k.area(),
-      k.pos(0, 150),
-    ]);
-
-    linkSwitch.onCollide("player", () => {
-      store.set(isModalVisibleAtom, true);
-      store.set(selectedLinkAtom, link);
-    });
-  }
-
-  opacityTrickleDown(
-    parent,
-    linkSwitch ? [subtitleText, linkSwitch] : [subtitleText]
-  );
-
-  return linkIcon;
+  return [icon, subtitleText];
 }

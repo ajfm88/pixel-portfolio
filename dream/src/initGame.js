@@ -2,9 +2,11 @@ import makeKaplayCtx from "./kaplayCtx";
 import makePlayer from "./entities/Player";
 import makeSection from "./components/Section";
 import { PALETTE } from "./constants";
-import makeIcon from "./components/Icon";
+import makeSocialIcon from "./components/SocialIcon";
+import makeSkillIcon from "./components/SkillIcon";
 import { makeAppear } from "./utils";
 import makeWorkExperienceCard from "./components/WorkExperienceCard";
+import makeEmailIcon from "./components/EmailIcon";
 
 export default async function initGame() {
   const skillsData = await (await fetch("/configs/skillsData.json")).json();
@@ -27,6 +29,7 @@ export default async function initGame() {
   k.loadSprite("css-logo", "/logos/css-logo.png");
   k.loadSprite("tailwind-logo", "/logos/tailwind-logo.png");
   k.loadSprite("python-logo", "/logos/python-logo.png");
+  k.loadSprite("email-logo", "/logos/email-logo.png");
   k.loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
 
   k.camScale(k.vec2(k.width() < 1000 ? 0.5 : 0.8));
@@ -58,10 +61,12 @@ export default async function initGame() {
     k.vec2(k.center().x, k.center().y - 400),
     "About",
     (parent) => {
-      const container = parent.add([
+      const container = parent.add([k.pos(-730, -700), k.opacity(0)]);
+
+      container.add([
         k.text("Hi, I'm JSLegendDev!", { font: "ibm-bold", size: 88 }),
         k.color(k.Color.fromHex(PALETTE.color1)),
-        k.pos(10, -500),
+        k.pos(400, 0),
         k.opacity(0),
       ]);
 
@@ -71,12 +76,12 @@ export default async function initGame() {
           size: 48,
         }),
         k.color(k.Color.fromHex(PALETTE.color1)),
-        k.pos(5, 100),
+        k.pos(495, 100),
         k.opacity(0),
       ]);
 
       for (const socialData of socialsData) {
-        makeIcon(
+        makeSocialIcon(
           k,
           container,
           k.vec2(socialData.pos.x, socialData.pos.y),
@@ -86,14 +91,18 @@ export default async function initGame() {
         );
       }
 
-      container.add([
-        k.text("Email : jslegend@protonmail.com", {
-          font: "ibm-bold",
-        }),
-        k.color(k.Color.fromHex(PALETTE.color1)),
-        k.pos(400, 500),
-        k.opacity(0),
-      ]);
+      makeEmailIcon(
+        k,
+        container,
+        k.vec2(1300, 250),
+        {
+          name: "email-logo",
+          width: 128,
+          height: 128,
+        },
+        "Email",
+        "jslegend@protonmail.com"
+      );
 
       makeAppear(k, container);
     }
@@ -107,7 +116,7 @@ export default async function initGame() {
       const container = parent.add([k.opacity(0), k.pos(-300, 0)]);
 
       for (const skillData of skillsData) {
-        makeIcon(
+        makeSkillIcon(
           k,
           container,
           k.vec2(skillData.pos.x, skillData.pos.y),
