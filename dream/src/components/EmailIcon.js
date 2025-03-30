@@ -19,7 +19,7 @@ export default function makeEmailIcon(
   );
 
   const emailSwitch = emailIcon.add([
-    k.rect(60, 60),
+    k.circle(30),
     k.color(k.Color.fromHex(PALETTE.color1)),
     k.anchor("center"),
     k.area(),

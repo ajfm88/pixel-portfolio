@@ -1,9 +1,15 @@
 import { PALETTE } from "../constants";
 import { opacityTrickleDown } from "../utils";
 
-export default function makeWorkExperienceCard(k, parent, posVec2, roleData) {
+export default function makeWorkExperienceCard(
+  k,
+  parent,
+  posVec2,
+  height,
+  roleData
+) {
   const card = parent.add([
-    k.rect(800, 250, { radius: 8 }),
+    k.rect(800, height, { radius: 8 }),
     k.area(),
     k.outline(4, k.Color.fromHex(PALETTE.color1)),
     k.pos(posVec2),

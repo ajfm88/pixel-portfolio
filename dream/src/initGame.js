@@ -4,13 +4,18 @@ import makeSection from "./components/Section";
 import { PALETTE } from "./constants";
 import makeSocialIcon from "./components/SocialIcon";
 import makeSkillIcon from "./components/SkillIcon";
-import { makeAppear } from "./utils";
+import { makeAppear, opacityTrickleDown } from "./utils";
 import makeWorkExperienceCard from "./components/WorkExperienceCard";
 import makeEmailIcon from "./components/EmailIcon";
+import makeProjectCard from "./components/ProjectCard";
 
 export default async function initGame() {
+  const generalData = await (await fetch("/configs/generalData.json")).json();
   const skillsData = await (await fetch("/configs/skillsData.json")).json();
   const socialsData = await (await fetch("/configs/socialsData.json")).json();
+  const experiencesData = await (
+    await fetch("/configs/experiencesData.json")
+  ).json();
 
   const k = makeKaplayCtx();
   k.loadFont("ibm-regular", "/fonts/IBMPlexSans-Regular.ttf");
@@ -30,6 +35,9 @@ export default async function initGame() {
   k.loadSprite("tailwind-logo", "/logos/tailwind-logo.png");
   k.loadSprite("python-logo", "/logos/python-logo.png");
   k.loadSprite("email-logo", "/logos/email-logo.png");
+  k.loadSprite("sonic-js", "/projects/sonic-js.png");
+  k.loadSprite("kirby-ts", "/projects/kirby-ts.png");
+  k.loadSprite("platformer-js", "/projects/platformer-js.png");
   k.loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
 
   k.camScale(k.vec2(k.width() < 1000 ? 0.5 : 0.8));
@@ -59,59 +67,60 @@ export default async function initGame() {
   makeSection(
     k,
     k.vec2(k.center().x, k.center().y - 400),
-    "About",
+    generalData.section1Name,
     (parent) => {
-      const container = parent.add([k.pos(-730, -700), k.opacity(0)]);
+      const container = parent.add([k.pos(-805, -700), k.opacity(0)]);
 
       container.add([
-        k.text("Hi, I'm JSLegendDev!", { font: "ibm-bold", size: 88 }),
+        k.text(generalData.header.title, { font: "ibm-bold", size: 88 }),
         k.color(k.Color.fromHex(PALETTE.color1)),
-        k.pos(400, 0),
+        k.pos(395, 0),
         k.opacity(0),
       ]);
 
       container.add([
-        k.text("A creative software developer", {
+        k.text(generalData.header.subtitle, {
           font: "ibm-bold",
           size: 48,
         }),
         k.color(k.Color.fromHex(PALETTE.color1)),
-        k.pos(495, 100),
+        k.pos(485, 100),
         k.opacity(0),
       ]);
 
+      const socialContainer = container.add([k.pos(0, 0), k.opacity(0)]);
+
       for (const socialData of socialsData) {
+        if (socialData.name === "Email") {
+          makeEmailIcon(
+            k,
+            socialContainer,
+            k.vec2(1300, 250),
+            socialData.logoData,
+            socialData.name,
+            socialData.address
+          );
+          continue;
+        }
+
         makeSocialIcon(
           k,
-          container,
+          socialContainer,
           k.vec2(socialData.pos.x, socialData.pos.y),
           socialData.logoData,
           socialData.name,
-          socialData.link
+          socialData.link,
+          socialData.description
         );
       }
-
-      makeEmailIcon(
-        k,
-        container,
-        k.vec2(1300, 250),
-        {
-          name: "email-logo",
-          width: 128,
-          height: 128,
-        },
-        "Email",
-        "jslegend@protonmail.com"
-      );
 
       makeAppear(k, container);
     }
   );
-  makeSection(k, k.vec2(k.center().x, k.center().y + 400), "Projects");
   makeSection(
     k,
     k.vec2(k.center().x - 400, k.center().y),
-    "Skills",
+    generalData.section2Name,
     (parent) => {
       const container = parent.add([k.opacity(0), k.pos(-300, 0)]);
 
@@ -131,31 +140,50 @@ export default async function initGame() {
   makeSection(
     k,
     k.vec2(k.center().x + 400, k.center().y),
-    "Work Experience",
+    generalData.section3Name,
     (parent) => {
       const container = parent.add([k.opacity(0), k.pos(0)]);
-      makeWorkExperienceCard(k, container, k.vec2(150, -100), {
-        title: "Front-End Software Engineer",
-        description:
-          "Enhanced [REDACTED]'s interactive design platform by building and optimizing prototyping tools, empowering designers to create high-fidelity experiences and bridging the gap between design and development.",
-        company: {
-          name: "[REDACTED]",
-          startDate: "2024",
-          endDate: "Present",
-        },
-      });
-      makeWorkExperienceCard(k, container, k.vec2(150, 180), {
-        title: "Product Software Engineer",
-        description:
-          "Improved [REDACTED]'s real-time design collaboration tool by developing new components and refining existing features, enhancing workflow efficiency and creativity for design teams worldwide.",
-        company: {
-          name: "[REDACTED]",
-          startDate: "2021",
-          endDate: "2023",
-        },
-      });
+      for (const experienceData of experiencesData) {
+        makeWorkExperienceCard(
+          k,
+          container,
+          k.vec2(experienceData.pos.x, experienceData.pos.y),
+          experienceData.cardHeight,
+          experienceData.roleData
+        );
+      }
 
       makeAppear(k, container);
+    }
+  );
+  makeSection(
+    k,
+    k.vec2(k.center().x, k.center().y + 400),
+    generalData.section4Name,
+    (parent) => {
+      makeProjectCard(
+        k,
+        parent,
+        k.vec2(0, 350),
+        "JavaScript Sonic Themed Infinite Runnner Game",
+        "sonic-js"
+      );
+
+      makeProjectCard(
+        k,
+        parent,
+        k.vec2(0, 840),
+        "TypeScript Kirby-like Game",
+        "kirby-ts"
+      );
+
+      makeProjectCard(
+        k,
+        parent,
+        k.vec2(0, 1320),
+        "JavaScript Platformer Game",
+        "platformer-js"
+      );
     }
   );
 

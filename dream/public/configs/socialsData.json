@@ -2,14 +2,14 @@
   {
     "pos": { "x": 300, "y": 250 },
     "name": "GitHub",
-    "description": "",
+    "description": "GitHub is where I host my projects.",
     "link": "https://github.com/jslegenddev",
     "logoData": { "name": "github-logo", "width": 228.6, "height": 179.5 }
   },
   {
     "pos": { "x": 500, "y": 250 },
     "name": "Linkedin",
-    "description": "",
+    "description": "Let's connect on Linkedin!",
     "link": "https://www.linkedin.com/in/js-legenddev-203368332/",
     "logoData": {
       "name": "linkedin-logo",
@@ -20,7 +20,7 @@
   {
     "pos": { "x": 700, "y": 250 },
     "name": "YouTube",
-    "description": "",
+    "description": "I make JavaScript/TypeScript game dev courses there.",
     "link": "https://youtube.com/@jslegenddev",
     "logoData": {
       "name": "youtube-logo",
@@ -31,7 +31,7 @@
   {
     "pos": { "x": 900, "y": 250 },
     "name": "X",
-    "description": "",
+    "description": "Here is my X/Twitter, I don't really use it much.",
     "link": "https://x.com/jslegenddev",
     "logoData": {
       "name": "x-logo",
@@ -42,10 +42,20 @@
   {
     "pos": { "x": 1100, "y": 250 },
     "name": "Substack",
-    "description": "",
+    "description": "I make written JavaScript/TypeScript game dev tutorials there.",
     "link": "https://jslegenddev.substack.com/",
     "logoData": {
       "name": "substack-logo",
+      "width": 128,
+      "height": 128
+    }
+  },
+  {
+    "pos": { "x": 1300, "y": 250 },
+    "name": "Email",
+    "address": "jslegend@protonmail.com",
+    "logoData": {
+      "name": "email-logo",
       "width": 128,
       "height": 128
     }

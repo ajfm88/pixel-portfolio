@@ -3,6 +3,7 @@ import {
   areTouchControlsEnabledAtom,
   isModalVisibleAtom,
   selectedLinkAtom,
+  selectedLinkDescriptionAtom,
 } from "../state";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -11,6 +12,7 @@ export default function Modal() {
   const modalRef = useRef(null);
   const [isVisible, setIsVisible] = useAtom(isModalVisibleAtom);
   const selectedLink = useAtomValue(selectedLinkAtom);
+  const selectedLinkDescription = useAtomValue(selectedLinkDescriptionAtom);
   const areTouchControlsEnabled = useAtomValue(areTouchControlsEnabledAtom);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -69,6 +71,7 @@ export default function Modal() {
       <div ref={modalRef} className="modal">
         <div className="modal-content">
           <h1>Do you want to open this link?</h1>
+          <p>{selectedLinkDescription}</p>
           <span>{selectedLink}</span>
           <div className="modal-btn-container">
             {buttons.map((button, index) => (

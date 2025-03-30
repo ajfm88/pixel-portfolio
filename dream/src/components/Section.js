@@ -2,7 +2,7 @@ import { PALETTE } from "../constants";
 
 export default function makeSection(k, posVec2, sectionName, onCollide = null) {
   const section = k.add([
-    k.rect(200, 200),
+    k.rect(200, 200, { radius: 10 }),
     k.anchor("center"),
     k.area(),
     k.pos(posVec2),

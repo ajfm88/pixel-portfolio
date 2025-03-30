@@ -1,5 +1,10 @@
 import { PALETTE } from "../constants";
-import { isModalVisibleAtom, selectedLinkAtom, store } from "../state";
+import {
+  isModalVisibleAtom,
+  selectedLinkAtom,
+  selectedLinkDescriptionAtom,
+  store,
+} from "../state";
 import { opacityTrickleDown } from "../utils";
 import makeIcon from "./Icon";
 
@@ -9,7 +14,8 @@ export default function makeSocialIcon(
   posVec2,
   imageData,
   subtitle,
-  link
+  link,
+  description
 ) {
   const [socialIcon, subtitleText] = makeIcon(
     k,
@@ -20,7 +26,7 @@ export default function makeSocialIcon(
   );
 
   const linkSwitch = socialIcon.add([
-    k.rect(60, 60),
+    k.circle(30),
     k.color(k.Color.fromHex(PALETTE.color1)),
     k.anchor("center"),
     k.area(),
@@ -30,6 +36,7 @@ export default function makeSocialIcon(
   linkSwitch.onCollide("player", () => {
     store.set(isModalVisibleAtom, true);
     store.set(selectedLinkAtom, link);
+    store.set(selectedLinkDescriptionAtom, description);
   });
 
   opacityTrickleDown(parent, [subtitleText, linkSwitch]);
