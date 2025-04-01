@@ -4,7 +4,7 @@ import makeSection from "./components/Section";
 import { PALETTE } from "./constants";
 import makeSocialIcon from "./components/SocialIcon";
 import makeSkillIcon from "./components/SkillIcon";
-import { makeAppear, opacityTrickleDown } from "./utils";
+import { makeAppear } from "./utils";
 import makeWorkExperienceCard from "./components/WorkExperienceCard";
 import makeEmailIcon from "./components/EmailIcon";
 import makeProjectCard from "./components/ProjectCard";
@@ -88,7 +88,7 @@ export default async function initGame() {
         k.opacity(0),
       ]);
 
-      const socialContainer = container.add([k.pos(0, 0), k.opacity(0)]);
+      const socialContainer = container.add([k.pos(50, 0), k.opacity(0)]);
 
       for (const socialData of socialsData) {
         if (socialData.name === "Email") {
@@ -115,6 +115,7 @@ export default async function initGame() {
       }
 
       makeAppear(k, container);
+      makeAppear(k, socialContainer);
     }
   );
   makeSection(
@@ -161,9 +162,10 @@ export default async function initGame() {
     k.vec2(k.center().x, k.center().y + 400),
     generalData.section4Name,
     (parent) => {
+      const container = parent.add([k.opacity(0), k.pos(0, 0)]);
       makeProjectCard(
         k,
-        parent,
+        container,
         k.vec2(0, 350),
         "JavaScript Sonic Themed Infinite Runnner Game",
         "sonic-js"
@@ -171,7 +173,7 @@ export default async function initGame() {
 
       makeProjectCard(
         k,
-        parent,
+        container,
         k.vec2(0, 840),
         "TypeScript Kirby-like Game",
         "kirby-ts"
@@ -179,11 +181,13 @@ export default async function initGame() {
 
       makeProjectCard(
         k,
-        parent,
+        container,
         k.vec2(0, 1320),
         "JavaScript Platformer Game",
         "platformer-js"
       );
+
+      makeAppear(k, container);
     }
   );
 

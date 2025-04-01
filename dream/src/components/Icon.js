@@ -16,7 +16,6 @@ export default function makeIcon(k, parent, posVec2, imageData, subtitle) {
     k.color(k.Color.fromHex(PALETTE.color1)),
     k.anchor("center"),
     k.pos(0, 100),
-    k.opacity(0),
   ]);
 
   return [icon, subtitleText];

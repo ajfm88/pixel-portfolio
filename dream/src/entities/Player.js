@@ -1,3 +1,4 @@
+import { DIAGONAL_FACTOR } from "../constants";
 import { DPadInputAtom, isModalVisibleAtom, store } from "../state";
 
 export default function makePlayer(k, posVec2, speed) {
@@ -9,6 +10,9 @@ export default function makePlayer(k, posVec2, speed) {
     k.body(),
     k.pos(posVec2),
     "player",
+    {
+      direction: k.vec2(0, 0),
+    },
   ]);
 
   player.onUpdate(() => {
@@ -34,13 +38,21 @@ export default function makePlayer(k, posVec2, speed) {
 
     const DPadInput = store.get(DPadInputAtom);
 
+    player.direction = k.vec2(0, 0);
     if (k.isButtonDown("left") || DPadInput.isLeftPressed)
-      player.move(-speed, 0);
+      player.direction.x = -1;
     if (k.isButtonDown("right") || DPadInput.isRightPressed)
-      player.move(speed, 0);
-    if (k.isButtonDown("up") || DPadInput.isUpPressed) player.move(0, -speed);
+      player.direction.x = 1;
+    if (k.isButtonDown("up") || DPadInput.isUpPressed) player.direction.y = -1;
     if (k.isButtonDown("down") || DPadInput.isDownPressed)
-      player.move(0, speed);
+      player.direction.y = 1;
+
+    if (player.direction.x && player.direction.y) {
+      player.move(player.direction.scale(DIAGONAL_FACTOR * speed));
+      return;
+    }
+
+    player.move(player.direction.scale(speed));
   });
 
   return player;
