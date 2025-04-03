@@ -11,6 +11,15 @@ export const DPadInputAtom = atom({
   isDownPressed: false,
 });
 
+export const keyboardInputAtom = atom({
+  isLeftPressed: false,
+  isRightPressed: false,
+  isUpPressed: false,
+  isDownPressed: false,
+});
+
 export const areTouchControlsEnabledAtom = atom(false);
+
+export const cameraZoomValueAtom = atom({ value: 1 });
 
 export const store = createStore();

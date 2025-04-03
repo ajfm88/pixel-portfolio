@@ -1,5 +1,10 @@
 import { DIAGONAL_FACTOR } from "../constants";
-import { DPadInputAtom, isModalVisibleAtom, store } from "../state";
+import {
+  DPadInputAtom,
+  isModalVisibleAtom,
+  keyboardInputAtom,
+  store,
+} from "../state";
 
 export default function makePlayer(k, posVec2, speed) {
   const player = k.add([
@@ -15,7 +20,53 @@ export default function makePlayer(k, posVec2, speed) {
     },
   ]);
 
+  const DPadInput = store.get(DPadInputAtom);
+  const keyboardInput = store.get(keyboardInputAtom);
+
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "KeyW" || e.code === "ArrowUp") {
+      keyboardInput.isUpPressed = true;
+    }
+
+    if (e.code === "KeyS" || e.code === "ArrowDown") {
+      keyboardInput.isDownPressed = true;
+    }
+
+    if (e.code === "KeyA" || e.code === "ArrowLeft") {
+      keyboardInput.isLeftPressed = true;
+    }
+
+    if (e.code === "KeyD" || e.code === "ArrowRight") {
+      keyboardInput.isRightPressed = true;
+    }
+
+    store.set(keyboardInputAtom, keyboardInput);
+  });
+
+  window.addEventListener("keyup", (e) => {
+    if (e.code === "KeyW" || e.code === "ArrowUp") {
+      keyboardInput.isUpPressed = false;
+    }
+
+    if (e.code === "KeyS" || e.code === "ArrowDown") {
+      keyboardInput.isDownPressed = false;
+    }
+
+    if (e.code === "KeyA" || e.code === "ArrowLeft") {
+      keyboardInput.isLeftPressed = false;
+    }
+
+    if (e.code === "KeyD" || e.code === "ArrowRight") {
+      keyboardInput.isRightPressed = false;
+    }
+
+    store.set(keyboardInputAtom, keyboardInput);
+  });
+
   player.onUpdate(() => {
+    const DPadInput = store.get(DPadInputAtom);
+    const keyboardInput = store.get(keyboardInputAtom);
+
     if (!k.camPos().eq(player.pos)) {
       k.tween(
         k.camPos(),
@@ -33,18 +84,23 @@ export default function makePlayer(k, posVec2, speed) {
         isUpPressed: false,
         isDownPressed: false,
       });
+      store.set(keyboardInputAtom, {
+        isLeftPressed: false,
+        isRightPressed: false,
+        isUpPressed: false,
+        isDownPressed: false,
+      });
       return;
     }
 
-    const DPadInput = store.get(DPadInputAtom);
-
     player.direction = k.vec2(0, 0);
-    if (k.isButtonDown("left") || DPadInput.isLeftPressed)
+    if (keyboardInput.isLeftPressed || DPadInput.isLeftPressed)
       player.direction.x = -1;
-    if (k.isButtonDown("right") || DPadInput.isRightPressed)
+    if (keyboardInput.isRightPressed || DPadInput.isRightPressed)
       player.direction.x = 1;
-    if (k.isButtonDown("up") || DPadInput.isUpPressed) player.direction.y = -1;
-    if (k.isButtonDown("down") || DPadInput.isDownPressed)
+    if (keyboardInput.isUpPressed || DPadInput.isUpPressed)
+      player.direction.y = -1;
+    if (keyboardInput.isDownPressed || DPadInput.isDownPressed)
       player.direction.y = 1;
 
     if (player.direction.x && player.direction.y) {

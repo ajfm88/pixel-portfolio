@@ -111,7 +111,7 @@ span {
   opacity: 0.4;
 }
 
-.dpad-btn-color {
+.ui-btn {
   color: var(--color2);
   background-color: var(--color1);
   border: var(--color1);
@@ -149,6 +149,15 @@ span {
   width: 5rem;
   height: 5rem;
   font-size: 2rem;
+}
+
+.camera-controller {
+  display: flex;
+  position: fixed;
+  top: 5vh;
+  right: 15vw;
+  z-index: 1;
+  opacity: 0.4;
 }
 
 @media screen and (max-width: 600px) {

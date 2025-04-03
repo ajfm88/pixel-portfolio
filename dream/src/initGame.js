@@ -8,6 +8,7 @@ import { makeAppear } from "./utils";
 import makeWorkExperienceCard from "./components/WorkExperienceCard";
 import makeEmailIcon from "./components/EmailIcon";
 import makeProjectCard from "./components/ProjectCard";
+import { cameraZoomValueAtom, store } from "./state";
 
 export default async function initGame() {
   const generalData = await (await fetch("/configs/generalData.json")).json();
@@ -40,7 +41,23 @@ export default async function initGame() {
   k.loadSprite("platformer-js", "/projects/platformer-js.png");
   k.loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
 
-  k.camScale(k.vec2(k.width() < 1000 ? 0.5 : 0.8));
+  const setInitCamZoomValue = () => {
+    if (k.width() < 1000) {
+      k.camScale(k.vec2(0.5));
+      store.set(cameraZoomValueAtom, 0.5);
+      return;
+    }
+    k.camScale(k.vec2(0.8));
+    store.set(cameraZoomValueAtom, 0.8);
+  };
+  setInitCamZoomValue();
+
+  const cameraZoomValue = store.get(cameraZoomValueAtom);
+  store.set(cameraZoomValueAtom, 0.75);
+  k.onUpdate(() => {
+    console.log(cameraZoomValue);
+    if (cameraZoomValue !== k.camScale().x) k.camScale(k.vec2(cameraZoomValue));
+  });
 
   const tiledBackground = k.add([
     k.uvquad(k.width(), k.height()),
