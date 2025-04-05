@@ -4,7 +4,7 @@ import {
   selectedLinkAtom,
   selectedLinkDescriptionAtom,
   store,
-} from "../state";
+} from "../store";
 import { opacityTrickleDown } from "../utils";
 import makeIcon from "./Icon";
 

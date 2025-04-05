@@ -1,39 +1,48 @@
 import { useAtom } from "jotai";
-import { cameraZoomValueAtom } from "../state";
+import { cameraZoomValueAtom } from "../store";
+import { ZOOM_MAX_BOUND, ZOOM_MIN_BOUND } from "../constants";
+import PropTypes from "prop-types";
 
-const MAX_BOUND = 2;
-const MIN_BOUND = 0.2;
-export function CameraController() {
+export function CameraController({ isVisible }) {
   const [camZoomValue, setCamZoomValue] = useAtom(cameraZoomValueAtom);
 
   return (
-    <div className="camera-controller">
-      <button
-        className="ui-btn"
-        onClick={() => {
-          const newZoomVal = camZoomValue + 0.2;
-          if (newZoomVal <= MAX_BOUND && newZoomVal >= MIN_BOUND) {
-            setCamZoomValue(newZoomVal);
-          }
-        }}
-      >
-        +
-      </button>
-      <button
-        className="ui-btn"
-        onClick={() => {
-          setCamZoomValue((prevZoomVal) => {
-            const newZoomVal = prevZoomVal - 0.2;
-            if (newZoomVal <= MAX_BOUND && newZoomVal >= MIN_BOUND) {
-              return newZoomVal;
-            }
+    isVisible && (
+      <div className="camera-controller">
+        <button
+          className="camera-controller-btn"
+          onClick={() => {
+            const newZoomValue = camZoomValue + 0.2;
 
-            return prevZoomVal;
-          });
-        }}
-      >
-        -
-      </button>
-    </div>
+            if (
+              newZoomValue <= ZOOM_MAX_BOUND &&
+              newZoomValue >= ZOOM_MIN_BOUND
+            ) {
+              setCamZoomValue(newZoomValue);
+            }
+          }}
+        >
+          +
+        </button>
+        <button
+          className="camera-controller-btn"
+          onClick={() => {
+            const newZoomValue = camZoomValue - 0.2;
+            if (
+              newZoomValue <= ZOOM_MAX_BOUND &&
+              newZoomValue >= ZOOM_MIN_BOUND
+            ) {
+              setCamZoomValue(newZoomValue);
+            }
+          }}
+        >
+          -
+        </button>
+      </div>
+    )
   );
 }
+
+CameraController.propTypes = {
+  isVisible: PropTypes.bool,
+};

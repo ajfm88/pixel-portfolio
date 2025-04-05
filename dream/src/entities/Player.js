@@ -4,7 +4,7 @@ import {
   isModalVisibleAtom,
   keyboardInputAtom,
   store,
-} from "../state";
+} from "../store";
 
 export default function makePlayer(k, posVec2, speed) {
   const player = k.add([
@@ -20,10 +20,9 @@ export default function makePlayer(k, posVec2, speed) {
     },
   ]);
 
-  const DPadInput = store.get(DPadInputAtom);
-  const keyboardInput = store.get(keyboardInputAtom);
-
   window.addEventListener("keydown", (e) => {
+    const keyboardInput = store.get(keyboardInputAtom);
+
     if (e.code === "KeyW" || e.code === "ArrowUp") {
       keyboardInput.isUpPressed = true;
     }
@@ -44,6 +43,8 @@ export default function makePlayer(k, posVec2, speed) {
   });
 
   window.addEventListener("keyup", (e) => {
+    const keyboardInput = store.get(keyboardInputAtom);
+
     if (e.code === "KeyW" || e.code === "ArrowUp") {
       keyboardInput.isUpPressed = false;
     }

@@ -8,7 +8,7 @@ import { makeAppear } from "./utils";
 import makeWorkExperienceCard from "./components/WorkExperienceCard";
 import makeEmailIcon from "./components/EmailIcon";
 import makeProjectCard from "./components/ProjectCard";
-import { cameraZoomValueAtom, store } from "./state";
+import { cameraZoomValueAtom, store } from "./store";
 
 export default async function initGame() {
   const generalData = await (await fetch("/configs/generalData.json")).json();
@@ -52,10 +52,8 @@ export default async function initGame() {
   };
   setInitCamZoomValue();
 
-  const cameraZoomValue = store.get(cameraZoomValueAtom);
-  store.set(cameraZoomValueAtom, 0.75);
   k.onUpdate(() => {
-    console.log(cameraZoomValue);
+    const cameraZoomValue = store.get(cameraZoomValueAtom);
     if (cameraZoomValue !== k.camScale().x) k.camScale(k.vec2(cameraZoomValue));
   });
 

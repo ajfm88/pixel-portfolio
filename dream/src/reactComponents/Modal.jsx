@@ -4,7 +4,7 @@ import {
   isModalVisibleAtom,
   selectedLinkAtom,
   selectedLinkDescriptionAtom,
-} from "../state";
+} from "../store";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Modal() {

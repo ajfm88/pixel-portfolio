@@ -1,7 +1,7 @@
 import { useState } from "react";
 import initGame from "../initGame";
 import { useSetAtom } from "jotai";
-import { areTouchControlsEnabledAtom } from "../state";
+import { areTouchControlsEnabledAtom } from "../store";
 
 export default function Settings() {
   const [isVisible, setIsVisible] = useState(true);
