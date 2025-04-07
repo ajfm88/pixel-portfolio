@@ -8,10 +8,10 @@ import {
 
 export default function makePlayer(k, posVec2, speed) {
   const player = k.add([
-    k.rect(60, 60),
+    k.sprite("player", { anim: "idle" }),
+    k.scale(8),
     k.anchor("center"),
-    k.area(),
-    k.outline(6),
+    k.area({ shape: new k.Rect(k.vec2(0), 5, 5) }),
     k.body(),
     k.pos(posVec2),
     "player",
@@ -19,50 +19,6 @@ export default function makePlayer(k, posVec2, speed) {
       direction: k.vec2(0, 0),
     },
   ]);
-
-  window.addEventListener("keydown", (e) => {
-    const keyboardInput = store.get(keyboardInputAtom);
-
-    if (e.code === "KeyW" || e.code === "ArrowUp") {
-      keyboardInput.isUpPressed = true;
-    }
-
-    if (e.code === "KeyS" || e.code === "ArrowDown") {
-      keyboardInput.isDownPressed = true;
-    }
-
-    if (e.code === "KeyA" || e.code === "ArrowLeft") {
-      keyboardInput.isLeftPressed = true;
-    }
-
-    if (e.code === "KeyD" || e.code === "ArrowRight") {
-      keyboardInput.isRightPressed = true;
-    }
-
-    store.set(keyboardInputAtom, keyboardInput);
-  });
-
-  window.addEventListener("keyup", (e) => {
-    const keyboardInput = store.get(keyboardInputAtom);
-
-    if (e.code === "KeyW" || e.code === "ArrowUp") {
-      keyboardInput.isUpPressed = false;
-    }
-
-    if (e.code === "KeyS" || e.code === "ArrowDown") {
-      keyboardInput.isDownPressed = false;
-    }
-
-    if (e.code === "KeyA" || e.code === "ArrowLeft") {
-      keyboardInput.isLeftPressed = false;
-    }
-
-    if (e.code === "KeyD" || e.code === "ArrowRight") {
-      keyboardInput.isRightPressed = false;
-    }
-
-    store.set(keyboardInputAtom, keyboardInput);
-  });
 
   player.onUpdate(() => {
     const DPadInput = store.get(DPadInputAtom);
