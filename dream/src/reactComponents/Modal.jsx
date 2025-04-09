@@ -71,8 +71,8 @@ export default function Modal() {
       <div ref={modalRef} className="modal">
         <div className="modal-content">
           <h1>Do you want to open this link?</h1>
-          <p>{selectedLinkDescription}</p>
           <span>{selectedLink}</span>
+          <p>{selectedLinkDescription}</p>
           <div className="modal-btn-container">
             {buttons.map((button, index) => (
               <button
