@@ -187,14 +187,14 @@ export default async function initGame() {
         k.opacity(0),
       ]);
 
-      const socialContainer = container.add([k.pos(50, 0), k.opacity(0)]);
+      const socialContainer = container.add([k.pos(130, 0), k.opacity(0)]);
 
       for (const socialData of socialsData) {
         if (socialData.name === "Email") {
           makeEmailIcon(
             k,
             socialContainer,
-            k.vec2(1300, 250),
+            k.vec2(socialData.pos.x, socialData.pos.y),
             socialData.logoData,
             socialData.name,
             socialData.address

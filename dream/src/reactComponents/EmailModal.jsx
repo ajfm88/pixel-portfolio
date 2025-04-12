@@ -1,36 +1,36 @@
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import {
+  isEmailModalVisibleAtom,
+  emailAtom,
   areTouchControlsEnabledAtom,
-  isModalVisibleAtom,
-  selectedLinkAtom,
-  selectedLinkDescriptionAtom,
 } from "../store";
-import { useCallback, useEffect, useRef, useState } from "react";
 
-export default function Modal() {
+export default function EmailModal() {
   const canvasRef = useRef(null);
   const modalRef = useRef(null);
-  const [isVisible, setIsVisible] = useAtom(isModalVisibleAtom);
-  const selectedLink = useAtomValue(selectedLinkAtom);
-  const selectedLinkDescription = useAtomValue(selectedLinkDescriptionAtom);
+
   const areTouchControlsEnabled = useAtomValue(areTouchControlsEnabledAtom);
+  const [isVisible, setIsVisible] = useAtom(isEmailModalVisibleAtom);
+  const email = useAtomValue(emailAtom);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [onCopyMessage, setOnCopyMessage] = useState("");
+
   const buttons = ["Yes", "No"];
 
   const handleClick = useCallback(
     (index) => {
       if (index === 0) {
-        window.open(selectedLink, "_blank");
-        setIsVisible(false);
-        canvasRef.current.focus();
+        navigator.clipboard.writeText(email);
+        setOnCopyMessage("Email copied to clipboard!");
         return;
       }
 
       setIsVisible(false);
       canvasRef.current.focus();
     },
-    [selectedLink, setIsVisible]
+    [email, setIsVisible]
   );
   const keyboardControls = useCallback(
     (e) => {
@@ -44,6 +44,7 @@ export default function Modal() {
       }
 
       if (e.code === "Space") {
+        console.log("pressing the space key within EmailModal");
         handleClick(selectedIndex);
       }
     },
@@ -70,9 +71,9 @@ export default function Modal() {
     isVisible && (
       <div ref={modalRef} className="modal">
         <div className="modal-content">
-          <h1>Do you want to open this link?</h1>
-          <span>{selectedLink}</span>
-          <p>{selectedLinkDescription}</p>
+          <h1>Copy my email to your clipboard?</h1>
+          <span>{email}</span>
+          <p>{onCopyMessage}</p>
           <div className="modal-btn-container">
             {buttons.map((button, index) => (
               <button

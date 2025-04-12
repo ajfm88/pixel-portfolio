@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useAtom } from "jotai";
 import { DPadInputAtom } from "../store";
 
-export function VirtualDPad({ isVisible }) {
+export default function VirtualDPad({ isVisible }) {
   const [DPadInput, setDpadInput] = useAtom(DPadInputAtom);
 
   return (

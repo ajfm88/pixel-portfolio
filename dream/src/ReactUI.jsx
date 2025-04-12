@@ -1,9 +1,11 @@
 import { useAtomValue } from "jotai";
 import { areTouchControlsEnabledAtom } from "./store";
-import { CameraController } from "./reactComponents/CameraController";
-import Modal from "./reactComponents/Modal";
+import CameraController from "./reactComponents/CameraController";
+
 import Settings from "./reactComponents/Settings";
-import { VirtualDPad } from "./reactComponents/VirtualDPad";
+import VirtualDPad from "./reactComponents/VirtualDPad";
+import SocialModal from "./reactComponents/SocialModal";
+import EmailModal from "./reactComponents/EmailModal";
 
 export default function ReactUI() {
   const areTouchControlsEnabled = useAtomValue(areTouchControlsEnabledAtom);
@@ -13,7 +15,8 @@ export default function ReactUI() {
       <CameraController isVisible={areTouchControlsEnabled} />
       <VirtualDPad isVisible={areTouchControlsEnabled} />
       <Settings />
-      <Modal />
+      <SocialModal />
+      <EmailModal />
     </>
   );
 }

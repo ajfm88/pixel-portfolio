@@ -8,17 +8,6 @@
   },
   {
     "pos": { "x": 500, "y": 250 },
-    "name": "Linkedin",
-    "description": "Let's connect on Linkedin!",
-    "link": "https://www.linkedin.com/in/js-legenddev-203368332/",
-    "logoData": {
-      "name": "linkedin-logo",
-      "width": 112,
-      "height": 100
-    }
-  },
-  {
-    "pos": { "x": 700, "y": 250 },
     "name": "YouTube",
     "description": "I make JavaScript/TypeScript game dev courses there.",
     "link": "https://youtube.com/@jslegenddev",
@@ -29,7 +18,7 @@
     }
   },
   {
-    "pos": { "x": 900, "y": 250 },
+    "pos": { "x": 700, "y": 250 },
     "name": "X",
     "description": "Here is my X/Twitter, I don't really use it much.",
     "link": "https://x.com/jslegenddev",
@@ -40,7 +29,7 @@
     }
   },
   {
-    "pos": { "x": 1100, "y": 250 },
+    "pos": { "x": 900, "y": 250 },
     "name": "Substack",
     "description": "I make written JavaScript/TypeScript game dev tutorials there.",
     "link": "https://jslegenddev.substack.com/",
@@ -51,7 +40,7 @@
     }
   },
   {
-    "pos": { "x": 1300, "y": 250 },
+    "pos": { "x": 1100, "y": 250 },
     "name": "Email",
     "address": "jslegend@protonmail.com",
     "logoData": {

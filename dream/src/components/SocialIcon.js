@@ -1,6 +1,6 @@
 import { PALETTE } from "../constants";
 import {
-  isModalVisibleAtom,
+  isSocialModalVisibleAtom,
   selectedLinkAtom,
   selectedLinkDescriptionAtom,
   store,
@@ -34,7 +34,7 @@ export default function makeSocialIcon(
   ]);
 
   linkSwitch.onCollide("player", () => {
-    store.set(isModalVisibleAtom, true);
+    store.set(isSocialModalVisibleAtom, true);
     store.set(selectedLinkAtom, link);
     store.set(selectedLinkDescriptionAtom, description);
   });

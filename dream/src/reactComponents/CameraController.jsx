@@ -3,7 +3,7 @@ import { cameraZoomValueAtom } from "../store";
 import { ZOOM_MAX_BOUND, ZOOM_MIN_BOUND } from "../constants";
 import PropTypes from "prop-types";
 
-export function CameraController({ isVisible }) {
+export default function CameraController({ isVisible }) {
   const [camZoomValue, setCamZoomValue] = useAtom(cameraZoomValueAtom);
 
   return (

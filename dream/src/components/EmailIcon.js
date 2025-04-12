@@ -1,4 +1,5 @@
 import { PALETTE } from "../constants";
+import { emailAtom, isEmailModalVisibleAtom, store } from "../store";
 import { opacityTrickleDown } from "../utils";
 import makeIcon from "./Icon";
 
@@ -8,7 +9,7 @@ export default function makeEmailIcon(
   posVec2,
   imageData,
   subtitle,
-  address
+  email
 ) {
   const [emailIcon, subtitleText] = makeIcon(
     k,
@@ -27,7 +28,8 @@ export default function makeEmailIcon(
   ]);
 
   emailSwitch.onCollide("player", () => {
-    console.log(address);
+    store.set(isEmailModalVisibleAtom, true);
+    store.set(emailAtom, email);
   });
 
   opacityTrickleDown(parent, [subtitleText, emailSwitch]);

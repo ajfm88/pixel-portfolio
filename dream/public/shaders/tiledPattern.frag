@@ -2,8 +2,6 @@ uniform float u_time;
 uniform vec3 u_color1;
 uniform vec3 u_color2;
 uniform vec2 u_speed;
-uniform float u_angle;
-uniform float u_scale;
 uniform float u_aspect;
 uniform float u_size;
 

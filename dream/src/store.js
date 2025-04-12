@@ -1,8 +1,11 @@
 import { atom, createStore } from "jotai";
 
-export const isModalVisibleAtom = atom(false);
+export const isSocialModalVisibleAtom = atom(false);
 export const selectedLinkAtom = atom(null);
 export const selectedLinkDescriptionAtom = atom("");
+
+export const isEmailModalVisibleAtom = atom(false);
+export const emailAtom = atom("");
 
 export const DPadInputAtom = atom({
   isLeftPressed: false,

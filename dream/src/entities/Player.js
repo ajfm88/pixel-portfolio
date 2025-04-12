@@ -1,7 +1,8 @@
 import { DIAGONAL_FACTOR } from "../constants";
 import {
   DPadInputAtom,
-  isModalVisibleAtom,
+  isEmailModalVisibleAtom,
+  isSocialModalVisibleAtom,
   keyboardInputAtom,
   store,
 } from "../store";
@@ -11,7 +12,7 @@ export default function makePlayer(k, posVec2, speed) {
     k.sprite("player", { anim: "walk-down" }),
     k.scale(8),
     k.anchor("center"),
-    k.area({ shape: new k.Rect(k.vec2(0), 5, 5) }),
+    k.area({ shape: new k.Rect(k.vec2(0), 5, 10) }),
     k.body(),
     k.pos(posVec2),
     "player",
@@ -34,7 +35,10 @@ export default function makePlayer(k, posVec2, speed) {
       );
     }
 
-    if (store.get(isModalVisibleAtom)) {
+    if (
+      store.get(isSocialModalVisibleAtom) ||
+      store.get(isEmailModalVisibleAtom)
+    ) {
       store.set(DPadInputAtom, {
         isLeftPressed: false,
         isRightPressed: false,
