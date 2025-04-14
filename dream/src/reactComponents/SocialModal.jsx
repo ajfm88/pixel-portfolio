@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import {
   areTouchControlsEnabledAtom,
@@ -8,8 +8,6 @@ import {
 } from "../store";
 
 export default function SocialModal() {
-  const canvasRef = useRef(null);
-  const modalRef = useRef(null);
   const [isVisible, setIsVisible] = useAtom(isSocialModalVisibleAtom);
   const selectedLink = useAtomValue(selectedLinkAtom);
   const selectedLinkDescription = useAtomValue(selectedLinkDescriptionAtom);
@@ -23,12 +21,10 @@ export default function SocialModal() {
       if (index === 0) {
         window.open(selectedLink, "_blank");
         setIsVisible(false);
-        canvasRef.current.focus();
         return;
       }
 
       setIsVisible(false);
-      canvasRef.current.focus();
     },
     [selectedLink, setIsVisible]
   );
@@ -52,6 +48,7 @@ export default function SocialModal() {
   );
 
   useEffect(() => {
+    if (!isVisible) return;
     if (areTouchControlsEnabled) return;
 
     window.addEventListener("keydown", keyboardControls);
@@ -59,17 +56,11 @@ export default function SocialModal() {
     return () => {
       window.removeEventListener("keydown", keyboardControls);
     };
-  }, [selectedIndex, keyboardControls, areTouchControlsEnabled]);
-
-  useEffect(() => {
-    if (!canvasRef.current) {
-      canvasRef.current = document.getElementsByTagName("canvas")[0];
-    }
-  }, [isVisible]);
+  }, [keyboardControls, areTouchControlsEnabled, isVisible]);
 
   return (
     isVisible && (
-      <div ref={modalRef} className="modal">
+      <div className="modal">
         <div className="modal-content">
           <h1>Do you want to open this link?</h1>
           <span>{selectedLink}</span>
