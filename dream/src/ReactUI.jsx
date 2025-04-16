@@ -6,6 +6,7 @@ import Settings from "./reactComponents/Settings";
 import VirtualDPad from "./reactComponents/VirtualDPad";
 import SocialModal from "./reactComponents/SocialModal";
 import EmailModal from "./reactComponents/EmailModal";
+import ProjectModal from "./reactComponents/ProjectModal";
 
 export default function ReactUI() {
   const areTouchControlsEnabled = useAtomValue(areTouchControlsEnabledAtom);
@@ -14,9 +15,10 @@ export default function ReactUI() {
     <>
       <CameraController isVisible={areTouchControlsEnabled} />
       <VirtualDPad isVisible={areTouchControlsEnabled} />
+      <SocialModal areTouchControlsEnabled={areTouchControlsEnabled} />
+      <EmailModal areTouchControlsEnabled={areTouchControlsEnabled} />
+      <ProjectModal areTouchControlsEnabled={areTouchControlsEnabled} />
       <Settings />
-      <SocialModal />
-      <EmailModal />
     </>
   );
 }

@@ -1,13 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { useAtom, useAtomValue } from "jotai";
-import {
-  isEmailModalVisibleAtom,
-  emailAtom,
-  areTouchControlsEnabledAtom,
-} from "../store";
+import { isEmailModalVisibleAtom, emailAtom } from "../store";
+import PropTypes from "prop-types";
 
-export default function EmailModal() {
-  const areTouchControlsEnabled = useAtomValue(areTouchControlsEnabledAtom);
+export default function EmailModal({ areTouchControlsEnabled }) {
   const [isVisible, setIsVisible] = useAtom(isEmailModalVisibleAtom);
   const email = useAtomValue(emailAtom);
 
@@ -85,3 +81,7 @@ export default function EmailModal() {
     )
   );
 }
+
+EmailModal.propTypes = {
+  areTouchControlsEnabled: PropTypes.bool,
+};

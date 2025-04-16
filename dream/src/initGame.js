@@ -222,7 +222,14 @@ export default async function initGame() {
     k.vec2(k.center().x - 400, k.center().y),
     generalData.section2Name,
     (parent) => {
-      const container = parent.add([k.opacity(0), k.pos(-300, 0)]);
+      /* make the container independent of the section
+       so that the skill icons appear on top of every section's children.
+       so that when the skill icons are pushed around by the player
+       they always remain on top */
+      const container = k.add([
+        k.opacity(0),
+        k.pos(parent.pos.x - 300, parent.pos.y),
+      ]);
 
       for (const skillData of skillsData) {
         makeSkillIcon(

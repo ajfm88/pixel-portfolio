@@ -1,4 +1,9 @@
 import { PALETTE } from "../constants";
+import {
+  isProjectModalVisibleAtom,
+  selectedProjectDataAtom,
+  store,
+} from "../store";
 import { opacityTrickleDown } from "../utils";
 
 export default function makeProjectCard(k, parent, posVec2, title, imageName) {
@@ -33,7 +38,20 @@ export default function makeProjectCard(k, parent, posVec2, title, imageName) {
   ]);
 
   cardSwitch.onCollide("player", () => {
-    // TODO : Open project modal.
+    store.set(isProjectModalVisibleAtom, true);
+    store.set(selectedProjectDataAtom, {
+      title,
+      imageSrc: `./projects/${imageName}.png`, // TODO: do not hardcode the file type
+      description: `This is a test This is a testThis is a testThis is a testThis is a test
+        This is a test This is a testThis is a testThis is a testThis is a test
+        This is a test This is a testThis is a testThis is a testThis is a test
+        This is a test This is a testThis is a testThis is a testThis is a test`,
+      links: [
+        { name: "Live Demo", link: "//" },
+        { name: "Source Code", link: "//" },
+        { name: "YouTube Tutorial", link: "//" },
+      ],
+    });
     console.log("Project modal with more details should open");
   });
 

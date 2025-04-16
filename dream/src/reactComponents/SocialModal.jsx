@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import {
-  areTouchControlsEnabledAtom,
   isSocialModalVisibleAtom,
   selectedLinkAtom,
   selectedLinkDescriptionAtom,
 } from "../store";
+import PropTypes from "prop-types";
 
-export default function SocialModal() {
+export default function SocialModal({ areTouchControlsEnabled }) {
   const [isVisible, setIsVisible] = useAtom(isSocialModalVisibleAtom);
   const selectedLink = useAtomValue(selectedLinkAtom);
   const selectedLinkDescription = useAtomValue(selectedLinkDescriptionAtom);
-  const areTouchControlsEnabled = useAtomValue(areTouchControlsEnabledAtom);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const buttons = ["Yes", "No"];
@@ -85,3 +84,7 @@ export default function SocialModal() {
     )
   );
 }
+
+SocialModal.propTypes = {
+  areTouchControlsEnabled: PropTypes.bool,
+};

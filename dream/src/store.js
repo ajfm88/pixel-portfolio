@@ -7,6 +7,14 @@ export const selectedLinkDescriptionAtom = atom("");
 export const isEmailModalVisibleAtom = atom(false);
 export const emailAtom = atom("");
 
+export const isProjectModalVisibleAtom = atom(false);
+export const selectedProjectDataAtom = atom({
+  title: "",
+  description: "",
+  imageSrc: "",
+  links: [{ name: "", link: "" }],
+});
+
 export const DPadInputAtom = atom({
   isLeftPressed: false,
   isRightPressed: false,
