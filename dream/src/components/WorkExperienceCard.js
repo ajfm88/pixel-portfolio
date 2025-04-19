@@ -25,6 +25,7 @@ export default function makeWorkExperienceCard(
   ]);
 
   const history = card.add([
+    k.text("hello world!"),
     k.text(
       `${roleData.company.name} -- ${roleData.company.startDate}-${roleData.company.endDate}`,
       {

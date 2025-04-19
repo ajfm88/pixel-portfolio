@@ -1,76 +1,14 @@
 import makeKaplayCtx from "./kaplayCtx";
 import makePlayer from "./entities/Player";
 import makeSection from "./components/Section";
-import { PALETTE, ZOOM_MAX_BOUND, ZOOM_MIN_BOUND } from "./constants";
+import { PALETTE } from "./constants";
 import makeSocialIcon from "./components/SocialIcon";
 import makeSkillIcon from "./components/SkillIcon";
 import { makeAppear } from "./utils";
 import makeWorkExperienceCard from "./components/WorkExperienceCard";
 import makeEmailIcon from "./components/EmailIcon";
 import makeProjectCard from "./components/ProjectCard";
-import { cameraZoomValueAtom, keyboardInputAtom, store } from "./store";
-
-export function setKeyboardControls() {
-  window.addEventListener("keydown", (e) => {
-    const keyboardInput = store.get(keyboardInputAtom);
-
-    if (e.code === "KeyW" || e.code === "ArrowUp") {
-      keyboardInput.isUpPressed = true;
-    }
-
-    if (e.code === "KeyS" || e.code === "ArrowDown") {
-      keyboardInput.isDownPressed = true;
-    }
-
-    if (e.code === "KeyA" || e.code === "ArrowLeft") {
-      keyboardInput.isLeftPressed = true;
-    }
-
-    if (e.code === "KeyD" || e.code === "ArrowRight") {
-      keyboardInput.isRightPressed = true;
-    }
-
-    if (e.code === "KeyK") {
-      const cameraZoomValue = store.get(cameraZoomValueAtom);
-      const newZoomValue = cameraZoomValue + 0.2;
-      if (newZoomValue <= ZOOM_MAX_BOUND) {
-        store.set(cameraZoomValueAtom, newZoomValue);
-      }
-    }
-
-    if (e.code === "KeyL") {
-      const cameraZoomValue = store.get(cameraZoomValueAtom);
-      const newZoomValue = cameraZoomValue - 0.2;
-      if (newZoomValue >= ZOOM_MIN_BOUND) {
-        store.set(cameraZoomValueAtom, newZoomValue);
-      }
-    }
-
-    store.set(keyboardInputAtom, keyboardInput);
-  });
-
-  window.addEventListener("keyup", (e) => {
-    const keyboardInput = store.get(keyboardInputAtom);
-
-    if (e.code === "KeyW" || e.code === "ArrowUp") {
-      keyboardInput.isUpPressed = false;
-    }
-
-    if (e.code === "KeyS" || e.code === "ArrowDown") {
-      keyboardInput.isDownPressed = false;
-    }
-
-    if (e.code === "KeyA" || e.code === "ArrowLeft") {
-      keyboardInput.isLeftPressed = false;
-    }
-
-    if (e.code === "KeyD" || e.code === "ArrowRight") {
-      keyboardInput.isRightPressed = false;
-    }
-
-    store.set(keyboardInputAtom, keyboardInput);
-  });
-}
+import { cameraZoomValueAtom, store } from "./store";
 
 export default async function initGame() {
   const generalData = await (await fetch("/configs/generalData.json")).json();
@@ -124,8 +62,6 @@ export default async function initGame() {
     },
   });
   k.loadShaderURL("tiledPattern", null, "/shaders/tiledPattern.frag");
-
-  setKeyboardControls();
 
   const setInitCamZoomValue = () => {
     if (k.width() < 1000) {

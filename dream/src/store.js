@@ -8,25 +8,9 @@ export const isEmailModalVisibleAtom = atom(false);
 export const emailAtom = atom("");
 
 export const isProjectModalVisibleAtom = atom(false);
-export const selectedProjectDataAtom = atom({
+export const chosenProjectDataAtom = atom({
   title: "",
-  description: "",
-  imageSrc: "",
-  links: [{ name: "", link: "" }],
-});
-
-export const DPadInputAtom = atom({
-  isLeftPressed: false,
-  isRightPressed: false,
-  isUpPressed: false,
-  isDownPressed: false,
-});
-
-export const keyboardInputAtom = atom({
-  isLeftPressed: false,
-  isRightPressed: false,
-  isUpPressed: false,
-  isDownPressed: false,
+  links: [{ id: 0, name: "", link: "" }],
 });
 
 export const areTouchControlsEnabledAtom = atom(false);

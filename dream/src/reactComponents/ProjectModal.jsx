@@ -1,30 +1,50 @@
 import { useState, useEffect } from "react";
 import { useAtomValue, useAtom } from "jotai";
-import { isProjectModalVisibleAtom, selectedProjectDataAtom } from "../store";
+import { isProjectModalVisibleAtom, chosenProjectDataAtom } from "../store";
 import PropTypes from "prop-types";
 
 export default function ProjectModal({ areTouchControlsEnabled }) {
-  const projectData = useAtomValue(selectedProjectDataAtom);
+  const projectData = useAtomValue(chosenProjectDataAtom);
   const [isVisible, setIsVisible] = useAtom(isProjectModalVisibleAtom);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [chosenIndex, setChosenIndex] = useState(0);
+
+  const keyboardControls = (e) => {
+    if (e.code === "KeyS" || e.code === "ArrowDown") {
+      setChosenIndex(chosenIndex + 1);
+      return;
+    }
+
+    if (e.code === "KeyW" || e.code === "ArrowUp") {
+      setChosenIndex(chosenIndex - 1);
+    }
+
+    if (e.code === "Space") {
+      // TODO
+    }
+  };
 
   useEffect(() => {
-    console.log(projectData);
+    if (!isVisible) return;
+    if (areTouchControlsEnabled) return;
+
+    window.addEventListener("keydown", keyboardControls);
+
+    return () => {
+      window.removeEventListener("keydown", keyboardControls);
+    };
   }, [projectData]);
 
   return (
     isVisible && (
-      <div className="project-modal">
+      <div className="modal">
         <div className="modal-content">
           <h1>{projectData.title}</h1>
-          <img src={projectData.imageSrc} className="project-img" />
-          <p>{projectData.description}</p>
           <div className="modal-btn-container">
             {projectData.links.map((linkData, index) => (
               <button
-                key={linkData}
+                key={linkData.id}
                 className={`modal-btn ${
-                  selectedIndex === index && !areTouchControlsEnabled
+                  chosenIndex === index && !areTouchControlsEnabled
                     ? "active"
                     : null
                 }`}
@@ -37,7 +57,7 @@ export default function ProjectModal({ areTouchControlsEnabled }) {
             ))}
             <button
               className={`modal-btn ${
-                selectedIndex === projectData.links.length - 1 &&
+                chosenIndex === projectData.links.length - 1 &&
                 !areTouchControlsEnabled
                   ? "active"
                   : null

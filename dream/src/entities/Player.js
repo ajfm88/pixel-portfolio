@@ -1,11 +1,4 @@
 import { DIAGONAL_FACTOR } from "../constants";
-import {
-  DPadInputAtom,
-  isEmailModalVisibleAtom,
-  isSocialModalVisibleAtom,
-  keyboardInputAtom,
-  store,
-} from "../store";
 
 export default function makePlayer(k, posVec2, speed) {
   const player = k.add([
@@ -18,13 +11,11 @@ export default function makePlayer(k, posVec2, speed) {
     "player",
     {
       direction: k.vec2(0, 0),
+      directionName: "walk-down",
     },
   ]);
 
   player.onUpdate(() => {
-    const DPadInput = store.get(DPadInputAtom);
-    const keyboardInput = store.get(keyboardInputAtom);
-
     if (!k.camPos().eq(player.pos)) {
       k.tween(
         k.camPos(),
@@ -35,89 +26,72 @@ export default function makePlayer(k, posVec2, speed) {
       );
     }
 
-    if (
-      store.get(isSocialModalVisibleAtom) ||
-      store.get(isEmailModalVisibleAtom)
-    ) {
-      store.set(DPadInputAtom, {
-        isLeftPressed: false,
-        isRightPressed: false,
-        isUpPressed: false,
-        isDownPressed: false,
-      });
-      store.set(keyboardInputAtom, {
-        isLeftPressed: false,
-        isRightPressed: false,
-        isUpPressed: false,
-        isDownPressed: false,
-      });
-      return;
-    }
-
     player.direction = k.vec2(0, 0);
-    if (keyboardInput.isLeftPressed || DPadInput.isLeftPressed)
-      player.direction.x = -1;
-    if (keyboardInput.isRightPressed || DPadInput.isRightPressed)
-      player.direction.x = 1;
-    if (keyboardInput.isUpPressed || DPadInput.isUpPressed)
-      player.direction.y = -1;
-    if (keyboardInput.isDownPressed || DPadInput.isDownPressed)
-      player.direction.y = 1;
+    const worldMousePos = k.toWorld(k.mousePos());
 
-    if (
-      player.direction.eq(k.vec2(1, 0)) &&
-      player.getCurAnim().name !== "walk-right"
-    ) {
-      player.play("walk-right");
+    if (k.isMouseDown("left")) {
+      player.direction = worldMousePos.sub(player.pos).unit();
     }
-
-    if (
-      player.direction.eq(k.vec2(-1, 0)) &&
-      player.getCurAnim().name !== "walk-left"
-    )
-      player.play("walk-left");
-
-    if (
-      player.direction.eq(k.vec2(0, -1)) &&
-      player.getCurAnim().name !== "walk-up"
-    )
-      player.play("walk-up");
-
-    if (
-      player.direction.eq(k.vec2(0, 1)) &&
-      player.getCurAnim().name !== "walk-down"
-    )
-      player.play("walk-down");
-
-    if (
-      player.direction.eq(k.vec2(-1, -1)) &&
-      player.getCurAnim().name !== "walk-left-up"
-    )
-      player.play("walk-left-up");
-
-    if (
-      player.direction.eq(k.vec2(-1, 1)) &&
-      player.getCurAnim().name !== "walk-left-down"
-    )
-      player.play("walk-left-down");
-
-    if (
-      player.direction.eq(k.vec2(1, -1)) &&
-      player.getCurAnim().name !== "walk-right-up"
-    )
-      player.play("walk-right-up");
-
-    if (
-      player.direction.eq(k.vec2(1, 1)) &&
-      player.getCurAnim().name !== "walk-right-down"
-    )
-      player.play("walk-right-down");
 
     if (
       player.direction.eq(k.vec2(0, 0)) &&
       !player.getCurAnim().name.includes("idle")
     ) {
-      player.play(`${player.getCurAnim().name}-idle`);
+      player.play(`${player.directionName}-idle`);
+      return;
+    }
+
+    if (
+      player.direction.x > 0 &&
+      player.direction.y > -0.5 &&
+      player.direction.y < 0.5
+    ) {
+      player.directionName = "walk-right";
+    }
+
+    if (
+      player.direction.x < 0 &&
+      player.direction.y > -0.5 &&
+      player.direction.y < 0.5
+    )
+      player.directionName = "walk-left";
+
+    if (player.direction.x < 0 && player.direction.y < -0.8)
+      player.directionName = "walk-up";
+
+    if (player.direction.x < 0 && player.direction.y > 0.8)
+      player.directionName = "walk-down";
+
+    if (
+      player.direction.x < 0 &&
+      player.direction.y > -0.8 &&
+      player.direction.y < -0.5
+    )
+      player.directionName = "walk-left-up";
+
+    if (
+      player.direction.x < 0 &&
+      player.direction.y > 0.5 &&
+      player.direction.y < 0.8
+    )
+      player.directionName = "walk-left-down";
+
+    if (
+      player.direction.x > 0 &&
+      player.direction.y < -0.5 &&
+      player.direction.y > -0.8
+    )
+      player.directionName = "walk-right-up";
+
+    if (
+      player.direction.x > 0 &&
+      player.direction.y > 0.5 &&
+      player.direction.y < 0.8
+    )
+      player.directionName = "walk-right-down";
+
+    if (player.getCurAnim().name !== player.directionName) {
+      player.play(player.directionName);
     }
 
     if (player.direction.x && player.direction.y) {

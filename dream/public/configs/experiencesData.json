@@ -4,9 +4,9 @@
     "cardHeight": 250,
     "roleData": {
       "title": "Front-End Software Engineer",
-      "description": "Enhanced [REDACTED]'s interactive design platform by building and optimizing prototyping tools, empowering designers to create high-fidelity experiences and bridging the gap between design and development.",
+      "description": "Enhanced [\\REDACTED\\]'s interactive design platform by building and optimizing prototyping tools, empowering designers to create high-fidelity experiences and bridging the gap between design and development.",
       "company": {
-        "name": "[REDACTED]",
+        "name": "[\\REDACTED]",
         "startDate": "2024",
         "endDate": "Present"
       }
@@ -17,9 +17,9 @@
     "cardHeight": 250,
     "roleData": {
       "title": "Product Software Engineer",
-      "description": "Improved [REDACTED]'s real-time design collaboration tool by developing new components and refining existing features, enhancing workflow efficiency and creativity for design teams worldwide.",
+      "description": "Improved [\\REDACTED]'s real-time design collaboration tool by developing new components and refining existing features, enhancing workflow efficiency and creativity for design teams worldwide.",
       "company": {
-        "name": "[REDACTED]",
+        "name": "[\\REDACTED]",
         "startDate": "2021",
         "endDate": "2023"
       }
