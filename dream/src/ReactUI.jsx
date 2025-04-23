@@ -13,9 +13,9 @@ export default function ReactUI() {
   return (
     <>
       <CameraController isVisible={areTouchControlsEnabled} />
-      <SocialModal areTouchControlsEnabled={areTouchControlsEnabled} />
-      <EmailModal areTouchControlsEnabled={areTouchControlsEnabled} />
-      <ProjectModal areTouchControlsEnabled={areTouchControlsEnabled} />
+      <SocialModal />
+      <EmailModal />
+      <ProjectModal />
       <Settings />
     </>
   );

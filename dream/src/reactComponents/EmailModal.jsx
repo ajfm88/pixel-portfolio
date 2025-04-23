@@ -1,13 +1,11 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { isEmailModalVisibleAtom, emailAtom } from "../store";
-import PropTypes from "prop-types";
 
-export default function EmailModal({ areTouchControlsEnabled }) {
+export default function EmailModal() {
   const [isVisible, setIsVisible] = useAtom(isEmailModalVisibleAtom);
   const email = useAtomValue(emailAtom);
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [onCopyMessage, setOnCopyMessage] = useState("");
 
   const buttons = ["Yes", "No"];
@@ -24,35 +22,6 @@ export default function EmailModal({ areTouchControlsEnabled }) {
     },
     [email, setIsVisible]
   );
-  const keyboardControls = useCallback(
-    (e) => {
-      if (e.code === "KeyS" || e.code === "ArrowDown") {
-        setSelectedIndex(1);
-        return;
-      }
-
-      if (e.code === "KeyW" || e.code === "ArrowUp") {
-        setSelectedIndex(0);
-      }
-
-      if (e.code === "Space") {
-        console.log("pressing the space key within EmailModal");
-        handleClick(selectedIndex);
-      }
-    },
-    [handleClick, selectedIndex]
-  );
-
-  useEffect(() => {
-    if (!isVisible) return;
-    if (areTouchControlsEnabled) return;
-
-    window.addEventListener("keydown", keyboardControls);
-
-    return () => {
-      window.removeEventListener("keydown", keyboardControls);
-    };
-  }, [keyboardControls, areTouchControlsEnabled, isVisible]);
 
   return (
     isVisible && (
@@ -65,11 +34,7 @@ export default function EmailModal({ areTouchControlsEnabled }) {
             {buttons.map((button, index) => (
               <button
                 key={button}
-                className={`modal-btn ${
-                  selectedIndex === index && !areTouchControlsEnabled
-                    ? "active"
-                    : null
-                }`}
+                className={"modal-btn"}
                 onClick={() => handleClick(index)}
               >
                 {button}
@@ -81,7 +46,3 @@ export default function EmailModal({ areTouchControlsEnabled }) {
     )
   );
 }
-
-EmailModal.propTypes = {
-  areTouchControlsEnabled: PropTypes.bool,
-};

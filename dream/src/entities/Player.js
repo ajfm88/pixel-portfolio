@@ -1,4 +1,10 @@
 import { DIAGONAL_FACTOR } from "../constants";
+import {
+  isEmailModalVisibleAtom,
+  isProjectModalVisibleAtom,
+  isSocialModalVisibleAtom,
+  store,
+} from "../store";
 
 export default function makePlayer(k, posVec2, speed) {
   const player = k.add([
@@ -15,6 +21,19 @@ export default function makePlayer(k, posVec2, speed) {
     },
   ]);
 
+  let isMouseDown = false;
+  const game = document.getElementById("game");
+  game.addEventListener("focusout", () => {
+    isMouseDown = false;
+  });
+  game.addEventListener("mousedown", () => {
+    isMouseDown = true;
+  });
+
+  game.addEventListener("mouseup", () => {
+    isMouseDown = false;
+  });
+
   player.onUpdate(() => {
     if (!k.camPos().eq(player.pos)) {
       k.tween(
@@ -26,10 +45,17 @@ export default function makePlayer(k, posVec2, speed) {
       );
     }
 
+    if (
+      store.get(isSocialModalVisibleAtom) ||
+      store.get(isEmailModalVisibleAtom) ||
+      store.get(isProjectModalVisibleAtom)
+    )
+      return;
+
     player.direction = k.vec2(0, 0);
     const worldMousePos = k.toWorld(k.mousePos());
 
-    if (k.isMouseDown("left")) {
+    if (isMouseDown) {
       player.direction = worldMousePos.sub(player.pos).unit();
     }
 

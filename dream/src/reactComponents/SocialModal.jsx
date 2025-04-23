@@ -1,18 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import {
   isSocialModalVisibleAtom,
   selectedLinkAtom,
   selectedLinkDescriptionAtom,
 } from "../store";
-import PropTypes from "prop-types";
 
-export default function SocialModal({ areTouchControlsEnabled }) {
+export default function SocialModal() {
   const [isVisible, setIsVisible] = useAtom(isSocialModalVisibleAtom);
   const selectedLink = useAtomValue(selectedLinkAtom);
   const selectedLinkDescription = useAtomValue(selectedLinkDescriptionAtom);
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const buttons = ["Yes", "No"];
 
   const handleClick = useCallback(
@@ -27,35 +25,6 @@ export default function SocialModal({ areTouchControlsEnabled }) {
     },
     [selectedLink, setIsVisible]
   );
-  const keyboardControls = useCallback(
-    (e) => {
-      if (e.code === "KeyS" || e.code === "ArrowDown") {
-        setSelectedIndex(1);
-        return;
-      }
-
-      if (e.code === "KeyW" || e.code === "ArrowUp") {
-        setSelectedIndex(0);
-      }
-
-      if (e.code === "Space") {
-        console.log("pressing the space key within SocialModal");
-        handleClick(selectedIndex);
-      }
-    },
-    [handleClick, selectedIndex]
-  );
-
-  useEffect(() => {
-    if (!isVisible) return;
-    if (areTouchControlsEnabled) return;
-
-    window.addEventListener("keydown", keyboardControls);
-
-    return () => {
-      window.removeEventListener("keydown", keyboardControls);
-    };
-  }, [keyboardControls, areTouchControlsEnabled, isVisible]);
 
   return (
     isVisible && (
@@ -68,11 +37,7 @@ export default function SocialModal({ areTouchControlsEnabled }) {
             {buttons.map((button, index) => (
               <button
                 key={button}
-                className={`modal-btn ${
-                  selectedIndex === index && !areTouchControlsEnabled
-                    ? "active"
-                    : null
-                }`}
+                className={"modal-btn"}
                 onClick={() => handleClick(index)}
               >
                 {button}
@@ -84,7 +49,3 @@ export default function SocialModal({ areTouchControlsEnabled }) {
     )
   );
 }
-
-SocialModal.propTypes = {
-  areTouchControlsEnabled: PropTypes.bool,
-};
