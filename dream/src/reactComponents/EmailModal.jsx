@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { isEmailModalVisibleAtom, emailAtom } from "../store";
 
@@ -8,20 +8,23 @@ export default function EmailModal() {
 
   const [onCopyMessage, setOnCopyMessage] = useState("");
 
-  const buttons = ["Yes", "No"];
-
-  const handleClick = useCallback(
-    (index) => {
-      if (index === 0) {
+  const buttons = [
+    {
+      id: 0,
+      name: "Yes",
+      handler: () => {
         navigator.clipboard.writeText(email);
         setOnCopyMessage("Email copied to clipboard!");
-        return;
-      }
-
-      setIsVisible(false);
+      },
     },
-    [email, setIsVisible]
-  );
+    {
+      id: 1,
+      name: "No",
+      handler: () => {
+        setIsVisible(false);
+      },
+    },
+  ];
 
   return (
     isVisible && (
@@ -31,13 +34,13 @@ export default function EmailModal() {
           <span>{email}</span>
           <p>{onCopyMessage}</p>
           <div className="modal-btn-container">
-            {buttons.map((button, index) => (
+            {buttons.map((button) => (
               <button
-                key={button}
+                key={button.id}
                 className={"modal-btn"}
-                onClick={() => handleClick(index)}
+                onClick={button.handler}
               >
-                {button}
+                {button.name}
               </button>
             ))}
           </div>

@@ -209,7 +209,21 @@ export default async function initGame() {
         k,
         container,
         k.vec2(0, 350),
-        "JavaScript Sonic Themed Infinite Runnner Game",
+        {
+          title: "JavaScript Sonic Themed Infinite Runnner Game",
+          links: [
+            {
+              id: 0,
+              name: "Live Demo",
+              link: "https://jslegend.itch.io/sonic-ring-run",
+            },
+            {
+              id: 1,
+              name: "Source Code",
+              link: "https://github.com/JSLegendDev/sonic-runner",
+            },
+          ],
+        },
         "sonic-js"
       );
 
@@ -217,7 +231,21 @@ export default async function initGame() {
         k,
         container,
         k.vec2(0, 840),
-        "TypeScript Kirby-like Game",
+        {
+          title: "TypeScript Kirby-like Game",
+          links: [
+            {
+              id: 0,
+              name: "Live Demo",
+              link: "https://jslegend.itch.io/kirby-like-platformer-asset-pack",
+            },
+            {
+              id: 1,
+              name: "Source Code",
+              link: "https://github.com/JSLegendDev/Kirby-like-ts",
+            },
+          ],
+        },
         "kirby-ts"
       );
 
@@ -225,7 +253,21 @@ export default async function initGame() {
         k,
         container,
         k.vec2(0, 1320),
-        "JavaScript Platformer Game",
+        {
+          title: "JavaScript Platformer Game",
+          links: [
+            {
+              id: 0,
+              name: "Live Demo",
+              link: "https://jslegend.itch.io/mario-like-in-javascript",
+            },
+            {
+              id: 1,
+              name: "Source Code",
+              link: "https://github.com/JSLegendDev/Mario-Game-Kaboom.js",
+            },
+          ],
+        },
         "platformer-js"
       );
 

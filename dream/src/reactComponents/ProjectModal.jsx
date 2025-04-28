@@ -16,8 +16,7 @@ export default function ProjectModal() {
                 key={linkData.id}
                 className={"modal-btn"}
                 onClick={() => {
-                  console.log(linkData.link);
-                  setIsVisible(false);
+                  window.open(linkData.link, "_blank");
                 }}
               >
                 {linkData.name}

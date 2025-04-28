@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import {
   isSocialModalVisibleAtom,
@@ -11,20 +10,23 @@ export default function SocialModal() {
   const selectedLink = useAtomValue(selectedLinkAtom);
   const selectedLinkDescription = useAtomValue(selectedLinkDescriptionAtom);
 
-  const buttons = ["Yes", "No"];
-
-  const handleClick = useCallback(
-    (index) => {
-      if (index === 0) {
+  const buttons = [
+    {
+      id: 0,
+      name: "Yes",
+      handler: () => {
         window.open(selectedLink, "_blank");
         setIsVisible(false);
-        return;
-      }
-
-      setIsVisible(false);
+      },
     },
-    [selectedLink, setIsVisible]
-  );
+    {
+      id: 1,
+      name: "No",
+      handler: () => {
+        setIsVisible(false);
+      },
+    },
+  ];
 
   return (
     isVisible && (
@@ -34,13 +36,13 @@ export default function SocialModal() {
           <span>{selectedLink}</span>
           <p>{selectedLinkDescription}</p>
           <div className="modal-btn-container">
-            {buttons.map((button, index) => (
+            {buttons.map((button) => (
               <button
-                key={button}
+                key={button.id}
                 className={"modal-btn"}
-                onClick={() => handleClick(index)}
+                onClick={button.handler}
               >
-                {button}
+                {button.name}
               </button>
             ))}
           </div>

@@ -6,7 +6,7 @@ import {
 } from "../store";
 import { opacityTrickleDown } from "../utils";
 
-export default function makeProjectCard(k, parent, posVec2, title, imageName) {
+export default function makeProjectCard(k, parent, posVec2, data, imageName) {
   const card = parent.add([k.anchor("center"), k.pos(posVec2), k.opacity(0)]);
 
   const cardMask = card.add([
@@ -23,7 +23,12 @@ export default function makeProjectCard(k, parent, posVec2, title, imageName) {
   ]);
 
   const cardTitle = card.add([
-    k.text(title, { font: "ibm-bold", size: 32, width: 600, lineSpacing: 12 }),
+    k.text(data.title, {
+      font: "ibm-bold",
+      size: 32,
+      width: 600,
+      lineSpacing: 12,
+    }),
     k.color(k.Color.fromHex(PALETTE.color1)),
     k.pos(-310, 200),
     k.opacity(0),
@@ -39,20 +44,7 @@ export default function makeProjectCard(k, parent, posVec2, title, imageName) {
 
   cardSwitch.onCollide("player", () => {
     store.set(isProjectModalVisibleAtom, true);
-    store.set(chosenProjectDataAtom, {
-      title,
-      imageSrc: `./projects/${imageName}.png`, // TODO: do not hardcode the file type
-      description: `This is a test This is a testThis is a testThis is a testThis is a test
-        This is a test This is a testThis is a testThis is a testThis is a test
-        This is a test This is a testThis is a testThis is a testThis is a test
-        This is a test This is a testThis is a testThis is a testThis is a test`,
-      links: [
-        { id: 0, name: "Live Demo", link: "//" },
-        { id: 1, name: "Source Code", link: "//" },
-        { id: 2, name: "YouTube Tutorial", link: "//" },
-      ],
-    });
-    console.log("Project modal with more details should open");
+    store.set(chosenProjectDataAtom, data);
   });
 
   opacityTrickleDown(parent, [cardMask, image, cardTitle, cardSwitch]);
