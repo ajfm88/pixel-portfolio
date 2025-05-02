@@ -124,55 +124,6 @@ p {
   font-style: italic;
 }
 
-.dpad {
-  display: flex;
-  position: fixed;
-  top: 60vh;
-  left: 15vw;
-  z-index: 1;
-  opacity: 0.4;
-}
-
-.dpad-btn {
-  color: var(--color2);
-  background-color: var(--color1);
-  border: var(--color1);
-  border-style: solid;
-  border-radius: 12px;
-}
-
-.up {
-  position: absolute;
-  top: -5rem;
-  width: 5rem;
-  height: 5rem;
-  font-size: 2rem;
-}
-
-.down {
-  position: absolute;
-  top: 5rem;
-  width: 5rem;
-  height: 5rem;
-  font-size: 2rem;
-}
-
-.left {
-  position: absolute;
-  left: -5rem;
-  width: 5rem;
-  height: 5rem;
-  font-size: 2rem;
-}
-
-.right {
-  position: absolute;
-  left: 5rem;
-  width: 5rem;
-  height: 5rem;
-  font-size: 2rem;
-}
-
 .camera-controller {
   display: flex;
   position: fixed;
@@ -193,14 +144,12 @@ p {
   width: 12vw;
 }
 
-@media screen and (max-width: 600px) {
-  .settings-btn {
-    font-size: 2rem;
-    margin-top: 3vh;
-  }
-
-  .dpad {
-    top: 70vh;
-    left: 25vw;
-  }
+.controls-message {
+  position: fixed;
+  top: 3vh;
+  left: 5vw;
+  opacity: 0.4;
+  font-size: 1.2rem;
+  max-width: 40vw;
+  user-select: none;
 }

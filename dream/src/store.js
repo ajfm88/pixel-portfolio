@@ -13,8 +13,6 @@ export const chosenProjectDataAtom = atom({
   links: [{ id: 0, name: "", link: "" }],
 });
 
-export const areTouchControlsEnabledAtom = atom(false);
-
 export const cameraZoomValueAtom = atom({ value: 1 });
 
 export const store = createStore();
