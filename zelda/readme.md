@@ -1,6 +1,6 @@
-# Outside
+# The Legend Of JavaScript
 
-One third of a neat, walkable, 2D sprite developer portfolio.
+An adventure mini game found inside my 2D sprite developer portfolio.
 
 Live Demo: https://zelda-ajfm88.netlify.app
 
