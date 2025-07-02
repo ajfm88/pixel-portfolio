@@ -7,7 +7,7 @@ export function makePlayer(k) {
     k.area({ shape: new k.Rect(k.vec2(0, 18), 12, 12) }),
     k.anchor("center"),
     k.body({ mass: 100, jumpForce: 320 }),
-    k.doubleJump(1),
+    k.doubleJump(2),
     "player",
     {
       speed: 150,
@@ -74,6 +74,12 @@ export function makePlayer(k) {
             this.curAnim() !== "fall"
           )
             this.play("idle");
+        });
+      },
+
+      setHealthEvents() {
+        this.on("hit", () => {
+          // TODO
         });
       },
 
