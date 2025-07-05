@@ -5,7 +5,7 @@ export function makeDrone(k, initialPos) {
     k.area({ shape: new k.Rect(k.vec2(0), 12, 12) }),
     k.anchor("center"),
     k.body({ gravityScale: 0 }),
-    k.offscreen({ distance: 650 }),
+    k.offscreen({ distance: 400 }),
     k.state("patrol-right", [
       "patrol-right",
       "patrol-left",
@@ -50,17 +50,6 @@ export function makeDrone(k, initialPos) {
           this.move(-this.speed, 0);
         });
 
-        // this.onStateUpdate("retreat", () => {
-        //   if (!this.pos.eq(initialPos)) {
-        //     // this.flipX = 0 <= this.pos.angleBetween(initialPos);
-        //     // this.moveTo(initialPos, this.speed);
-
-        //     return;
-        //   }
-
-        //   this.enterState("patrol-right");
-        // });
-
         this.onStateEnter("alert", async () => {
           await k.wait(2);
           if (this.pos.dist(player.pos) < this.range) {
@@ -84,22 +73,34 @@ export function makeDrone(k, initialPos) {
           );
         });
 
+        this.onStateEnter("explode", () => {
+          this.unuse("body");
+        });
+      },
+
+      setEvents() {
+        const player = k.get("player", { recursive: true })[0];
+
         this.on("exploded", () => {
           k.destroy(this);
         });
 
         this.onCollide("player", () => {
+          player.trigger("hit");
           this.enterState("explode");
           this.play("explode", {
             onEnd: () => {
-              player.trigger("hit");
               this.trigger("exploded");
             },
           });
         });
 
+        this.on("exploded", () => {
+          k.destroy(this);
+        });
+
         this.onExitScreen(() => {
-          if (!this.pos.eq(initialPos)) this.pos = initialPos;
+          if (this.pos.dist(initialPos) > 400) this.pos = initialPos;
         });
       },
     },
