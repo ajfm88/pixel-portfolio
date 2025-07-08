@@ -1,6 +1,6 @@
+import { makeBoss } from "../entities/enemyBoss.js";
 import { makeDrone } from "../entities/enemyDrone.js";
 import { makePlayer } from "../entities/player.js";
-import { state } from "../state/GlobalStateManager.js";
 import { healthBar } from "../ui/healthBar.js";
 
 import {
@@ -84,6 +84,11 @@ export async function room1(
       const drone = map.add(makeDrone(k, k.vec2(position.x, position.y)));
       drone.setBehavior();
       drone.setEvents();
+      continue;
+    }
+
+    if (position.name === "boss") {
+      const boss = map.add(makeBoss(k, k.vec2(position.x, position.y)));
     }
   }
 

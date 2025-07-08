@@ -51,7 +51,7 @@ export function makeDrone(k, initialPos) {
         });
 
         this.onStateEnter("alert", async () => {
-          await k.wait(2);
+          await k.wait(1);
           if (this.pos.dist(player.pos) < this.range) {
             this.enterState("attack");
             return;
