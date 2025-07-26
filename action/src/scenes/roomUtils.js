@@ -1,4 +1,4 @@
-import { state } from "../state/GlobalStateManager.js";
+import { state, statePropsEnum } from "../state/GlobalStateManager.js";
 
 export function setBackgroundColor(k, hexColorCode) {
   k.add([
@@ -42,7 +42,9 @@ export function setMapColliders(k, map, colliders) {
       ]);
 
       bossBarrier.onCollide("player", async (player) => {
-        if (state.current().playerInBossFight) return;
+        const currentState = state.current();
+        if (currentState.playerInBossFight || currentState.isBossDefeated)
+          return;
         player.disableControls();
         player.play("idle");
         await k.tween(
@@ -56,9 +58,11 @@ export function setMapColliders(k, map, colliders) {
       });
 
       bossBarrier.onCollideEnd("player", () => {
-        if (state.current().playerInBossFight) return;
+        const currentState = state.current();
+        if (currentState.playerInBossFight || currentState.isBossDefeated)
+          return;
 
-        state.set("playerInBossFight", true);
+        state.set(statePropsEnum.playerInBossFight, true);
 
         k.tween(
           bossBarrier.opacity,

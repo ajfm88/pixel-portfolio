@@ -1,4 +1,4 @@
-import { state } from "../state/GlobalStateManager.js";
+import { state, statePropsEnum } from "../state/GlobalStateManager.js";
 import { maxPlayerHp } from "../state/constants.js";
 import { healthBar } from "../ui/healthBar.js";
 import { makeBlink } from "./entitySharedLogic.js";
@@ -10,8 +10,9 @@ export function makePlayer(k) {
     k.area({ shape: new k.Rect(k.vec2(0, 18), 12, 12) }),
     k.anchor("center"),
     k.body({ mass: 100, jumpForce: 320 }),
-    k.doubleJump(1),
+    k.doubleJump(state.current().isDoubleJumpUnlocked ? 2 : 1),
     k.opacity(),
+    k.health(state.current().playerHp),
     "player",
     {
       speed: 150,
@@ -65,31 +66,6 @@ export function makePlayer(k) {
         );
 
         this.controlHandlers.push(
-          this.onFall(() => {
-            this.play("fall");
-          })
-        );
-
-        // when player falls off a platform
-        this.controlHandlers.push(
-          this.onFallOff(() => {
-            this.play("fall");
-          })
-        );
-
-        this.controlHandlers.push(
-          this.onGround(() => {
-            this.play("idle");
-          })
-        );
-
-        this.controlHandlers.push(
-          this.onHeadbutt(() => {
-            this.play("fall");
-          })
-        );
-
-        this.controlHandlers.push(
           k.onKeyDown((key) => {
             if (key === "left") {
               if (this.curAnim() !== "run" && this.isGrounded()) {
@@ -131,16 +107,38 @@ export function makePlayer(k) {
       },
 
       setEvents() {
-        this.on("hit", () => {
+        // when player falls after jumping
+        this.onFall(() => {
+          this.play("fall");
+        });
+
+        // when player falls off a platform
+        this.onFallOff(() => {
+          this.play("fall");
+        });
+        this.onGround(() => {
+          this.play("idle");
+        });
+        this.onHeadbutt(() => {
+          this.play("fall");
+        });
+
+        this.on("hurt", () => {
           makeBlink(k, this);
-          state.set("playerHp", state.current().playerHp - 1);
-          healthBar.trigger("update");
+          if (this.hp() > 0) {
+            state.set(statePropsEnum.playerHp, this.hp());
+            healthBar.trigger("update");
+            return;
+          }
 
-          if (state.current().playerHp !== 0) return;
+          state.set(statePropsEnum.playerHp, maxPlayerHp);
+          this.play("explode");
+        });
 
-          this.disableControls();
-          state.set("playerHp", maxPlayerHp);
-          this.play("explode", { onEnd: () => k.go("room1") });
+        this.onAnimEnd((anim) => {
+          if (anim === "explode") {
+            k.go("room1");
+          }
         });
       },
 
