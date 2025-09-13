@@ -1,6 +1,8 @@
 export class Player {
     heightDelta = 0
     isMoving = false
+    isRespawning = false
+    lives = 3
 
     constructor(posX, posY, speed) {
         this.loadPlayerAnims()
@@ -33,6 +35,8 @@ export class Player {
     }
 
     makePlayer(x, y) {
+        this.initialX = x
+        this.initialY = y
         this.gameObj = add([
             sprite('player', {anim: 'idle'}),
             area({shape: new Rect(vec2(0,3), 10, 10)}),
@@ -48,14 +52,14 @@ export class Player {
         onKeyDown('left', () => {
             if (this.gameObj.curAnim() !== 'run') this.gameObj.play('run')
             this.gameObj.flipX = true
-            this.gameObj.move(-this.speed, 0)
+            if (!this.isRespawning) this.gameObj.move(-this.speed, 0)
             this.isMoving = true
         })
 
         onKeyDown('right', () => {
             if (this.gameObj.curAnim() !== 'run') this.gameObj.play('run')
             this.gameObj.flipX = false
-            this.gameObj.move(this.speed, 0)
+            if (!this.isRespawning)this.gameObj.move(this.speed, 0)
             this.isMoving = true
         })
 
@@ -71,8 +75,18 @@ export class Player {
         })
     }
 
+    respawnPlayer() {
+        setTimeout(() => {
+            if (this.lives > 0) {
+                this.gameObj.pos = vec2(this.initialX, this.initialY)
+                this.isRespawning = false
+                this.lives-- 
+            }
+        }, 2000)
+    }
+
     update() {
-        onUpdate(() => {
+        onUpdate(() => {    
             this.heightDelta = this.previousHeight - this.gameObj.pos.y
             this.previousHeight = this.gameObj.pos.y
  
@@ -91,6 +105,17 @@ export class Player {
             && this.gameObj.curAnim() !== 'jump-down') {
                 this.gameObj.play('jump-down')
             }
+
+            if (this.gameObj.pos.y > 1000 && !this.isRespawning) {
+                this.respawnPlayer()
+                this.isRespawning = true
+            }
+        })
+    }
+
+    updateLives(livesCountComp) {
+        onUpdate(() => {
+            livesCountComp.text = `Lives: ${this.lives}`
         })
     }
 }
