@@ -3,6 +3,7 @@ export class Player {
     isMoving = false
     isRespawning = false
     lives = 3
+    coins = 0
 
     constructor(posX, posY, speed) {
         this.loadPlayerAnims()
@@ -48,6 +49,21 @@ export class Player {
         ])
     }
 
+    enablePassthrough() {
+        this.gameObj.onBeforePhysicsResolve((collision) => {
+            if (collision.target.is('passthrough') && this.gameObj.isJumping()) {
+                collision.preventResolution()
+            }
+        })
+    }
+
+    enableCoinPickUp() {
+        this.gameObj.onCollide('coin', (coin) => {
+            this.coins++
+            destroy(coin)
+        })
+    }
+
     setPlayerControls() {
         onKeyDown('left', () => {
             if (this.gameObj.curAnim() !== 'run') this.gameObj.play('run')
@@ -82,7 +98,7 @@ export class Player {
                 this.isRespawning = false
                 this.lives-- 
             }
-        }, 2000)
+        }, 1000)
     }
 
     update() {
@@ -113,9 +129,9 @@ export class Player {
         })
     }
 
-    updateLives(livesCountComp) {
+    updateLives(livesCountUI) {
         onUpdate(() => {
-            livesCountComp.text = `Lives: ${this.lives}`
+            livesCountUI.text = `Lives: ${this.lives}`
         })
     }
 }

@@ -1,11 +1,12 @@
 export class World {
-    loadMapAssets() {
-
+    loadGeneralMapAssets() {
+        loadSprite('coin', 'assets/Coin.png')
     }
 }
 
 export class World1 extends World {
     loadMapAssets() {
+        this.loadGeneralMapAssets()
         loadSprite('forest-background', 'assets/Forest_Background_0.png')
         loadSprite('grass-tileset', 'assets/Grass_Tileset.png', {
            sliceX: 3,
@@ -49,34 +50,7 @@ export class World1 extends World {
                 }
             }
         })
-    }
-
-    enablePassthrough() {
-        const passthroughTiles = get('passthrough', {recursive: true})
-        const onewayTiles = get('oneway', {recursive: true})
-        const gaps = get('platform-gap', {recursive: true})
-
-        gaps.forEach(gap => {
-            gap.onCollide('player', () => {
-                passthroughTiles.forEach(tile => {
-                    tile.use(body({isStatic: true}))
-                })
-            })
-        })
-
-        onewayTiles.forEach(tile => {
-            tile.onCollide('player', () => {
-                passthroughTiles.forEach(tile => tile.unuse('body'))
-            })
-        })
-
-        passthroughTiles.forEach(tile => {
-            tile.onCollideEnd('player', () => {
-                passthroughTiles.forEach(tile => {
-                    tile.use(body({isStatic: true}))
-                })
-            })
-        })
+        loadSprite('bridge', 'assets/Bridge.png')
     }
 
     drawMap(levelLayout, mappings) {
