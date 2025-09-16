@@ -1,3 +1,5 @@
+import { Flames } from "./Flames.js"
+
 export class World {
     loadGeneralMapAssets() {
         loadSprite('coin', 'assets/Coin.png')
@@ -57,6 +59,21 @@ export class World1 extends World {
             }
         })
         loadSprite('bridge', 'assets/Bridge.png')
+        loadSprite('flame-1', 'assets/Flame_1.png', {
+            sliceX: 2,
+            sliceY: 1,
+            anims: {
+                'burning': { from: 0, to: 1, loop: true }
+            }
+        })
+        loadSprite('flame-2', 'assets/Flame_2.png', {
+            sliceX: 2,
+            sliceY: 1,
+            anims: {
+                'burning': { from: 0, to: 1, loop: true }
+            }
+        })
+
     }
 
     drawWaves() {
@@ -84,6 +101,12 @@ export class World1 extends World {
         for (const layer of this.map) {
             layer.use(scale(4))
         }
+
+        const flames = new Flames([
+            vec2(2595, 600),
+            vec2(2655, 500)
+        ], 2)
+        flames.setMovementPattern()
 
         this.drawWaves()
     }
