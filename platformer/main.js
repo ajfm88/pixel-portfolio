@@ -7,34 +7,34 @@ import { world1Config } from "./content/world1/config.js"
 import { UI } from "./UI.js"
 
 kaboom({
-    width: 1280,
-    height: 720,
-    letterbox: true
+  width: 1280,
+  height: 720,
+  letterbox: true,
 })
 
-scene('world-1', () => {
-    setGravity(1400)
-    const world1 = new World1()
-    world1.loadMapAssets()
-    world1.drawMap(level1Layout, level1Mappings)
+scene("world-1", () => {
+  setGravity(1400)
+  const world1 = new World1()
+  world1.loadMapAssets()
+  world1.drawMap(level1Layout, level1Mappings)
 
-    const player = new Player(
-        world1Config.playerStartPosX, 
-        world1Config.playerStartPosY, 
-        world1Config.playerSpeed
-    )
-    player.enablePassthrough()
-    player.enableCoinPickUp()
+  const player = new Player(
+    world1Config.playerStartPosX,
+    world1Config.playerStartPosY,
+    world1Config.playerSpeed
+  )
+  player.enablePassthrough()
+  player.enableCoinPickUp()
 
-    const camera = new Camera()
-    camera.attach(player.gameObj, 0, -200, null, 200)
-    const UIManager = new UI()
-    UIManager.loadUIAssets()
-    UIManager.displayLivesCount(player)
-    UIManager.displayCoinCount(player)
+  const camera = new Camera()
+  camera.attach(player.gameObj, 0, -200, null, 200)
+  const UIManager = new UI()
+  UIManager.loadUIAssets()
+  UIManager.displayLivesCount(player)
+  UIManager.displayCoinCount(player)
 
-    player.updateLives(UIManager.livesCountUI)
-    player.updateCoinCount(UIManager.coinCountUI)
+  player.updateLives(UIManager.livesCountUI)
+  player.updateCoinCount(UIManager.coinCountUI)
 })
 
-go('world-1')
+go("world-1")
