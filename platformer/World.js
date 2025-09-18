@@ -1,4 +1,4 @@
-import { Flames } from "./Flames.js"
+import { Fish } from "./Fish.js"
 
 export class World {
   loadGeneralMapAssets() {
@@ -73,6 +73,20 @@ export class World1 extends World {
         burning: { from: 0, to: 1, loop: true },
       },
     })
+    loadSprite("fish-1", "assets/Fish_1.png", {
+      sliceX: 2,
+      sliceY: 1,
+      anims: {
+        swimming: { from: 0, to: 1, loop: true },
+      },
+    })
+    loadSprite("fish-2", "assets/Fish_2.png", {
+      sliceX: 2,
+      sliceY: 1,
+      anims: {
+        swimming: { from: 0, to: 1, loop: true },
+      },
+    })
   }
 
   drawWaves() {
@@ -106,8 +120,19 @@ export class World1 extends World {
       layer.use(scale(4))
     }
 
-    const flames = new Flames([vec2(2595, 600), vec2(2655, 500)], 2)
-    flames.setMovementPattern()
+    const fish = new Fish(
+      [
+        vec2(2595, 600),
+        vec2(2655, 600),
+        vec2(4100, 600),
+        vec2(4220, 800),
+        vec2(5200, 800),
+        vec2(5300, 800),
+      ],
+      [300, 500, 400, 500, 900, 800],
+      1
+    )
+    fish.setMovementPattern()
 
     this.drawWaves()
   }
