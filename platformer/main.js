@@ -1,10 +1,10 @@
 import kaboom from "https://unpkg.com/kaboom@3000.0.14/dist/kaboom.mjs"
-import { Player } from "./Player.js"
-import { Camera } from "./Camera.js"
-import { World1 } from "./World.js"
+import { Player } from "./entities/Player.js"
+import { Camera } from "./utils/Camera.js"
+import { World1 } from "./worlds/World1.js"
 import { level1Layout, level1Mappings } from "./content/world1/level1Layout.js"
 import { world1Config } from "./content/world1/config.js"
-import { UI } from "./UI.js"
+import { UI } from "./utils/UI.js"
 
 kaboom({
   width: 1280,
@@ -15,6 +15,7 @@ kaboom({
 scene("world-1", () => {
   setGravity(1400)
   const world1 = new World1()
+  world1.loadGeneralMapAssets()
   world1.loadMapAssets()
   world1.drawMap(level1Layout, level1Mappings)
 
