@@ -1,4 +1,4 @@
-import kaboom from "https://unpkg.com/kaboom@3000.0.14/dist/kaboom.mjs"
+import kaboom from "./libs/kaboom.mjs"
 import { Player } from "./entities/Player.js"
 import { Camera } from "./utils/Camera.js"
 import { World1 } from "./worlds/World1.js"
@@ -37,6 +37,10 @@ scene("world-1", () => {
 
   player.updateLives(UIManager.livesCountUI)
   player.updateCoinCount(UIManager.coinCountUI)
+})
+
+scene("gameover", () => {
+  onKeyDown("enter", () => go("world-1"))
 })
 
 go("world-1")
