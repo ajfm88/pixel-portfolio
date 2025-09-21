@@ -1,5 +1,3 @@
-import { Fish } from "../entities/Fish.js"
-import { Spiders } from "../entities/Spiders.js"
 import { World } from "./World.js"
 
 export class World1 extends World {
@@ -100,59 +98,7 @@ export class World1 extends World {
     })
   }
 
-  drawWaves() {
-    let offset = -100
-    for (let i = 0; i < 21; i++) {
-      add([
-        sprite("water", { anim: "wave" }),
-        pos(offset, 600),
-        scale(4),
-        fixed(),
-      ])
-      offset += 64
-    }
-  }
-
-  drawMap(levelLayout, mappings) {
+  drawBackground() {
     this.background = add([sprite("forest-background"), fixed(), scale(4)])
-
-    const layerSettings = {
-      tileWidth: 16,
-      tileHeight: 12,
-      tiles: mappings,
-    }
-
-    this.map = []
-    for (const layerLayout of levelLayout) {
-      this.map.push(addLevel(layerLayout, layerSettings))
-    }
-
-    for (const layer of this.map) {
-      layer.use(scale(4))
-    }
-
-    const fish = new Fish(
-      [
-        vec2(2595, 600),
-        vec2(2655, 600),
-        vec2(4100, 600),
-        vec2(4220, 800),
-        vec2(5200, 800),
-        vec2(5300, 800),
-      ],
-      [300, 500, 400, 500, 900, 800],
-      1
-    )
-    fish.setMovementPattern()
-
-    const spiders = new Spiders(
-      [vec2(2000, 300), vec2(2020, 0)],
-      [300, 150],
-      [2, 1],
-      1
-    )
-    spiders.setMovementPattern()
-
-    this.drawWaves()
   }
 }

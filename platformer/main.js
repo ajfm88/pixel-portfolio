@@ -1,5 +1,7 @@
 import kaboom from "./libs/kaboom.mjs"
 import { Player } from "./entities/Player.js"
+import { Fish } from "./entities/Fish.js"
+import { Spiders } from "./entities/Spiders.js"
 import { Camera } from "./utils/Camera.js"
 import { World1 } from "./worlds/World1.js"
 import { level1Layout, level1Mappings } from "./content/world1/level1Layout.js"
@@ -13,11 +15,12 @@ kaboom({
 })
 
 scene("world-1", () => {
-  setGravity(1400)
   const world1 = new World1()
+  setGravity(world1Config.gravity)
   world1.loadGeneralMapAssets()
   world1.loadMapAssets()
-  world1.drawMap(level1Layout, level1Mappings)
+  world1.drawBackground()
+  world1.drawMapLayout(level1Layout, level1Mappings)
 
   const player = new Player(
     world1Config.playerStartPosX,
@@ -27,6 +30,23 @@ scene("world-1", () => {
   player.enablePassthrough()
   player.enableCoinPickUp()
   player.enableMobVunerability()
+
+  const fish = new Fish(
+    world1Config.fishPositions.map((fishPos) => fishPos()),
+    world1Config.fishAmplitudes,
+    world1Config.fishType
+  )
+  fish.setMovementPattern()
+
+  const spiders = new Spiders(
+    [vec2(2000, 300), vec2(2020, 0)],
+    [300, 150],
+    [2, 1],
+    1
+  )
+  spiders.setMovementPattern(player.gameObj)
+
+  world1.drawWaves("water", "wave")
 
   const camera = new Camera()
   camera.attach(player.gameObj, 0, -200, null, 200)
