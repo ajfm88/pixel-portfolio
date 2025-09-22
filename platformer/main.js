@@ -44,7 +44,8 @@ scene("world-1", () => {
     [2, 1],
     1
   )
-  spiders.setMovementPattern(player.gameObj)
+  spiders.setMovementPattern()
+  spiders.enablePassthrough()
 
   world1.drawWaves("water", "wave")
 
