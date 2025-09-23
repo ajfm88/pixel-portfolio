@@ -1,6 +1,41 @@
 export class World {
   loadGeneralMapAssets() {
     loadSprite("coin", "assets/Coin.png")
+    loadSprite("player", "assets/Player.png", {
+      sliceX: 4,
+      sliceY: 6,
+      anims: {
+        idle: {
+          from: 0,
+          to: 3,
+          loop: true,
+        },
+        run: {
+          from: 4,
+          to: 7,
+          loop: true,
+        },
+        "jump-up": 8,
+        "jump-down": 9,
+      },
+    })
+    loadSprite("bridge", "assets/Bridge.png")
+    loadSprite("spider-1", "assets/Spider_1.png", {
+      sliceX: 3,
+      sliceY: 1,
+      anims: {
+        crawl: { from: 0, to: 2, loop: true },
+        idle: 0,
+      },
+    })
+    loadSprite("spider-2", "assets/Spider_2.png", {
+      sliceX: 3,
+      sliceY: 1,
+      anims: {
+        crawl: { from: 0, to: 2, loop: true },
+        idle: 0,
+      },
+    })
   }
 
   drawWaves(type, anim) {
@@ -26,5 +61,9 @@ export class World {
     for (const layer of this.map) {
       layer.use(scale(4))
     }
+  }
+
+  drawBackground(bgSpriteName) {
+    this.background = add([sprite(bgSpriteName), fixed(), scale(4)])
   }
 }

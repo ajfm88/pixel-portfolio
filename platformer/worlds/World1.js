@@ -51,7 +51,6 @@ export class World1 extends World {
         },
       },
     })
-    loadSprite("bridge", "assets/Bridge.png")
     loadSprite("flame-1", "assets/Flame_1.png", {
       sliceX: 2,
       sliceY: 1,
@@ -96,9 +95,5 @@ export class World1 extends World {
         idle: 0,
       },
     })
-  }
-
-  drawBackground() {
-    this.background = add([sprite("forest-background"), fixed(), scale(4)])
   }
 }
