@@ -1,4 +1,4 @@
-export const world2Config = {
+export const level1Config = {
   gravity: 1400,
   playerSpeed: 400,
   playerStartPosX: 1500,
@@ -21,5 +21,5 @@ export const world2Config = {
   ],
   spiderAmplitudes: [300, 150, 150, 300],
   spiderSpeeds: [2, 1, 1, 2],
-  spiderType: 2,
+  spiderType: 1,
 }

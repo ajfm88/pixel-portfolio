@@ -9,7 +9,8 @@ export class Player {
 
   coins = 0
 
-  constructor(posX, posY, speed) {
+  constructor(posX, posY, speed, currentLevelScene) {
+    this.currentLevelScene = currentLevelScene
     this.makePlayer(posX, posY)
     this.speed = speed
     this.previousHeight = this.gameObj.pos.y
@@ -88,6 +89,7 @@ export class Player {
   enableMobVunerability() {
     this.gameObj.onCollide("fish", () => this.respawnPlayer())
     this.gameObj.onCollide("spiders", () => this.respawnPlayer())
+    this.gameObj.onCollide("flames", () => this.respawnPlayer())
   }
 
   update() {
@@ -131,7 +133,7 @@ export class Player {
     onUpdate(() => {
       coinCountUI.text = `${this.coins} / ${coinCountUI.fullCoinCount}`
       if (this.coins === coinCountUI.fullCoinCount) {
-        go("world-2")
+        go(this.currentLevelScene + 1)
       }
     })
   }
