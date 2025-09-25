@@ -11,6 +11,7 @@ import { UI } from "./utils/UI.js"
 import { level2Layout, level2Mappings } from "./content/level2/level2Layout.js"
 import { loadAssets } from "./utils/loadAssets.js"
 import { Level } from "./entities/Level.js"
+import { Axes } from "./entities/Axes.js"
 
 kaboom({
   width: 1280,
@@ -30,7 +31,8 @@ const scenes = {
       level1Config.playerStartPosX,
       level1Config.playerStartPosY,
       level1Config.playerSpeed,
-      1
+      1,
+      false
     )
     player.enablePassthrough()
     player.enableCoinPickUp()
@@ -74,7 +76,8 @@ const scenes = {
       level2Config.playerStartPosX,
       level2Config.playerStartPosY,
       level2Config.playerSpeed,
-      2
+      2,
+      true
     )
     player.enablePassthrough()
     player.enableCoinPickUp()
@@ -95,6 +98,9 @@ const scenes = {
     )
     spiders.setMovementPattern()
     spiders.enablePassthrough()
+
+    const axes = new Axes([vec2(2100, -50)], [1])
+    axes.swing()
 
     level2.drawWaves("lava", "wave")
 
@@ -119,4 +125,4 @@ for (const key in scenes) {
   scene(key, scenes[key])
 }
 
-go(1)
+go(2)
