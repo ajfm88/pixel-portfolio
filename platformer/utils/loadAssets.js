@@ -2,6 +2,7 @@ export function loadAssets() {
   loadFont("Round", "./assets/Round9x13.ttf")
   loadSprite("coin-icon", "./assets/Coins_Ui.png")
   loadSprite("coin", "./assets/Coin.png")
+  loadSprite("logo", "./assets/Logo.png")
   loadSprite("player", "./assets/Player.png", {
     sliceX: 4,
     sliceY: 6,
@@ -215,6 +216,30 @@ export function loadAssets() {
         from: 7,
         to: 0,
         speed: 16,
+        loop: true,
+      },
+    },
+  })
+  loadSprite("bird-1", "./assets/Bird_1.png", {
+    sliceX: 3,
+    sliceY: 1,
+    anims: {
+      fly: {
+        from: 0,
+        to: 2,
+        speed: 9,
+        loop: true,
+      },
+    },
+  })
+  loadSprite("bird-2", "./assets/Bird_2.png", {
+    sliceX: 3,
+    sliceY: 1,
+    anims: {
+      fly: {
+        from: 0,
+        to: 2,
+        speed: 9,
         loop: true,
       },
     },
