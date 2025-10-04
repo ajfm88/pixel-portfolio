@@ -27,8 +27,106 @@ const scenes = {
   menu: () => {
     const level = new Level()
     level.drawBackground("forest-background")
-    add([sprite("logo"), fixed(), pos(40, 0), scale(8)])
-    onKeyDown("enter", () => go(1))
+    add([
+      sprite("logo"),
+      fixed(),
+      area(),
+      anchor("center"),
+      pos(center().x, center().y - 200),
+      scale(8),
+    ])
+
+    const startMsg = add([
+      text("Press [ Enter ] to Start Game", { size: 24, font: "Round" }),
+      area(),
+      anchor("center"),
+      pos(center().x, center().y + 100),
+      opacity(),
+      state("flash-up", ["flash-up", "flash-down"]),
+    ])
+
+    startMsg.onStateEnter("flash-up", async () => {
+      await tween(
+        startMsg.opacity,
+        0,
+        0.5,
+        (opacity) => (startMsg.opacity = opacity),
+        easings.linear
+      )
+      startMsg.enterState("flash-down")
+    })
+
+    startMsg.onStateEnter("flash-down", async () => {
+      await tween(
+        startMsg.opacity,
+        1,
+        0.5,
+        (opacity) => (startMsg.opacity = opacity),
+        easings.linear
+      )
+      startMsg.enterState("flash-up")
+    })
+
+    onKeyPress("enter", () => go("controls"))
+  },
+  controls: () => {
+    const level = new Level()
+    level.drawBackground("forest-background")
+
+    add([
+      text("Controls", { font: "Round", size: 50 }),
+      area(),
+      anchor("center"),
+      pos(center().x, center().y - 200),
+    ])
+
+    const controlPrompts = add([pos(center().x + 30, center().y)])
+    controlPrompts.add([sprite("up"), pos(0, -80)])
+    controlPrompts.add([sprite("down")])
+    controlPrompts.add([sprite("left"), pos(-80, 0)])
+    controlPrompts.add([sprite("right"), pos(80, 0)])
+    controlPrompts.add([sprite("space"), pos(-200, 0)])
+    controlPrompts.add([
+      text("Jump", { font: "Round", size: 32 }),
+      pos(-190, 100),
+    ])
+    controlPrompts.add([
+      text("Move", { font: "Round", size: 32 }),
+      pos(10, 100),
+    ])
+
+    const startMsg = add([
+      text("Press [ Enter ] to Start Game", { size: 24, font: "Round" }),
+      area(),
+      anchor("center"),
+      pos(center().x, center().y + 300),
+      opacity(),
+      state("flash-up", ["flash-up", "flash-down"]),
+    ])
+
+    startMsg.onStateEnter("flash-up", async () => {
+      await tween(
+        startMsg.opacity,
+        0,
+        0.5,
+        (opacity) => (startMsg.opacity = opacity),
+        easings.linear
+      )
+      startMsg.enterState("flash-down")
+    })
+
+    startMsg.onStateEnter("flash-down", async () => {
+      await tween(
+        startMsg.opacity,
+        1,
+        0.5,
+        (opacity) => (startMsg.opacity = opacity),
+        easings.linear
+      )
+      startMsg.enterState("flash-up")
+    })
+
+    onKeyPress("enter", () => go(1))
   },
   1: () => {
     const level1 = new Level()
@@ -174,11 +272,49 @@ const scenes = {
     player.updateLives(UIManager.livesCountUI)
     player.updateCoinCount(UIManager.coinCountUI)
   },
-  gameover: () => {
-    onKeyDown("enter", () => go(1))
+  gameover: async () => {
+    add([rect(1280, 720), color(0, 0, 0)])
+    add([
+      text("Game Over!", { size: 50, font: "Round" }),
+      area(),
+      anchor("center"),
+      pos(center()),
+    ])
+    const restartMsg = add([
+      text("Press [ Enter ] to Restart", { size: 24, font: "Round" }),
+      area(),
+      anchor("center"),
+      pos(center().x, center().y + 100),
+      opacity(),
+      state("flash-up", ["flash-up", "flash-down"]),
+    ])
+
+    restartMsg.onStateEnter("flash-up", async () => {
+      await tween(
+        restartMsg.opacity,
+        0,
+        0.5,
+        (opacity) => (restartMsg.opacity = opacity),
+        easings.linear
+      )
+      restartMsg.enterState("flash-down")
+    })
+
+    restartMsg.onStateEnter("flash-down", async () => {
+      await tween(
+        restartMsg.opacity,
+        1,
+        0.5,
+        (opacity) => (restartMsg.opacity = opacity),
+        easings.linear
+      )
+      restartMsg.enterState("flash-up")
+    })
+
+    onKeyPress("enter", () => go(1))
   },
   end: () => {
-    onKeyDown("enter", () => go("menu"))
+    onKeyPress("enter", () => go("menu"))
   },
 }
 
@@ -188,4 +324,4 @@ for (const key in scenes) {
   scene(key, scenes[key])
 }
 
-go(3)
+go("menu")

@@ -1,6 +1,14 @@
 export function loadAssets() {
+  // controls prompts
+  loadSprite("up", "./assets/Arrow_Up_Key_Dark.png")
+  loadSprite("down", "./assets/Arrow_Down_Key_Dark.png")
+  loadSprite("left", "./assets/Arrow_Left_Key_Dark.png")
+  loadSprite("right", "./assets/Arrow_Right_Key_Dark.png")
+  loadSprite("space", "./assets/Space_Key_Dark.png")
+
   loadFont("Round", "./assets/Round9x13.ttf")
   loadSprite("coin-icon", "./assets/Coins_Ui.png")
+  loadSprite("star-icon", "./assets/Stars_Ui.png")
   loadSprite("coin", "./assets/Coin.png")
   loadSprite("logo", "./assets/Logo.png")
   loadSprite("player", "./assets/Player.png", {

@@ -6,12 +6,17 @@ export class Birds {
       this.birds.push(
         add([
           sprite(`bird-${type}`, { anim: "fly" }),
-          area({ shape: new Rect(vec2(0), 12, 12) }),
+          area({ shape: new Rect(vec2(0), 10, 10) }),
           anchor("center"),
           pos(position),
           scale(4),
           rotate(),
-          state("fly-left", ["fly-left", "fly-right", "homing-attack"]),
+          state("fly-left", [
+            "fly-left",
+            "fly-right",
+            "dive-attack-left",
+            "dive-attack-right",
+          ]),
           "birds",
         ])
       )
@@ -25,13 +30,13 @@ export class Birds {
         await tween(
           bird.pos.x,
           bird.pos.x - this.ranges[index],
-          2,
+          0.5,
           (posX) => (bird.pos.x = posX),
           easings.linear
         )
 
         if (Math.random() > 0.5) {
-          bird.enterState("homing-attack")
+          bird.enterState("dive-attack-left")
           return
         }
 
@@ -42,34 +47,67 @@ export class Birds {
         await tween(
           bird.pos.x,
           bird.pos.x + this.ranges[index],
-          2,
+          0.5,
           (posX) => (bird.pos.x = posX),
           easings.linear
         )
+
+        if (Math.random() > 0.5) {
+          bird.enterState("dive-attack-right")
+          return
+        }
+
         bird.enterState("fly-left")
       })
 
-      bird.onStateEnter("homing-attack", async () => {
-        debug.log("entered homing-attack state")
-        const previousPos = bird.pos
+      bird.onStateEnter("dive-attack-left", async () => {
+        await tween(
+          bird.pos,
+          vec2(
+            bird.pos.x - this.ranges[index],
+            bird.pos.y + this.ranges[index]
+          ),
+          0.5,
+          (pos) => (bird.pos = pos),
+          easings.easeInSine
+        )
+        await tween(
+          bird.pos,
+          vec2(
+            bird.pos.x - this.ranges[index],
+            bird.pos.y - this.ranges[index]
+          ),
+          0.5,
+          (pos) => (bird.pos = pos),
+          easings.easeInSine
+        )
 
+        bird.enterState("fly-left")
+      })
+
+      bird.onStateEnter("dive-attack-right", async () => {
         await tween(
           bird.pos,
           vec2(
             bird.pos.x + this.ranges[index],
             bird.pos.y + this.ranges[index]
           ),
-          1,
+          0.5,
           (pos) => (bird.pos = pos),
           easings.linear
         )
         await tween(
           bird.pos,
-          previousPos,
-          1,
+          vec2(
+            bird.pos.x + this.ranges[index],
+            bird.pos.y - this.ranges[index]
+          ),
+          0.5,
           (pos) => (bird.pos = pos),
           easings.linear
         )
+
+        bird.enterState("fly-right")
       })
     }
   }
