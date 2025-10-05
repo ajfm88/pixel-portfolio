@@ -1,4 +1,15 @@
 export function loadAssets() {
+  loadSound("jump", "./sounds/jump.wav")
+  loadSound("coin", "./sounds/coin.wav")
+  loadSound("water-ambience", "./sounds/water-ambience.mp3")
+  loadSound("spider-attack", "./sounds/spider-attack.mp3")
+  loadSound("hit", "./sounds/hit.wav")
+  loadSound("lava-ambience", "./sounds/lava.wav")
+  loadSound("confirm-ui", "./sounds/confirm-ui.wav")
+  loadSound("swinging-axe", "./sounds/swinging-axe.mp3")
+  loadSound("saw", "./sounds/saw.wav")
+  loadSound("fireball", "./sounds/fireball.wav")
+
   // controls prompts
   loadSprite("up", "./assets/Arrow_Up_Key_Dark.png")
   loadSprite("down", "./assets/Arrow_Down_Key_Dark.png")

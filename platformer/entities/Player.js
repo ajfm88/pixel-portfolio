@@ -53,6 +53,7 @@ export class Player {
     this.gameObj.onCollide("coin", (coin) => {
       this.coins++
       destroy(coin)
+      play("coin")
     })
   }
 
@@ -75,6 +76,7 @@ export class Player {
       if (this.gameObj.isGrounded() && !this.isRespawning) {
         this.hasJumpedOnce = true
         this.gameObj.jump()
+        play("jump")
       }
 
       //coyote time
@@ -85,6 +87,7 @@ export class Player {
       ) {
         this.hasJumpedOnce = true
         this.gameObj.jump()
+        play("jump")
       }
     })
 
@@ -109,12 +112,16 @@ export class Player {
   }
 
   enableMobVunerability() {
-    this.gameObj.onCollide("fish", () => this.respawnPlayer())
-    this.gameObj.onCollide("spiders", () => this.respawnPlayer())
-    this.gameObj.onCollide("flames", () => this.respawnPlayer())
-    this.gameObj.onCollide("axes", () => this.respawnPlayer())
-    this.gameObj.onCollide("saws", () => this.respawnPlayer())
-    this.gameObj.onCollide("birds", () => this.respawnPlayer())
+    function hitAndRespawn(context) {
+      play("hit", { speed: 1.5 })
+      context.respawnPlayer()
+    }
+    this.gameObj.onCollide("fish", () => hitAndRespawn(this))
+    this.gameObj.onCollide("spiders", () => hitAndRespawn(this))
+    this.gameObj.onCollide("flames", () => hitAndRespawn(this))
+    this.gameObj.onCollide("axes", () => hitAndRespawn(this))
+    this.gameObj.onCollide("saws", () => hitAndRespawn(this))
+    this.gameObj.onCollide("birds", () => hitAndRespawn(this))
   }
 
   update() {
