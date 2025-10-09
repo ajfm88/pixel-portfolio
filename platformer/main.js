@@ -7,7 +7,7 @@ import { Camera } from "./utils/Camera.js"
 import { level1Layout, level1Mappings } from "./content/level1/level1Layout.js"
 import { level1Config } from "./content/level1/config.js"
 import { level2Config } from "./content/level2/config.js"
-import { UI } from "./utils/UI.js"
+import { UIManager } from "./utils/UIManager.js"
 import { level2Layout, level2Mappings } from "./content/level2/level2Layout.js"
 import { Level } from "./entities/Level.js"
 import { Axes } from "./entities/Axes.js"
@@ -16,6 +16,7 @@ import { level3Config } from "./content/level3/config.js"
 import { level3Layout, level3Mappings } from "./content/level3/level3Layout.js"
 import { Birds } from "./entities/Birds.js"
 import { load } from "./utils/loader.js"
+import { bgSoundManager } from "./utils/BGSoundManager.js"
 
 kaboom({
   width: 1280,
@@ -27,8 +28,6 @@ load.fonts()
 load.assets()
 load.sounds()
 
-const soundMap = {}
-const UIManager = new UI()
 const scenes = {
   menu: () => {
     UIManager.displayMainMenu()
@@ -37,10 +36,11 @@ const scenes = {
     UIManager.displayControlsMenu()
   },
   1: () => {
-    soundMap.waterAmbience = play("water-ambience", {
+    bgSoundManager.addSound("water-ambience", {
       volume: 0.02,
       loop: true,
     })
+    bgSoundManager.play("water-ambience")
     const level1 = new Level()
     setGravity(level1Config.gravity)
     level1.drawBackground("forest-background")
@@ -86,8 +86,9 @@ const scenes = {
     player.updateCoinCount(UIManager.coinCountUI)
   },
   2: () => {
-    if (soundMap.waterAmbience) soundMap.waterAmbience.paused = true
-    soundMap.lavaAmbience = play("lava-ambience", { loop: true })
+    bgSoundManager.pauseAllSounds()
+    bgSoundManager.addSound("lava-ambience", { loop: true })
+    bgSoundManager.play("lava-ambience")
     setGravity(level2Config.gravity)
 
     const level2 = new Level()
@@ -147,8 +148,9 @@ const scenes = {
     player.updateCoinCount(UIManager.coinCountUI)
   },
   3: () => {
-    if (soundMap.lavaAmbience) soundMap.lavaAmbience.paused = true
-    soundMap.windAmbience = play("strong-wind", { loop: true })
+    bgSoundManager.pauseAllSounds()
+    bgSoundManager.addSound("strong-wind", { volume: 0.2, loop: true })
+    bgSoundManager.play("strong-wind")
     setGravity(level3Config.gravity)
     const level3 = new Level()
     level3.drawBackground("sky-background-0")
@@ -188,48 +190,12 @@ const scenes = {
     player.updateLives(UIManager.livesCountUI)
     player.updateCoinCount(UIManager.coinCountUI)
   },
-  gameover: async () => {
-    add([rect(1280, 720), color(0, 0, 0)])
-    add([
-      text("Game Over!", { size: 50, font: "Round" }),
-      area(),
-      anchor("center"),
-      pos(center()),
-    ])
-
-    UIManager.displayBlinkingUIMessage(
-      "Press [ Enter ] to Start Game",
-      vec2(center().x, center().y + 100)
-    )
-
-    onKeyPress("enter", () => {
-      play("confirm-ui")
-      go(1)
-    })
-  },
-  end: () => {
-    add([rect(1280, 720), color(0, 0, 0)])
-    add([
-      text("You Won!", { size: 50, font: "Round" }),
-      area(),
-      anchor("center"),
-      pos(center()),
-    ])
-
-    UIManager.displayBlinkingUIMessage(
-      "Press [ Enter ] to Play Again",
-      vec2(center().x, center().y + 100)
-    )
-
-    onKeyPress("enter", () => {
-      play("confirm-ui")
-      go("menu")
-    })
-  },
+  gameover: async () => UIManager.displayGameOverScreen(),
+  end: () => UIManager.displayEndGameScreen(),
 }
 
 for (const key in scenes) {
   scene(key, scenes[key])
 }
 
-go("menu")
+go("2")
