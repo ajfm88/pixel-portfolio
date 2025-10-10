@@ -22,6 +22,7 @@ kaboom({
   width: 1280,
   height: 720,
   letterbox: true,
+  debug: false,
 })
 
 load.fonts()
@@ -36,6 +37,9 @@ const scenes = {
     UIManager.displayControlsMenu()
   },
   1: () => {
+    onKeyPress("p", () => {
+      get("*", { recursive: true }).forEach((obj) => (obj.paused = !obj.paused))
+    })
     bgSoundManager.addSound("water-ambience", {
       volume: 0.02,
       loop: true,
@@ -51,6 +55,7 @@ const scenes = {
       level1Config.playerStartPosY,
       level1Config.playerSpeed,
       level1Config.jumpForce,
+      level1Config.nbLives,
       1,
       false
     )
@@ -100,6 +105,7 @@ const scenes = {
       level2Config.playerStartPosY,
       level2Config.playerSpeed,
       level2Config.jumpForce,
+      level2Config.nbLives,
       2,
       false
     )
@@ -163,6 +169,7 @@ const scenes = {
       level3Config.playerStartPosY,
       level3Config.playerSpeed,
       level3Config.jumpForce,
+      level3Config.nbLives,
       3,
       true
     )
@@ -198,4 +205,4 @@ for (const key in scenes) {
   scene(key, scenes[key])
 }
 
-go("2")
+go("menu")

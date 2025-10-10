@@ -18,6 +18,7 @@ export class Player {
     posY,
     speed,
     jumpForce,
+    nbLives,
     currentLevelScene,
     isInTerminalScene
   ) {
@@ -26,6 +27,7 @@ export class Player {
     this.makePlayer(posX, posY)
     this.speed = speed
     this.jumpForce = jumpForce
+    this.lives = nbLives
     this.previousHeight = this.gameObj.pos.y
     this.setPlayerControls()
     this.update()
@@ -67,6 +69,7 @@ export class Player {
 
   setPlayerControls() {
     onKeyDown("left", () => {
+      if (this.gameObj.paused) return
       if (this.gameObj.curAnim() !== "run") this.gameObj.play("run")
       this.gameObj.flipX = true
       if (!this.isRespawning) this.gameObj.move(-this.speed, 0)
@@ -74,6 +77,7 @@ export class Player {
     })
 
     onKeyDown("right", () => {
+      if (this.gameObj.paused) return
       if (this.gameObj.curAnim() !== "run") this.gameObj.play("run")
       this.gameObj.flipX = false
       if (!this.isRespawning) this.gameObj.move(this.speed, 0)
@@ -81,6 +85,7 @@ export class Player {
     })
 
     onKeyDown("space", () => {
+      if (this.gameObj.paused) return
       if (this.gameObj.isGrounded() && !this.isRespawning) {
         this.hasJumpedOnce = true
         this.gameObj.jump(this.jumpForce)
@@ -100,6 +105,7 @@ export class Player {
     })
 
     onKeyRelease(() => {
+      if (this.gameObj.paused) return
       if (isKeyReleased("right") || isKeyReleased("left")) {
         this.gameObj.play("idle")
         this.isMoving = false
@@ -163,6 +169,7 @@ export class Player {
       }
 
       if (this.gameObj.pos.y > 1000) {
+        play("hit", { speed: 1.5 })
         this.respawnPlayer()
       }
     })
