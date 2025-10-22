@@ -21,26 +21,15 @@ k.loadSprite("sonic", "graphics/sonic.png", {
 
 k.scene("game", () => {
   k.setGravity(3000);
-  const bgLeft = k.add([k.sprite("chemical-bg"), k.pos(0, 0), k.scale(2)]);
-  const bgRight = k.add([k.sprite("chemical-bg"), k.pos(1920, 0), k.scale(2)]);
-  const bgPieces = [bgLeft, bgRight];
+  const bgPieceWidth = 1920;
+  const bgPieces = [
+    k.add([k.sprite("chemical-bg"), k.pos(0, 0), k.scale(2)]),
+    k.add([k.sprite("chemical-bg"), k.pos(1920, 0), k.scale(2)]),
+  ];
 
   const platforms = [
-    k.add([
-      k.sprite("platforms", { tiled: true, width: 384, height: 160 }),
-      k.pos(0, 450),
-      k.scale(4),
-    ]),
-    k.add([
-      k.sprite("platforms", { tiled: true, width: 384, height: 160 }),
-      k.pos(384, 450),
-      k.scale(4),
-    ]),
-    k.add([
-      k.sprite("platforms", { tiled: true, width: 384, height: 160 }),
-      k.pos(384 * 2, 450),
-      k.scale(4),
-    ]),
+    k.add([k.sprite("platforms"), k.pos(0, 450), k.scale(4)]),
+    k.add([k.sprite("platforms"), k.pos(384, 450), k.scale(4)]),
   ];
 
   const sonic = k.add([
@@ -79,26 +68,25 @@ k.scene("game", () => {
   ]);
 
   k.onUpdate(() => {
-    for (const bgPiece of bgPieces) {
-      bgPiece.moveTo(bgPiece.pos.x, -sonic.pos.y / 10 - 50);
-      if (bgPiece.pos.x < -3840) {
-        bgPieces.push(bgPieces.shift());
-        bgPiece.moveTo(3840, 0);
-      }
+    if (bgPieces[1].pos.x < 0) {
+      bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
+      bgPieces.push(bgPieces.shift());
     }
-    bgPieces[0].move(-100, 0);
-    bgPieces[1].moveTo(bgPieces[0].pos.x + 3840, 0);
 
-    for (const platform of platforms) {
-      if (platform.pos.x < -1920) {
-        platforms.push(platforms.shift());
-        platform.moveTo(1920, 450);
-      }
+    bgPieces[0].move(-100, 0);
+    bgPieces[1].moveTo(bgPieces[0].pos.x + bgPieceWidth * 2, 0);
+
+    // for jump effect
+    bgPieces[0].moveTo(bgPieces[0].pos.x, -sonic.pos.y / 10 - 50);
+    bgPieces[1].moveTo(bgPieces[1].pos.x, -sonic.pos.y / 10 - 50);
+
+    if (platforms[1].pos.x < 0) {
+      platforms[0].moveTo(platforms[1].pos.x + platforms[1].width * 4, 450);
+      platforms.push(platforms.shift());
     }
 
     platforms[0].move(-4000, 0);
-    platforms[1].moveTo(platforms[0].pos.x + 1532, 450);
-    platforms[2].moveTo(platforms[1].pos.x + 1532, 450);
+    platforms[1].moveTo(platforms[0].pos.x + platforms[1].width * 4, 450);
   });
 });
 
