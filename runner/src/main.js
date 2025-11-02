@@ -29,9 +29,80 @@ k.loadSprite("motobug", "graphics/motobug.png", {
 });
 k.loadFont("mania", "fonts/mania.ttf");
 
+k.scene("disclaimer", () => {
+  k.add([
+    k.text(
+      `
+    Sonic is owned by SEGA.
+    This is a fangame made by JSLegendDev using assets from Sonic Mania
+  `,
+      { font: "mania", size: 32 }
+    ),
+  ]);
+
+  k.add([
+    k.text("Press Space/Click/Touch to Start The Game", {
+      font: "mania",
+      size: 64,
+    }),
+    k.anchor("center"),
+    k.pos(k.center()),
+  ]);
+
+  k.onButtonPress("jump", () => k.go("main-menu"));
+});
+
 k.scene("main-menu", () => {
   if (!k.getData("best-score")) k.setData("best-score", 0);
-  k.onKeyPress("space", () => k.go("game"));
+  k.onButtonPress("jump", () => k.go("game"));
+
+  const bgPieceWidth = 1920;
+  const bgPieces = [
+    k.add([k.sprite("chemical-bg"), k.pos(0, 0), k.scale(2), k.opacity(0.8)]),
+    k.add([
+      k.sprite("chemical-bg"),
+      k.pos(1920, 0),
+      k.scale(2),
+      k.opacity(0.8),
+    ]),
+  ];
+
+  const platforms = [
+    k.add([k.sprite("platforms"), k.pos(0, 450), k.scale(4)]),
+    k.add([k.sprite("platforms"), k.pos(384, 450), k.scale(4)]),
+  ];
+
+  k.add([
+    k.text("SONIC RING RUN", { font: "mania", size: 96 }),
+    k.anchor("center"),
+    k.pos(k.center().x, 200),
+  ]);
+
+  k.add([
+    k.text("Press Space/Click/Touch to Play", { font: "mania", size: 32 }),
+    k.anchor("center"),
+    k.pos(k.center().x, k.center().y - 200),
+  ]);
+
+  const sonic = makeSonic(k.vec2(200, 745));
+  const gameSpeed = 4000;
+  k.onUpdate(() => {
+    if (bgPieces[1].pos.x < 0) {
+      bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
+      bgPieces.push(bgPieces.shift());
+    }
+
+    bgPieces[0].move(-100, 0);
+    bgPieces[1].moveTo(bgPieces[0].pos.x + bgPieceWidth * 2, 0);
+
+    if (platforms[1].pos.x < 0) {
+      platforms[0].moveTo(platforms[1].pos.x + platforms[1].width * 4, 450);
+      platforms.push(platforms.shift());
+    }
+
+    platforms[0].move(-gameSpeed, 0);
+    platforms[1].moveTo(platforms[0].pos.x + platforms[1].width * 4, 450);
+  });
 });
 
 k.scene("game", () => {
@@ -55,6 +126,19 @@ k.scene("game", () => {
   const sonic = makeSonic(k.vec2(200, 745));
   sonic.setControls();
   sonic.setEvents();
+
+  const controlsText = k.add([
+    k.text("Press Space/Click/Touch to Jump!", {
+      font: "mania",
+      size: 64,
+    }),
+    k.anchor("center"),
+    k.pos(k.center()),
+  ]);
+
+  k.wait(3, () => {
+    k.destroy(controlsText);
+  });
 
   const scoreText = k.add([
     k.text("SCORE : 0", { font: "mania", size: 72 }),
@@ -195,7 +279,7 @@ k.scene("gameover", () => {
   k.add([
     k.text("GAME OVER", { font: "mania", size: 96 }),
     k.anchor("center"),
-    k.pos(k.center().x, k.center().y - 200),
+    k.pos(k.center().x, k.center().y - 300),
   ]);
   k.add([
     k.text(`BEST SCORE : ${bestScore}`, {
@@ -203,7 +287,7 @@ k.scene("gameover", () => {
       size: 64,
     }),
     k.anchor("center"),
-    k.pos(k.center().x - 400, k.center().y - 80),
+    k.pos(k.center().x - 400, k.center().y - 200),
   ]);
   k.add([
     k.text(`CURRENT SCORE : ${currentScore}`, {
@@ -211,7 +295,7 @@ k.scene("gameover", () => {
       size: 64,
     }),
     k.anchor("center"),
-    k.pos(k.center().x + 400, k.center().y - 80),
+    k.pos(k.center().x + 400, k.center().y - 200),
   ]);
 
   const bestRankBox = k.add([
@@ -220,7 +304,7 @@ k.scene("gameover", () => {
     k.area(),
     k.anchor("center"),
     k.outline(6, k.Color.fromArray([255, 255, 255])),
-    k.pos(k.center().x - 400, k.center().y + 200),
+    k.pos(k.center().x - 400, k.center().y + 50),
   ]);
 
   bestRankBox.add([
@@ -234,7 +318,7 @@ k.scene("gameover", () => {
     k.area(),
     k.anchor("center"),
     k.outline(6, k.Color.fromArray([255, 255, 255])),
-    k.pos(k.center().x + 400, k.center().y + 200),
+    k.pos(k.center().x + 400, k.center().y + 50),
   ]);
 
   currentRankBox.add([
@@ -249,10 +333,10 @@ k.scene("gameover", () => {
         size: 64,
       }),
       k.anchor("center"),
-      k.pos(k.center().x, k.center().y + 500),
+      k.pos(k.center().x, k.center().y + 350),
     ]);
     k.onButtonPress("jump", () => k.go("game"));
   });
 });
 
-k.go("main-menu");
+k.go("disclaimer");
