@@ -1,5 +1,5 @@
 import k from "./kaplayCtx";
-import { makeRing, makeSonic } from "./entities";
+import { makeMotobug, makeRing, makeSonic } from "./entities";
 import { GameObj } from "kaplay";
 
 k.loadSprite("chemical-bg", "graphics/chemical-bg.png");
@@ -111,6 +111,55 @@ k.scene("game", () => {
     });
   });
 
+  const spawnMotoBug = () => {
+    const motobug = makeMotobug(k.vec2(1280, 595));
+    motobug.onUpdate(() => {
+      if (gameSpeed < 3000) {
+        motobug.move(-(gameSpeed + 300), 0);
+        return;
+      }
+      motobug.move(-gameSpeed, 0);
+    });
+
+    motobug.onExitScreen(() => {
+      if (motobug.pos.x < 0) k.destroy(motobug);
+    });
+
+    const waitTime = k.rand(0.5, 2.5);
+
+    k.wait(waitTime, spawnMotoBug);
+  };
+
+  spawnMotoBug();
+
+  sonic.onCollide("enemy", (enemy) => {
+    if (!sonic.isGrounded()) {
+      k.play("destroy", { volume: 0.5 });
+      k.play("hyper-ring", { volume: 0.5 });
+      k.destroy(enemy);
+      sonic.play("jump");
+      sonic.jump();
+      scoreMultiplier += 1;
+      score += 10 * scoreMultiplier;
+      scoreText.text = `SCORE : ${score}`;
+      if (scoreMultiplier === 1)
+        ringCollectUI.text = `+${10 * scoreMultiplier}`;
+      if (scoreMultiplier > 1) ringCollectUI.text = `x${scoreMultiplier}`;
+      k.wait(1, () => {
+        ringCollectUI.text = "";
+      });
+      return;
+    }
+
+    k.play("hurt", { volume: 0.5 });
+    k.setData("current-score", score);
+    k.go("game-over");
+  });
+
+  sonic.onGround(() => {
+    scoreMultiplier = 0;
+  });
+
   k.onUpdate(() => {
     if (bgPieces[1].pos.x < 0) {
       bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
@@ -133,6 +182,48 @@ k.scene("game", () => {
   });
 });
 
-k.scene("game-over", () => {});
+k.scene("game-over", () => {
+  let bestScore: number = k.getData("best-score") || 0;
+  const currentScore: number | null = k.getData("current-score");
+
+  if (currentScore && bestScore < currentScore) {
+    k.setData("best-score", currentScore);
+    bestScore = currentScore;
+  }
+
+  k.add([
+    k.text("GAME OVER", { font: "mania", size: 64 }),
+    k.anchor("center"),
+    k.pos(k.center().x, k.center().y - 300),
+  ]);
+  k.add([
+    k.text(`BEST SCORE : ${bestScore}`, {
+      font: "mania",
+      size: 32,
+    }),
+    k.anchor("center"),
+    k.pos(k.center().x - 400, k.center().y - 200),
+  ]);
+  k.add([
+    k.text(`CURRENT SCORE : ${currentScore}`, {
+      font: "mania",
+      size: 32,
+    }),
+    k.anchor("center"),
+    k.pos(k.center().x + 400, k.center().y - 200),
+  ]);
+
+  k.wait(1, () => {
+    k.add([
+      k.text("Press Space/Click/Touch to Play Again", {
+        font: "mania",
+        size: 32,
+      }),
+      k.anchor("center"),
+      k.pos(k.center().x, k.center().y + 200),
+    ]);
+    k.onButtonPress("jump", () => k.go("game"));
+  });
+});
 
 k.go("game");
