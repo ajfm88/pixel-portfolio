@@ -1,10 +1,10 @@
 import kaplay from "kaplay";
 
 const k = kaplay({
-  width: 1920,
-  height: 1080,
-  letterbox: true,
+  width: 1280,
+  height: 720,
   background: [0, 0, 0],
+  letterbox: true,
   global: false,
   buttons: {
     jump: {
@@ -13,7 +13,8 @@ const k = kaplay({
     },
   },
   touchToMouse: true,
-  debug: false,
+  debug: true,
+  pixelDensity: window.devicePixelRatio,
 });
 
 export default k;

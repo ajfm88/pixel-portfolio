@@ -1,16 +1,16 @@
-import k from "../kaplayCtx";
+import k from "./kaplayCtx";
+import { Vec2, GameObj } from "kaplay";
 
-export function makeSonic(pos) {
-  const sonic = k.add([
+export function makeSonic(position: Vec2) {
+  return k.add([
     k.sprite("sonic", { anim: "run" }),
-    k.scale(4),
+    k.scale(3),
     k.area(),
     k.anchor("center"),
-    k.pos(pos),
+    k.pos(position),
     k.body({ jumpForce: 1700 }),
     {
-      ringCollectUI: null,
-      setControls() {
+      setControls(this: GameObj) {
         k.onButtonPress("jump", () => {
           if (this.isGrounded()) {
             this.play("jump");
@@ -19,20 +19,23 @@ export function makeSonic(pos) {
           }
         });
       },
-      setEvents() {
+      setEvents(this: GameObj) {
         this.onGround(() => {
           this.play("run");
         });
       },
     },
   ]);
+}
 
-  sonic.ringCollectUI = sonic.add([
-    k.text("", { font: "mania", size: 24 }),
-    k.color(255, 255, 0),
+export function makeRing(position: Vec2) {
+  return k.add([
+    k.sprite("ring", { anim: "spin" }),
+    k.area(),
+    k.scale(3),
     k.anchor("center"),
-    k.pos(30, -10),
+    k.pos(position),
+    k.offscreen(),
+    "ring",
   ]);
-
-  return sonic;
 }
