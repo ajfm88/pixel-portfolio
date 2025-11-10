@@ -13,7 +13,7 @@ const k = kaplay({
     },
   },
   touchToMouse: true,
-  debug: true,
+  debug: false, // set it to true initially
   pixelDensity: window.devicePixelRatio,
 });
 
