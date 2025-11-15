@@ -6,6 +6,7 @@ const k = kaplay({
   letterbox: true,
   touchToMouse: true,
   scale: 4,
+  pixelDensity: devicePixelRatio,
 });
 
 export default k;
