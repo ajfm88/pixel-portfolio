@@ -13,6 +13,7 @@ export function loadAssets() {
       snif: { from: 4, to: 5, speed: 4, loop: true },
       detect: 6,
       jump: { from: 7, to: 8, speed: 6 },
+      catch: 9,
     },
   });
 }

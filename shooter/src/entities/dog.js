@@ -14,7 +14,7 @@ export default class Dog {
     return this;
   }
 
-  setDogAI() {
+  searchForDucks() {
     let nbSnifs = 0;
     this.gameObj.onStateEnter("search", () => {
       this.gameObj.play("search");
@@ -58,7 +58,7 @@ export default class Dog {
       this.gameObj.move(100, -50);
     });
 
-    this.gameObj.onStateUpdate("drop", () => {
+    this.gameObj.onStateUpdate("drop", async () => {
       k.tween(
         this.gameObj.pos.y,
         150,
