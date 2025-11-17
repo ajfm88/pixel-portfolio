@@ -1,6 +1,7 @@
 import { loadAssets } from "./assetLoader";
 import { COLORS } from "./constants";
 import Dog from "./entities/dog";
+import Duck from "./entities/duck";
 import k from "./kaplayCtx";
 
 loadAssets();
@@ -54,6 +55,8 @@ k.scene("game", () => {
 
   const dog = new Dog(k.vec2(0, k.center().y));
   dog.searchForDucks();
+
+  const duck = new Duck();
 
   const cursor = k.add([
     k.sprite("cursor"),

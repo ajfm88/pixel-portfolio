@@ -16,4 +16,14 @@ export function loadAssets() {
       catch: 9,
     },
   });
+  k.loadSprite("duck", "./duck.png", {
+    sliceX: 8,
+    sliceY: 1,
+    anims: {
+      "flight-diagonal": { from: 0, to: 2, loop: true },
+      "flight-side": { from: 3, to: 5, loop: true },
+      shot: 6,
+      fall: 7,
+    },
+  });
 }
