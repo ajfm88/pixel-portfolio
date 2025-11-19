@@ -24,6 +24,8 @@ export default class Duck {
     ]);
 
     this.angle = angles[chosenAngleIndex];
+    // make duck face the correct direction
+    if (this.angle.x < 0) this.gameObj.flipX = true;
 
     this.gameObj.onUpdate(() => {
       if (this.gameObj.pos.x > k.width() || this.gameObj.pos.x < 10) {
@@ -50,7 +52,5 @@ export default class Duck {
 
       this.gameObj.move(k.vec2(this.angle).scale(this.speed));
     });
-
-    this.gameObj.onCollide("bounds", () => {});
   }
 }

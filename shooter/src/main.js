@@ -3,6 +3,7 @@ import { COLORS } from "./constants";
 import Dog from "./entities/dog";
 import Duck from "./entities/duck";
 import k from "./kaplayCtx";
+import gameStateManager from "./stateManager";
 
 loadAssets();
 
@@ -56,7 +57,10 @@ k.scene("game", () => {
   const dog = new Dog(k.vec2(0, k.center().y));
   dog.searchForDucks();
 
-  const duck = new Duck();
+  gameStateManager.gameObj.onStateEnter("game", () => {
+    console.log("should run once");
+    const duck = new Duck();
+  });
 
   const cursor = k.add([
     k.sprite("cursor"),

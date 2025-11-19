@@ -1,4 +1,5 @@
 import k from "../kaplayCtx";
+import gameStateManager from "../stateManager";
 
 export default class Dog {
   speed = 15;
@@ -58,14 +59,15 @@ export default class Dog {
       this.gameObj.move(100, -50);
     });
 
-    this.gameObj.onStateUpdate("drop", async () => {
-      k.tween(
+    this.gameObj.onStateEnter("drop", async () => {
+      await k.tween(
         this.gameObj.pos.y,
         150,
         0.5,
         (nextValue) => (this.gameObj.pos.y = nextValue),
         k.easings.linear
       );
+      gameStateManager.gameObj.enterState("game");
     });
   }
 }
