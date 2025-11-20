@@ -1,5 +1,5 @@
 import k from "../kaplayCtx";
-import gameStateManager from "../stateManager";
+import gameManager from "../gameManager";
 
 export default class Dog {
   speed = 15;
@@ -67,7 +67,7 @@ export default class Dog {
         (nextValue) => (this.gameObj.pos.y = nextValue),
         k.easings.linear
       );
-      gameStateManager.gameObj.enterState("game");
+      gameManager.state.enterState("round-start");
     });
   }
 }

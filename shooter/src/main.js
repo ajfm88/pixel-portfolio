@@ -3,7 +3,7 @@ import { COLORS } from "./constants";
 import Dog from "./entities/dog";
 import Duck from "./entities/duck";
 import k from "./kaplayCtx";
-import gameStateManager from "./stateManager";
+import gameManager from "./gameManager";
 
 loadAssets();
 
@@ -46,20 +46,29 @@ k.scene("game", () => {
   ]);
 
   const duckIconColors = k.add([k.pos(95, 198)]);
-  for (let i = 0; i < 9; i++) {
-    duckIconColors.add([
-      k.rect(9, 9),
-      k.pos(i * 9, 0),
-      //k.color(k.Color.fromHex(COLORS.RED)),
-    ]);
+  let duckIconPosX = 1;
+  for (let i = 0; i < 10; i++) {
+    duckIconColors.add([k.rect(7, 9), k.pos(duckIconPosX, 0), `duckIcon-${i}`]);
+    duckIconPosX += 8;
   }
 
   const dog = new Dog(k.vec2(0, k.center().y));
   dog.searchForDucks();
 
-  gameStateManager.gameObj.onStateEnter("game", () => {
-    console.log("should run once");
-    const duck = new Duck();
+  gameManager.state.onStateEnter("round-start", () => {
+    gameManager.currentRoundNb++;
+    gameManager.state.enterState("hunt-start");
+  });
+
+  gameManager.state.onStateEnter("hunt-start", () => {
+    gameManager.currentHuntNb++;
+    const duck = new Duck(gameManager.currentHuntNb - 1);
+  });
+
+  gameManager.state.onStateEnter("hunt-end", () => {
+    if (gameManager.currentHuntNb <= 9) {
+      gameManager.state.enterState("hunt-start");
+    }
   });
 
   const cursor = k.add([
