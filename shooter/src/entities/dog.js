@@ -67,7 +67,7 @@ export default class Dog {
         (nextValue) => (this.gameObj.pos.y = nextValue),
         k.easings.linear
       );
-      gameManager.state.enterState("round-start");
+      gameManager.stateMachine.enterState("round-start");
     });
   }
 }

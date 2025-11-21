@@ -4,6 +4,7 @@ import k from "../kaplayCtx";
 
 export default class Duck {
   speed = 100;
+  timer = 0;
 
   constructor(id) {
     this.id = id;
@@ -25,6 +26,8 @@ export default class Duck {
       k.anchor("center"),
       k.pos(startingPos[chosenPosIndex]),
       k.state("fly", ["fly", "shot", "fall"]),
+      k.timer(),
+      k.offscreen({ destroy: true, distance: 100 }),
     ]);
 
     this.angle = angles[chosenAngleIndex];
@@ -32,7 +35,10 @@ export default class Duck {
     if (this.angle.x < 0) this.gameObj.flipX = true;
 
     this.gameObj.onStateUpdate("fly", () => {
-      if (this.gameObj.pos.x > k.width() || this.gameObj.pos.x < 10) {
+      if (
+        this.timer < 5 &&
+        (this.gameObj.pos.x > k.width() || this.gameObj.pos.x < 10)
+      ) {
         this.angle.x = -this.angle.x;
         this.angle.y = this.angle.y;
         this.gameObj.flipX = !this.gameObj.flipX;
@@ -73,15 +79,33 @@ export default class Duck {
       if (this.gameObj.pos.y > k.height() - 70) {
         k.destroy(this.gameObj);
         delete this; // Destroy the Duck instance
-        gameManager.state.enterState("hunt-end");
+        gameManager.nbBulletsLeft = 3;
+        gameManager.stateMachine.enterState("hunt-end");
       }
     });
 
     this.gameObj.onClick(() => {
+      if (gameManager.nbBulletsLeft < 0) return;
       this.gameObj.play("shot");
       const duckIcon = k.get(`duckIcon-${this.id}`, { recursive: true })[0];
       if (duckIcon) duckIcon.use(k.color(k.Color.fromHex(COLORS.RED)));
       this.gameObj.enterState("shot");
+    });
+
+    const sky = k.get("sky")[0];
+    this.gameObj.loop(1, () => {
+      this.timer += 1;
+
+      if (this.timer === 5) {
+        sky.color = k.Color.fromHex(COLORS.BEIGE);
+      }
+    });
+
+    this.gameObj.onExitScreen(() => {
+      sky.color = k.Color.fromHex(COLORS.BLUE);
+      delete this; // Destroy the Duck instance
+      gameManager.nbBulletsLeft = 3;
+      gameManager.stateMachine.enterState("hunt-end");
     });
   }
 }

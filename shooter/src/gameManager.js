@@ -4,9 +4,10 @@ class GameManager {
   currentScore = 0;
   currentRoundNb = 1;
   currentHuntNb = 0;
+  nbBulletsLeft = 3;
 
   constructor() {
-    this.state = k.add([
+    this.stateMachine = k.add([
       k.state("menu", [
         "menu",
         "cutscene",

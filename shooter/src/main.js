@@ -19,7 +19,7 @@ k.scene("main-menu", () => {
   k.add([
     k.text("000000", { font: "nes", size: 8 }),
     k.pos(150, 184),
-    k.color(k.Color.fromHex(COLORS.GREEN)),
+    k.color(COLORS.GREEN),
   ]);
 
   k.onClick(() => {
@@ -29,7 +29,7 @@ k.scene("main-menu", () => {
 
 k.scene("game", () => {
   k.setCursor("none");
-  k.add([k.rect(k.width(), k.height()), k.color(k.Color.fromHex(COLORS.BLUE))]);
+  k.add([k.rect(k.width(), k.height()), k.color(COLORS.BLUE), "sky"]);
   k.add([k.sprite("background"), k.pos(0, -10), k.z(1)]);
 
   const score = k.add([
@@ -52,22 +52,29 @@ k.scene("game", () => {
     duckIconPosX += 8;
   }
 
+  const bulletUIMask = k.add([
+    k.rect(0, 8),
+    k.pos(25, 198),
+    k.z(2),
+    k.color(0, 0, 0),
+  ]);
+
   const dog = new Dog(k.vec2(0, k.center().y));
   dog.searchForDucks();
 
-  gameManager.state.onStateEnter("round-start", () => {
+  gameManager.stateMachine.onStateEnter("round-start", () => {
     gameManager.currentRoundNb++;
-    gameManager.state.enterState("hunt-start");
+    gameManager.stateMachine.enterState("hunt-start");
   });
 
-  gameManager.state.onStateEnter("hunt-start", () => {
+  gameManager.stateMachine.onStateEnter("hunt-start", () => {
     gameManager.currentHuntNb++;
     const duck = new Duck(gameManager.currentHuntNb - 1);
   });
 
-  gameManager.state.onStateEnter("hunt-end", () => {
+  gameManager.stateMachine.onStateEnter("hunt-end", () => {
     if (gameManager.currentHuntNb <= 9) {
-      gameManager.state.enterState("hunt-start");
+      gameManager.stateMachine.enterState("hunt-start");
     }
   });
 
@@ -77,7 +84,26 @@ k.scene("game", () => {
     k.pos(),
     k.z(3),
   ]);
-  cursor.onUpdate(() => {
+  k.onClick(() => {
+    if (gameManager.stateMachine.state === "hunt-start") {
+      gameManager.nbBulletsLeft--;
+    }
+  });
+
+  k.onUpdate(() => {
+    switch (gameManager.nbBulletsLeft) {
+      case 3:
+        bulletUIMask.width = 0;
+        break;
+      case 2:
+        bulletUIMask.width = 8;
+        break;
+      case 1:
+        bulletUIMask.width = 15;
+        break;
+      default:
+        bulletUIMask.width = 22;
+    }
     cursor.moveTo(k.mousePos());
   });
 });
