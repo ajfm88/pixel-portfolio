@@ -33,7 +33,9 @@ export default class Duck {
     this.angle = angles[chosenAngleIndex];
     // make duck face the correct direction
     if (this.angle.x < 0) this.gameObj.flipX = true;
+  }
 
+  setDuckBehavior() {
     this.gameObj.onStateUpdate("fly", () => {
       if (
         this.timer < 5 &&
@@ -79,8 +81,9 @@ export default class Duck {
       if (this.gameObj.pos.y > k.height() - 70) {
         k.destroy(this.gameObj);
         delete this; // Destroy the Duck instance
+        sky.color = k.Color.fromHex(COLORS.BLUE);
         gameManager.nbBulletsLeft = 3;
-        gameManager.stateMachine.enterState("hunt-end");
+        gameManager.stateMachine.enterState("duck-hunted");
       }
     });
 
@@ -105,7 +108,7 @@ export default class Duck {
       sky.color = k.Color.fromHex(COLORS.BLUE);
       delete this; // Destroy the Duck instance
       gameManager.nbBulletsLeft = 3;
-      gameManager.stateMachine.enterState("hunt-end");
+      gameManager.stateMachine.enterState("duck-escaped");
     });
   }
 }

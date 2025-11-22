@@ -14,6 +14,7 @@ export function loadAssets() {
       detect: 6,
       jump: { from: 7, to: 8, speed: 6 },
       catch: 9,
+      mock: { from: 10, to: 11, loop: true },
     },
   });
   k.loadSprite("duck", "./duck.png", {

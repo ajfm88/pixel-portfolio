@@ -70,12 +70,25 @@ k.scene("game", () => {
   gameManager.stateMachine.onStateEnter("hunt-start", () => {
     gameManager.currentHuntNb++;
     const duck = new Duck(gameManager.currentHuntNb - 1);
+    duck.setDuckBehavior();
   });
 
   gameManager.stateMachine.onStateEnter("hunt-end", () => {
     if (gameManager.currentHuntNb <= 9) {
       gameManager.stateMachine.enterState("hunt-start");
+      return;
     }
+
+    gameManager.currentHuntNb = 0;
+    gameManager.stateMachine.enterState("round-end");
+  });
+
+  gameManager.stateMachine.onStateEnter("duck-hunted", () => {
+    dog.catchFallenDuck();
+  });
+
+  gameManager.stateMachine.onStateEnter("duck-escaped", async () => {
+    dog.mockPlayer();
   });
 
   const cursor = k.add([

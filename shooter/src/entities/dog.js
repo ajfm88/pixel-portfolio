@@ -62,12 +62,42 @@ export default class Dog {
     this.gameObj.onStateEnter("drop", async () => {
       await k.tween(
         this.gameObj.pos.y,
-        150,
+        125,
         0.5,
-        (nextValue) => (this.gameObj.pos.y = nextValue),
+        (newY) => (this.gameObj.pos.y = newY),
         k.easings.linear
       );
       gameManager.stateMachine.enterState("round-start");
     });
+  }
+
+  async slideUpAndDown() {
+    await k.tween(
+      this.gameObj.pos.y,
+      90,
+      0.4,
+      (newY) => (this.gameObj.pos.y = newY),
+      k.easings.linear
+    );
+    await k.wait(1);
+    await k.tween(
+      this.gameObj.pos.y,
+      125,
+      0.4,
+      (newY) => (this.gameObj.pos.y = newY),
+      k.easings.linear
+    );
+  }
+
+  async catchFallenDuck() {
+    this.gameObj.play("catch");
+    await this.slideUpAndDown();
+    gameManager.stateMachine.enterState("hunt-end");
+  }
+
+  async mockPlayer() {
+    this.gameObj.play("mock");
+    await this.slideUpAndDown();
+    gameManager.stateMachine.enterState("hunt-end");
   }
 }
