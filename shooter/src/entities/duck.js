@@ -66,6 +66,7 @@ export default class Duck {
     });
 
     this.gameObj.onStateEnter("shot", async () => {
+      gameManager.nbDucksShotInRound++;
       this.gameObj.play("shot");
       await k.wait(0.2);
       this.gameObj.enterState("fall");
@@ -91,7 +92,7 @@ export default class Duck {
       if (gameManager.nbBulletsLeft < 0) return;
       this.gameObj.play("shot");
       const duckIcon = k.get(`duckIcon-${this.id}`, { recursive: true })[0];
-      if (duckIcon) duckIcon.use(k.color(k.Color.fromHex(COLORS.RED)));
+      if (duckIcon) duckIcon.color = k.Color.fromHex(COLORS.RED);
       this.gameObj.enterState("shot");
     });
 

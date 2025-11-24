@@ -2,9 +2,10 @@ import k from "./kaplayCtx";
 
 class GameManager {
   currentScore = 0;
-  currentRoundNb = 1;
+  currentRoundNb = 0;
   currentHuntNb = 0;
   nbBulletsLeft = 3;
+  nbDucksShotInRound = 0;
 
   constructor() {
     this.stateMachine = k.add([

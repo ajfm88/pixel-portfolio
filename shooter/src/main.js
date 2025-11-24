@@ -45,10 +45,10 @@ k.scene("game", () => {
     k.color(COLORS.GREEN2),
   ]);
 
-  const duckIconColors = k.add([k.pos(95, 198)]);
+  const duckIcons = k.add([k.pos(95, 198)]);
   let duckIconPosX = 1;
   for (let i = 0; i < 10; i++) {
-    duckIconColors.add([k.rect(7, 9), k.pos(duckIconPosX, 0), `duckIcon-${i}`]);
+    duckIcons.add([k.rect(7, 9), k.pos(duckIconPosX, 0), `duckIcon-${i}`]);
     duckIconPosX += 8;
   }
 
@@ -62,9 +62,41 @@ k.scene("game", () => {
   const dog = new Dog(k.vec2(0, k.center().y));
   dog.searchForDucks();
 
-  gameManager.stateMachine.onStateEnter("round-start", () => {
+  gameManager.stateMachine.onStateEnter("round-start", async () => {
     gameManager.currentRoundNb++;
+    roundCount.text = gameManager.currentRoundNb;
+    const textBox = k.add([
+      k.sprite("text-box"),
+      k.anchor("center"),
+      k.pos(k.center().x, k.center().y - 50),
+      k.z(3),
+    ]);
+    textBox.add([
+      k.text("ROUND", { font: "nes", size: 8 }),
+      k.anchor("center"),
+      k.pos(0, -10),
+    ]);
+    textBox.add([
+      k.text(gameManager.currentRoundNb, { font: "nes", size: 8 }),
+      k.anchor("center"),
+      k.pos(0, 4),
+    ]);
+
+    await k.wait(1);
+    k.destroy(textBox);
     gameManager.stateMachine.enterState("hunt-start");
+  });
+
+  gameManager.stateMachine.onStateEnter("round-end", () => {
+    if (gameManager.nbDucksShotInRound < 6) {
+      k.go("game-over");
+      return;
+    }
+    gameManager.nbDucksShotInRound = 0;
+    for (const duckIcon of duckIcons.children) {
+      duckIcon.color = k.color(255, 255, 255);
+    }
+    gameManager.stateMachine.enterState("round-start");
   });
 
   gameManager.stateMachine.onStateEnter("hunt-start", () => {
@@ -118,6 +150,24 @@ k.scene("game", () => {
         bulletUIMask.width = 22;
     }
     cursor.moveTo(k.mousePos());
+  });
+});
+
+k.scene("game-over", () => {
+  k.add([k.rect(k.width(), k.height()), k.color(0, 0, 0)]);
+  k.add([
+    k.text("GAME OVER!", { font: "nes", size: 8 }),
+    k.anchor("center"),
+    k.pos(k.center()),
+  ]);
+  k.add([
+    k.text("CLICK TO PLAY AGAIN!", { font: "nes", size: 8 }),
+    k.anchor("center"),
+    k.pos(k.center().x, k.center().y + 50),
+  ]);
+
+  k.onClick(() => {
+    k.go("game");
   });
 });
 
