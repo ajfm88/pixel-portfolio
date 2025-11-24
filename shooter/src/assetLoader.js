@@ -1,7 +1,7 @@
 import k from "./kaplayCtx";
 
 export function loadAssets() {
-  k.loadSprite("background", "./background.png");
+  k.loadSprite("background", "./background-alt.png");
   k.loadSprite("menu", "./menu.png");
   k.loadSprite("cursor", "./cursor.png");
   k.loadFont("nes", "./fonts/nintendo-nes-font/nintendo-nes-font.ttf");
@@ -17,7 +17,7 @@ export function loadAssets() {
       mock: { from: 10, to: 11, loop: true },
     },
   });
-  k.loadSprite("duck", "./duck-alt.png", {
+  k.loadSprite("duck", "./duck.png", {
     sliceX: 8,
     sliceY: 1,
     anims: {

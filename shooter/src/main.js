@@ -4,6 +4,7 @@ import Dog from "./entities/dog";
 import Duck from "./entities/duck";
 import k from "./kaplayCtx";
 import gameManager from "./gameManager";
+import formatScore from "./utils";
 
 loadAssets();
 
@@ -16,10 +17,15 @@ k.scene("main-menu", () => {
     k.pos(k.center().x, k.center().y + 40),
   ]);
 
+  let bestScore = k.getData("best-score");
+  if (!bestScore) {
+    bestScore = 0;
+    k.setData("best-score", 0);
+  }
   k.add([
-    k.text("000000", { font: "nes", size: 8 }),
+    k.text(formatScore(bestScore, 6), { font: "nes", size: 8 }),
     k.pos(150, 184),
-    k.color(COLORS.GREEN),
+    k.color(COLORS.RED),
   ]);
 
   k.onClick(() => {
@@ -33,7 +39,7 @@ k.scene("game", () => {
   k.add([k.sprite("background"), k.pos(0, -10), k.z(1)]);
 
   const score = k.add([
-    k.text("000000", { font: "nes", size: 8 }),
+    k.text(formatScore(0, 6), { font: "nes", size: 8 }),
     k.pos(192, 197),
     k.z(2),
   ]);
@@ -42,7 +48,7 @@ k.scene("game", () => {
     k.text("1", { font: "nes", size: 8 }),
     k.pos(42, 182),
     k.z(2),
-    k.color(COLORS.GREEN2),
+    k.color(COLORS.RED),
   ]);
 
   const duckIcons = k.add([k.pos(95, 198)]);
@@ -63,6 +69,7 @@ k.scene("game", () => {
   dog.searchForDucks();
 
   gameManager.stateMachine.onStateEnter("round-start", async () => {
+    gameManager.preySpeed += 10;
     gameManager.currentRoundNb++;
     roundCount.text = gameManager.currentRoundNb;
     const textBox = k.add([
@@ -101,11 +108,17 @@ k.scene("game", () => {
 
   gameManager.stateMachine.onStateEnter("hunt-start", () => {
     gameManager.currentHuntNb++;
-    const duck = new Duck(gameManager.currentHuntNb - 1);
+    const duck = new Duck(gameManager.currentHuntNb - 1, gameManager.preySpeed);
     duck.setDuckBehavior();
   });
 
   gameManager.stateMachine.onStateEnter("hunt-end", () => {
+    const bestScore = Number(k.getData("best-score"));
+
+    if (bestScore < gameManager.currentScore) {
+      k.setData("best-score", gameManager.currentScore);
+    }
+
     if (gameManager.currentHuntNb <= 9) {
       gameManager.stateMachine.enterState("hunt-start");
       return;
@@ -136,6 +149,7 @@ k.scene("game", () => {
   });
 
   k.onUpdate(() => {
+    score.text = formatScore(gameManager.currentScore, 6);
     switch (gameManager.nbBulletsLeft) {
       case 3:
         bulletUIMask.width = 0;

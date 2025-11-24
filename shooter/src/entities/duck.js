@@ -3,10 +3,10 @@ import { COLORS } from "../constants";
 import k from "../kaplayCtx";
 
 export default class Duck {
-  speed = 100;
   timer = 0;
 
-  constructor(id) {
+  constructor(id, speed) {
+    this.speed = speed;
     this.id = id;
     const startingPos = [
       k.vec2(80, k.center().y + 40),
@@ -14,7 +14,7 @@ export default class Duck {
       k.vec2(200, k.center().y + 40),
     ];
 
-    const angles = [k.vec2(-0.5, -0.5), k.vec2(0.5, -0.5), k.vec2(1, -1)];
+    const angles = [k.vec2(-1, -1), k.vec2(1, -1), k.vec2(1, -1)];
 
     const chosenPosIndex = k.randi(startingPos.length);
     const chosenAngleIndex = k.randi(angles.length);
@@ -90,6 +90,7 @@ export default class Duck {
 
     this.gameObj.onClick(() => {
       if (gameManager.nbBulletsLeft < 0) return;
+      gameManager.currentScore += 100;
       this.gameObj.play("shot");
       const duckIcon = k.get(`duckIcon-${this.id}`, { recursive: true })[0];
       if (duckIcon) duckIcon.color = k.Color.fromHex(COLORS.RED);

@@ -1,7 +1,5 @@
 export const COLORS = {
-  BLUE: "#63adff",
+  BLUE: "#9fa2cb", //"#639bff",
   BEIGE: "#ffccc5",
-  GREEN: "#5ce430",
-  GREEN2: "#8cd600",
-  RED: "#b53121",
+  RED: "#cb7387",
 };
