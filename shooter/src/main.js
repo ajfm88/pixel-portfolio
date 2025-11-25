@@ -76,7 +76,7 @@ k.scene("game", () => {
       k.sprite("text-box"),
       k.anchor("center"),
       k.pos(k.center().x, k.center().y - 50),
-      k.z(3),
+      k.z(2),
     ]);
     textBox.add([
       k.text("ROUND", { font: "nes", size: 8 }),
@@ -109,7 +109,7 @@ k.scene("game", () => {
   gameManager.stateMachine.onStateEnter("hunt-start", () => {
     gameManager.currentHuntNb++;
     const duck = new Duck(gameManager.currentHuntNb - 1, gameManager.preySpeed);
-    duck.setDuckBehavior();
+    duck.setBehavior();
   });
 
   gameManager.stateMachine.onStateEnter("hunt-end", () => {
@@ -144,6 +144,12 @@ k.scene("game", () => {
   ]);
   k.onClick(() => {
     if (gameManager.stateMachine.state === "hunt-start") {
+      // Note : we need to allow nbBulletsLeft to go below zero
+      // so that if cursor overlaps with duck, the duck shot logic
+      // will work. Otherwise, the onClick in the Duck class will
+      // never register a successful hit because the nbBulletsLeft goes
+      // to zero before that onClick runs. Look at a Duck class and you'll understand.
+      if (gameManager.nbBulletsLeft > 0) k.play("gun-shot", { volume: 0.5 });
       gameManager.nbBulletsLeft--;
     }
   });

@@ -21,7 +21,7 @@ export default class Duck {
 
     this.gameObj = k.add([
       k.sprite("duck", { anim: "flight-side" }),
-      k.area({ shape: new k.Rect(k.vec2(0), 32, 32) }),
+      k.area({ shape: new k.Rect(k.vec2(0), 32, 16) }),
       k.body(),
       k.anchor("center"),
       k.pos(startingPos[chosenPosIndex]),
@@ -35,11 +35,11 @@ export default class Duck {
     if (this.angle.x < 0) this.gameObj.flipX = true;
   }
 
-  setDuckBehavior() {
+  setBehavior() {
     this.gameObj.onStateUpdate("fly", () => {
       if (
         this.timer < 5 &&
-        (this.gameObj.pos.x > k.width() || this.gameObj.pos.x < 10)
+        (this.gameObj.pos.x > k.width() + 10 || this.gameObj.pos.x < 10)
       ) {
         this.angle.x = -this.angle.x;
         this.angle.y = this.angle.y;
@@ -52,7 +52,7 @@ export default class Duck {
         this.gameObj.play(currentAnim);
       }
 
-      if (this.gameObj.pos.y < 0 || this.gameObj.pos.y > k.height() - 70) {
+      if (this.gameObj.pos.y < -10 || this.gameObj.pos.y > k.height() - 70) {
         this.angle.y = -this.angle.y;
 
         const currentAnim =

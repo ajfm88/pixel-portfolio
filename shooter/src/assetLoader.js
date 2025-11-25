@@ -1,11 +1,11 @@
 import k from "./kaplayCtx";
 
 export function loadAssets() {
-  k.loadSprite("background", "./background-alt.png");
+  k.loadSprite("background", "./background.png");
   k.loadSprite("menu", "./menu.png");
   k.loadSprite("cursor", "./cursor.png");
   k.loadFont("nes", "./fonts/nintendo-nes-font/nintendo-nes-font.ttf");
-  k.loadSprite("dog", "./dog-alt.png", {
+  k.loadSprite("dog", "./dog.png", {
     sliceX: 4,
     sliceY: 3,
     anims: {
@@ -28,4 +28,5 @@ export function loadAssets() {
     },
   });
   k.loadSprite("text-box", "./text-box.png");
+  k.loadSound("gun-shot", "./sounds/gun-shot.wav");
 }
