@@ -68,73 +68,95 @@ k.scene("game", () => {
   const dog = new Dog(k.vec2(0, k.center().y));
   dog.searchForDucks();
 
-  gameManager.stateMachine.onStateEnter("round-start", async () => {
-    gameManager.preySpeed += 10;
-    gameManager.currentRoundNb++;
-    roundCount.text = gameManager.currentRoundNb;
-    const textBox = k.add([
-      k.sprite("text-box"),
-      k.anchor("center"),
-      k.pos(k.center().x, k.center().y - 50),
-      k.z(2),
-    ]);
-    textBox.add([
-      k.text("ROUND", { font: "nes", size: 8 }),
-      k.anchor("center"),
-      k.pos(0, -10),
-    ]);
-    textBox.add([
-      k.text(gameManager.currentRoundNb, { font: "nes", size: 8 }),
-      k.anchor("center"),
-      k.pos(0, 4),
-    ]);
+  const roundStartController = gameManager.stateMachine.onStateEnter(
+    "round-start",
+    async (isFirstRound) => {
+      if (!isFirstRound) gameManager.preySpeed += 50;
+      gameManager.currentRoundNb++;
+      roundCount.text = gameManager.currentRoundNb;
+      const textBox = k.add([
+        k.sprite("text-box"),
+        k.anchor("center"),
+        k.pos(k.center().x, k.center().y - 50),
+        k.z(2),
+      ]);
+      textBox.add([
+        k.text("ROUND", { font: "nes", size: 8 }),
+        k.anchor("center"),
+        k.pos(0, -10),
+      ]);
+      textBox.add([
+        k.text(gameManager.currentRoundNb, { font: "nes", size: 8 }),
+        k.anchor("center"),
+        k.pos(0, 4),
+      ]);
 
-    await k.wait(1);
-    k.destroy(textBox);
-    gameManager.stateMachine.enterState("hunt-start");
-  });
-
-  gameManager.stateMachine.onStateEnter("round-end", () => {
-    if (gameManager.nbDucksShotInRound < 6) {
-      k.go("game-over");
-      return;
-    }
-    gameManager.nbDucksShotInRound = 0;
-    for (const duckIcon of duckIcons.children) {
-      duckIcon.color = k.color(255, 255, 255);
-    }
-    gameManager.stateMachine.enterState("round-start");
-  });
-
-  gameManager.stateMachine.onStateEnter("hunt-start", () => {
-    gameManager.currentHuntNb++;
-    const duck = new Duck(gameManager.currentHuntNb - 1, gameManager.preySpeed);
-    duck.setBehavior();
-  });
-
-  gameManager.stateMachine.onStateEnter("hunt-end", () => {
-    const bestScore = Number(k.getData("best-score"));
-
-    if (bestScore < gameManager.currentScore) {
-      k.setData("best-score", gameManager.currentScore);
-    }
-
-    if (gameManager.currentHuntNb <= 9) {
+      await k.wait(1);
+      k.destroy(textBox);
       gameManager.stateMachine.enterState("hunt-start");
-      return;
     }
+  );
 
-    gameManager.currentHuntNb = 0;
-    gameManager.stateMachine.enterState("round-end");
-  });
+  const roundEndController = gameManager.stateMachine.onStateEnter(
+    "round-end",
+    () => {
+      if (gameManager.nbDucksShotInRound < 6) {
+        k.go("game-over");
+        return;
+      }
+      gameManager.nbDucksShotInRound = 0;
+      for (const duckIcon of duckIcons.children) {
+        duckIcon.color = k.color(255, 255, 255);
+      }
+      gameManager.stateMachine.enterState("round-start");
+    }
+  );
 
-  gameManager.stateMachine.onStateEnter("duck-hunted", () => {
-    dog.catchFallenDuck();
-  });
+  const huntStartController = gameManager.stateMachine.onStateEnter(
+    "hunt-start",
+    () => {
+      gameManager.currentHuntNb++;
+      const duck = new Duck(
+        gameManager.currentHuntNb - 1,
+        gameManager.preySpeed
+      );
+      duck.setBehavior();
+    }
+  );
 
-  gameManager.stateMachine.onStateEnter("duck-escaped", async () => {
-    dog.mockPlayer();
-  });
+  const huntEndController = gameManager.stateMachine.onStateEnter(
+    "hunt-end",
+    () => {
+      const bestScore = Number(k.getData("best-score"));
+
+      if (bestScore < gameManager.currentScore) {
+        k.setData("best-score", gameManager.currentScore);
+      }
+
+      if (gameManager.currentHuntNb <= 9) {
+        gameManager.stateMachine.enterState("hunt-start");
+        return;
+      }
+
+      gameManager.currentHuntNb = 0;
+      gameManager.stateMachine.enterState("round-end");
+    }
+  );
+
+  const duckHunterController = gameManager.stateMachine.onStateEnter(
+    "duck-hunted",
+    () => {
+      gameManager.nbBulletsLeft = 3;
+      dog.catchFallenDuck();
+    }
+  );
+
+  const duckEscapedController = gameManager.stateMachine.onStateEnter(
+    "duck-escaped",
+    async () => {
+      dog.mockPlayer();
+    }
+  );
 
   const cursor = k.add([
     k.sprite("cursor"),
@@ -170,6 +192,16 @@ k.scene("game", () => {
         bulletUIMask.width = 22;
     }
     cursor.moveTo(k.mousePos());
+  });
+
+  k.onSceneLeave(() => {
+    roundStartController.cancel();
+    roundEndController.cancel();
+    huntStartController.cancel();
+    huntEndController.cancel();
+    duckHunterController.cancel();
+    duckEscapedController.cancel();
+    gameManager.initializeGameState();
   });
 });
 

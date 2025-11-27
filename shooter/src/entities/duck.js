@@ -21,7 +21,7 @@ export default class Duck {
 
     this.gameObj = k.add([
       k.sprite("duck", { anim: "flight-side" }),
-      k.area({ shape: new k.Rect(k.vec2(0), 32, 16) }),
+      k.area({ shape: new k.Rect(k.vec2(0), 24, 24) }),
       k.body(),
       k.anchor("center"),
       k.pos(startingPos[chosenPosIndex]),
@@ -33,6 +33,9 @@ export default class Duck {
     this.angle = angles[chosenAngleIndex];
     // make duck face the correct direction
     if (this.angle.x < 0) this.gameObj.flipX = true;
+
+    this.quackingSound = k.play("quacking", { volume: 0.5, loop: true });
+    this.flappingSound = k.play("flapping", { loop: true, speed: 1.5 });
   }
 
   setBehavior() {
@@ -68,22 +71,27 @@ export default class Duck {
     this.gameObj.onStateEnter("shot", async () => {
       gameManager.nbDucksShotInRound++;
       this.gameObj.play("shot");
+      this.quackingSound.stop();
+      this.flappingSound.stop();
       await k.wait(0.2);
       this.gameObj.enterState("fall");
     });
 
     this.gameObj.onStateEnter("fall", () => {
+      this.fallSound = k.play("fall");
       this.gameObj.play("fall");
     });
 
-    this.gameObj.onStateUpdate("fall", () => {
+    this.gameObj.onStateUpdate("fall", async () => {
       this.gameObj.move(0, this.speed);
 
       if (this.gameObj.pos.y > k.height() - 70) {
+        this.fallSound.stop();
+        k.play("impact");
         k.destroy(this.gameObj);
         delete this; // Destroy the Duck instance
         sky.color = k.Color.fromHex(COLORS.BLUE);
-        gameManager.nbBulletsLeft = 3;
+        await k.wait(1);
         gameManager.stateMachine.enterState("duck-hunted");
       }
     });
@@ -107,6 +115,8 @@ export default class Duck {
     });
 
     this.gameObj.onExitScreen(() => {
+      this.quackingSound.stop();
+      this.flappingSound.stop();
       sky.color = k.Color.fromHex(COLORS.BLUE);
       delete this; // Destroy the Duck instance
       gameManager.nbBulletsLeft = 3;

@@ -1,14 +1,8 @@
 import k from "./kaplayCtx";
 
 class GameManager {
-  currentScore = 0;
-  currentRoundNb = 0;
-  currentHuntNb = 0;
-  nbBulletsLeft = 3;
-  nbDucksShotInRound = 0;
-  preySpeed = 100;
-
   constructor() {
+    this.initializeGameState();
     this.stateMachine = k.add([
       k.state("menu", [
         "menu",
@@ -21,6 +15,15 @@ class GameManager {
         "duck-escaped",
       ]),
     ]);
+  }
+
+  initializeGameState() {
+    this.currentScore = 0;
+    this.currentRoundNb = 0;
+    this.currentHuntNb = 0;
+    this.nbBulletsLeft = 3;
+    this.nbDucksShotInRound = 0;
+    this.preySpeed = 200;
   }
 }
 
