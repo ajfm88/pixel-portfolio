@@ -35,7 +35,7 @@ export default class Duck {
     if (this.angle.x < 0) this.gameObj.flipX = true;
 
     this.quackingSound = k.play("quacking", { volume: 0.5, loop: true });
-    this.flappingSound = k.play("flapping", { loop: true, speed: 1.5 });
+    this.flappingSound = k.play("flapping", { loop: true, speed: 2 });
   }
 
   setBehavior() {

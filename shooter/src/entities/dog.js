@@ -12,6 +12,15 @@ export default class Dog {
       k.z(2),
     ]);
 
+    this.sniffingSound = k.play("sniffing", { volume: 1.5 });
+    this.sniffingSound.stop();
+
+    this.barkingSound = k.play("barking");
+    this.barkingSound.stop();
+
+    this.laughingSound = k.play("laughing");
+    this.laughingSound.stop();
+
     return this;
   }
 
@@ -31,7 +40,9 @@ export default class Dog {
     this.gameObj.onStateEnter("snif", () => {
       nbSnifs++;
       this.gameObj.play("snif");
+      this.sniffingSound.play();
       k.wait(2, () => {
+        this.sniffingSound.stop();
         if (nbSnifs === 2) {
           this.gameObj.enterState("detect");
           return;
@@ -41,15 +52,19 @@ export default class Dog {
     });
 
     this.gameObj.onStateEnter("detect", () => {
+      this.barkingSound.play();
       this.gameObj.play("detect");
       k.wait(1, () => {
+        this.barkingSound.stop();
         this.gameObj.enterState("jump");
       });
     });
 
     this.gameObj.onStateEnter("jump", () => {
+      this.barkingSound.play();
       this.gameObj.play("jump");
       k.wait(0.5, () => {
+        this.barkingSound.stop();
         this.gameObj.use(k.z(0));
         this.gameObj.enterState("drop");
       });
@@ -96,6 +111,7 @@ export default class Dog {
   }
 
   async mockPlayer() {
+    this.laughingSound.play();
     this.gameObj.play("mock");
     await this.slideUpAndDown();
     gameManager.stateMachine.enterState("hunt-end");

@@ -33,4 +33,8 @@ export function loadAssets() {
   k.loadSound("flapping", "./sounds/flapping.ogg");
   k.loadSound("fall", "./sounds/fall.wav");
   k.loadSound("impact", "./sounds/impact.wav");
+  k.loadSound("sniffing", "./sounds/sniffing.wav");
+  k.loadSound("barking", "./sounds/barking.wav");
+  k.loadSound("laughing", "./sounds/laughing.wav");
+  k.loadSound("ui-appear", "./sounds/ui-appear.wav");
 }

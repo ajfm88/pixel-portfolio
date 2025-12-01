@@ -72,6 +72,7 @@ k.scene("game", () => {
     "round-start",
     async (isFirstRound) => {
       if (!isFirstRound) gameManager.preySpeed += 50;
+      k.play("ui-appear");
       gameManager.currentRoundNb++;
       roundCount.text = gameManager.currentRoundNb;
       const textBox = k.add([
@@ -165,7 +166,10 @@ k.scene("game", () => {
     k.z(3),
   ]);
   k.onClick(() => {
-    if (gameManager.stateMachine.state === "hunt-start") {
+    if (
+      gameManager.stateMachine.state === "hunt-start" &&
+      !gameManager.isGamePaused
+    ) {
       // Note : we need to allow nbBulletsLeft to go below zero
       // so that if cursor overlaps with duck, the duck shot logic
       // will work. Otherwise, the onClick in the Duck class will
@@ -202,6 +206,19 @@ k.scene("game", () => {
     duckHunterController.cancel();
     duckEscapedController.cancel();
     gameManager.initializeGameState();
+  });
+
+  k.onKeyPress((key) => {
+    if (key === "p") {
+      k.getTreeRoot().paused = !k.getTreeRoot().paused;
+      if (k.getTreeRoot().paused) {
+        gameManager.isGamePaused = true;
+        audioCtx.suspend();
+      } else {
+        gameManager.isGamePaused = false;
+        audioCtx.resume();
+      }
+    }
   });
 });
 

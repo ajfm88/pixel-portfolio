@@ -1,6 +1,8 @@
 import k from "./kaplayCtx";
 
 class GameManager {
+  isGamePaused = false;
+
   constructor() {
     this.initializeGameState();
     this.stateMachine = k.add([
