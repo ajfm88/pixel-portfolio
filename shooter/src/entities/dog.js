@@ -12,7 +12,7 @@ export default class Dog {
       k.z(2),
     ]);
 
-    this.sniffingSound = k.play("sniffing", { volume: 1.5 });
+    this.sniffingSound = k.play("sniffing", { volume: 2 });
     this.sniffingSound.stop();
 
     this.barkingSound = k.play("barking");
@@ -106,6 +106,7 @@ export default class Dog {
 
   async catchFallenDuck() {
     this.gameObj.play("catch");
+    k.play("successful-hunt");
     await this.slideUpAndDown();
     gameManager.stateMachine.enterState("hunt-end");
   }

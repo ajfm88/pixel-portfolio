@@ -3,7 +3,8 @@ import { COLORS } from "../constants";
 import k from "../kaplayCtx";
 
 export default class Duck {
-  timer = 0;
+  #timer = 0;
+  #timeBeforeEscape = 5;
 
   constructor(id, speed) {
     this.speed = speed;
@@ -41,8 +42,8 @@ export default class Duck {
   setBehavior() {
     this.gameObj.onStateUpdate("fly", () => {
       if (
-        this.timer < 5 &&
-        (this.gameObj.pos.x > k.width() + 10 || this.gameObj.pos.x < 10)
+        this.#timer < this.#timeBeforeEscape &&
+        (this.gameObj.pos.x > k.width() + 10 || this.gameObj.pos.x < -10)
       ) {
         this.angle.x = -this.angle.x;
         this.angle.y = this.angle.y;
@@ -78,7 +79,7 @@ export default class Duck {
     });
 
     this.gameObj.onStateEnter("fall", () => {
-      this.fallSound = k.play("fall");
+      this.fallSound = k.play("fall", { volume: 0.7 });
       this.gameObj.play("fall");
     });
 
@@ -107,9 +108,9 @@ export default class Duck {
 
     const sky = k.get("sky")[0];
     this.gameObj.loop(1, () => {
-      this.timer += 1;
+      this.#timer += 1;
 
-      if (this.timer === 5) {
+      if (this.#timer === this.#timeBeforeEscape) {
         sky.color = k.Color.fromHex(COLORS.BEIGE);
       }
     });

@@ -17,6 +17,14 @@ k.scene("main-menu", () => {
     k.pos(k.center().x, k.center().y + 40),
   ]);
 
+  k.add([
+    k.text("MADE BY JSLEGEND", { font: "nes", size: 8 }),
+    k.z(2),
+    k.pos(10, 215),
+    k.color(COLORS.BLUE),
+    k.opacity(0.5),
+  ]);
+
   let bestScore = k.getData("best-score");
   if (!bestScore) {
     bestScore = 0;
@@ -105,6 +113,11 @@ k.scene("game", () => {
         k.go("game-over");
         return;
       }
+
+      if (gameManager.nbDucksShotInRound === 10) {
+        gameManager.currentScore += 500;
+      }
+
       gameManager.nbDucksShotInRound = 0;
       for (const duckIcon of duckIcons.children) {
         duckIcon.color = k.color(255, 255, 255);
@@ -198,7 +211,12 @@ k.scene("game", () => {
     cursor.moveTo(k.mousePos());
   });
 
+  const forestAmbianceSound = k.play("forest-ambiance", {
+    volume: 0.1,
+    loop: true,
+  });
   k.onSceneLeave(() => {
+    forestAmbianceSound.stop();
     roundStartController.cancel();
     roundEndController.cancel();
     huntStartController.cancel();
@@ -214,9 +232,18 @@ k.scene("game", () => {
       if (k.getTreeRoot().paused) {
         gameManager.isGamePaused = true;
         audioCtx.suspend();
+        k.add([
+          k.text("PAUSED", { font: "nes", size: 8 }),
+          k.pos(5, 5),
+          k.z(3),
+          "paused-text",
+        ]);
       } else {
         gameManager.isGamePaused = false;
         audioCtx.resume();
+
+        const pausedText = k.get("paused-text")[0];
+        if (pausedText) k.destroy(pausedText);
       }
     }
   });
@@ -229,14 +256,9 @@ k.scene("game-over", () => {
     k.anchor("center"),
     k.pos(k.center()),
   ]);
-  k.add([
-    k.text("CLICK TO PLAY AGAIN!", { font: "nes", size: 8 }),
-    k.anchor("center"),
-    k.pos(k.center().x, k.center().y + 50),
-  ]);
 
-  k.onClick(() => {
-    k.go("game");
+  k.wait(2, () => {
+    k.go("main-menu");
   });
 });
 

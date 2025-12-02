@@ -25,7 +25,7 @@ class GameManager {
     this.currentHuntNb = 0;
     this.nbBulletsLeft = 3;
     this.nbDucksShotInRound = 0;
-    this.preySpeed = 200;
+    this.preySpeed = 100;
   }
 }
 
