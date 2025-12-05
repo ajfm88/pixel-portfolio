@@ -8,6 +8,7 @@ const k = kaplay({
   scale: 4,
   pixelDensity: devicePixelRatio,
   debug: false,
+  background: [0, 0, 0],
 });
 
 export default k;
