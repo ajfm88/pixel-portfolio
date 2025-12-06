@@ -1,3 +1,4 @@
+import type { GameObj } from "kaplay";
 import k from "./kaplayCtx";
 
 function makeGameManager() {
@@ -20,7 +21,7 @@ function makeGameManager() {
       nbBulletsLeft: 3,
       nbDucksShotInRound: 0,
       preySpeed: 100,
-      resetGameState() {
+      resetGameState(this: GameObj) {
         this.currentScore = 0;
         this.currentRoundNb = 0;
         this.currentHuntNb = 0;

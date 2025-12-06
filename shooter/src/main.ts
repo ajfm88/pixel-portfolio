@@ -1,8 +1,8 @@
-import { COLORS } from "./constants";
-import makeDog from "./entities/dog";
 import k from "./kaplayCtx";
+import { COLORS } from "./constant";
 import gameManager from "./gameManager";
 import formatScore from "./utils";
+import makeDog from "./entities/dog";
 import makeDuck from "./entities/duck";
 
 k.loadSprite("background", "./graphics/background.png");
@@ -61,7 +61,7 @@ k.scene("main-menu", () => {
     k.opacity(0.5),
   ]);
 
-  let bestScore = k.getData("best-score");
+  let bestScore: number = k.getData("best-score") || 0;
   if (!bestScore) {
     bestScore = 0;
     k.setData("best-score", 0);
@@ -121,7 +121,7 @@ k.scene("game", () => {
       if (!isFirstRound) gameManager.preySpeed += 50;
       k.play("ui-appear");
       gameManager.currentRoundNb++;
-      roundCount.text = gameManager.currentRoundNb;
+      roundCount.text = String(gameManager.currentRoundNb);
       const textBox = k.add([
         k.sprite("text-box"),
         k.anchor("center"),
@@ -134,7 +134,7 @@ k.scene("game", () => {
         k.pos(0, -10),
       ]);
       textBox.add([
-        k.text(gameManager.currentRoundNb, { font: "nes", size: 8 }),
+        k.text(String(gameManager.currentRoundNb), { font: "nes", size: 8 }),
         k.anchor("center"),
         k.pos(0, 4),
       ]);
@@ -164,7 +164,10 @@ k.scene("game", () => {
 
   const huntStartController = gameManager.onStateEnter("hunt-start", () => {
     gameManager.currentHuntNb++;
-    const duck = makeDuck(gameManager.currentHuntNb - 1, gameManager.preySpeed);
+    const duck = makeDuck(
+      String(gameManager.currentHuntNb - 1),
+      gameManager.preySpeed
+    );
     duck.setBehavior();
   });
 
@@ -252,6 +255,7 @@ k.scene("game", () => {
       k.getTreeRoot().paused = !k.getTreeRoot().paused;
       if (k.getTreeRoot().paused) {
         gameManager.isGamePaused = true;
+        //@ts-ignore
         audioCtx.suspend();
         k.add([
           k.text("PAUSED", { font: "nes", size: 8 }),
@@ -261,6 +265,7 @@ k.scene("game", () => {
         ]);
       } else {
         gameManager.isGamePaused = false;
+        //@ts-ignore
         audioCtx.resume();
 
         const pausedText = k.get("paused-text")[0];

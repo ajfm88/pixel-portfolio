@@ -1,7 +1,8 @@
 import k from "../kaplayCtx";
 import gameManager from "../gameManager";
+import type { GameObj, Vec2 } from "kaplay";
 
-export default function makeDog(position) {
+export default function makeDog(position: Vec2) {
   const sniffingSound = k.play("sniffing", { volume: 2 });
   sniffingSound.stop();
 
@@ -18,7 +19,7 @@ export default function makeDog(position) {
     k.z(2),
     {
       speed: 15,
-      searchForDucks() {
+      searchForDucks(this: GameObj) {
         let nbSnifs = 0;
 
         this.onStateEnter("search", () => {
@@ -80,7 +81,7 @@ export default function makeDog(position) {
           gameManager.enterState("round-start", true);
         });
       },
-      async slideUpAndDown() {
+      async slideUpAndDown(this: GameObj) {
         await k.tween(
           this.pos.y,
           90,
@@ -97,14 +98,14 @@ export default function makeDog(position) {
           k.easings.linear
         );
       },
-      async catchFallenDuck() {
+      async catchFallenDuck(this: GameObj) {
         this.play("catch");
         k.play("successful-hunt");
         await this.slideUpAndDown();
         gameManager.enterState("hunt-end");
       },
 
-      async mockPlayer() {
+      async mockPlayer(this: GameObj) {
         laughingSound.play();
         this.play("mock");
         await this.slideUpAndDown();

@@ -1,4 +1,4 @@
-export default function formatScore(score, nbDigits) {
+export default function formatScore(score: number, nbDigits: number) {
   const scoreAsText = score.toString();
   let zerosToAdd = 0;
   if (scoreAsText.length < nbDigits) {

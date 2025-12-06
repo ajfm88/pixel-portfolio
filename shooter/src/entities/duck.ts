@@ -1,8 +1,9 @@
-import gameManager from "../gameManager";
-import { COLORS } from "../constants";
 import k from "../kaplayCtx";
+import gameManager from "../gameManager";
+import { COLORS } from "../constant";
+import type { GameObj } from "kaplay";
 
-export default function makeDuck(duckId, speed) {
+export default function makeDuck(duckId: string, speed: number) {
   const startingPos = [
     k.vec2(80, k.center().y + 40),
     k.vec2(k.center().x, k.center().y + 40),
@@ -31,7 +32,7 @@ export default function makeDuck(duckId, speed) {
       speed,
       quackingSound: null,
       flappingSound: null,
-      setBehavior() {
+      setBehavior(this: GameObj) {
         this.flyDirection = flyDirections[chosenFlyDirectionIndex];
         // make duck face the correct direction
         if (this.flyDirection.x < 0) this.flipX = true;

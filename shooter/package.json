@@ -1,17 +1,18 @@
 {
-  "name": "duck_hunt",
+  "name": "duck-hunter-ts",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^6.0.5"
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
   },
   "dependencies": {
-    "kaplay": "^3001.0.9"
+    "kaplay": "^3001.0.19"
   }
 }
