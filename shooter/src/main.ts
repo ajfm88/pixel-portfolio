@@ -38,10 +38,10 @@ k.loadSound("flapping", "./sounds/flapping.ogg");
 k.loadSound("fall", "./sounds/fall.wav");
 k.loadSound("impact", "./sounds/impact.wav");
 k.loadSound("sniffing", "./sounds/sniffing.wav");
-k.loadSound("barking", "./sounds/barking.wav");
-k.loadSound("laughing", "./sounds/laughing.wav");
+k.loadSound("barking", "./sounds/barking.ogg");
+k.loadSound("laughing", "./sounds/laughing.mp3");
 k.loadSound("ui-appear", "./sounds/ui-appear.wav");
-k.loadSound("successful-hunt", "./sounds/successful-hunt.wav");
+k.loadSound("successful-hunt", "./sounds/successful-hunt.mp3");
 k.loadSound("forest-ambiance", "./sounds/forest-ambiance.wav");
 
 k.scene("main-menu", () => {
