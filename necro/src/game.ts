@@ -40,8 +40,10 @@ export class GameObject {
   collisionMask = 0;
   hp = 0;
   maxHp = 0;
-  despawnOnCollision = false;
   souls = 0;
+  corpseChance = 0;
+  despawnOnCollision = false;
+  despawnOnBounce = false;
 
   // Behaviours
   behaviours: Behaviour[] = [];
@@ -76,9 +78,10 @@ export class GameObject {
     }
   }
 
-  addBehaviour(behaviour: Behaviour) {
+  addBehaviour(behaviour: Behaviour = new Behaviour(this)): Behaviour {
     this.behaviours.unshift(behaviour);
     behaviour.onAdded();
+    return behaviour;
   }
 
   removeBehaviour(behaviour: Behaviour) {
@@ -113,9 +116,19 @@ export class GameObject {
     }
   }
 
+  onDeath(death: Death) {
+    for (let behaviour of this.behaviours) {
+      behaviour.onDeath(death);
+    }
+  }
+
   onBounce() {
     for (let behaviour of this.behaviours) {
       behaviour.onBounce();
+    }
+
+    if (this.despawnOnBounce) {
+      game.despawn(this);
     }
   }
 
@@ -134,6 +147,7 @@ export class Behaviour {
   constructor(public object: GameObject) {}
   turns = 1;
   timer = 0;
+  sprite: Sprite | undefined;
   onAdded() {}
   onRemoved() {}
   onUpdate(): boolean | void {}
@@ -151,6 +165,7 @@ export interface Damage {
 
 export interface Death {
   object: GameObject;
+  killer?: GameObject;
   souls: number;
 }
 
@@ -185,7 +200,7 @@ export interface Ritual {
   tags: number;
   exclusiveTags?: number;
   requiredTags?: number;
-  depth?: number;
+  recursive?: boolean;
   onFrame?(dt: number): void;
   onActive?(): void;
   onCast?(spell: GameObject): void;
@@ -196,7 +211,6 @@ export interface Ritual {
 export const PLAYING = 0;
 export const SHOPPING = 1;
 export type State = typeof PLAYING | typeof SHOPPING;
-
 
 export interface ShopItem {
   cost: number;
@@ -237,7 +251,7 @@ export class Game {
 
   ability: Ability = {
     cooldown: 10_000,
-    timer: 10_000,
+    timer: 0,
   };
 
   constructor(player: GameObject) {
@@ -296,7 +310,7 @@ export class Game {
   }
 
   private updateSpell(dt: number) {
-    game.ability.timer -= dt;
+    game.ability.timer += dt;
 
     if (this.spell.casts < this.spell.maxCasts) {
       this.spell.castRechargeTimer += dt;
@@ -366,9 +380,9 @@ export class Game {
     }
   }
 
-  onCast(spell: GameObject, depth = 0) {
+  onCast(spell: GameObject, recursive = false) {
     for (let ritual of game.rituals) {
-      if (depth === 0 || ritual.depth! >= depth) {
+      if (!recursive || ritual.recursive !== false) {
         ritual.onCast?.(spell);
       }
     }
