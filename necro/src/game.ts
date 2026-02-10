@@ -50,6 +50,10 @@ export class GameObject {
   updateSpeed = 0;
   updateClock = 0;
 
+  constructor(props: Partial<GameObject> = {}) {
+    Object.assign(this, props);
+  }
+
   is(mask: number): boolean {
     return (this.tags & mask) > 0;
   }
@@ -234,7 +238,8 @@ export class Game {
   player: GameObject = undefined!;
   rituals: Ritual[] = [];
   state: State = PLAYING;
-  souls: number = 100;
+  souls: number = 0;
+  streak: number = 0;
 
   spell: Spell = {
     targetAngle: 0,
@@ -368,12 +373,10 @@ export class Game {
 
     // Collisions
     for (let object of this.objects) {
-      if (object.collisionMask) {
-        for (let target of this.objects) {
-          if (object.collisionMask & target.tags) {
-            if (overlaps(object.bounds(), target.bounds())) {
-              object.onCollision(target);
-            }
+      for (let target of this.objects) {
+        if (object.collisionMask & target.tags) {
+          if (overlaps(object.bounds(), target.bounds())) {
+            object.onCollision(target);
           }
         }
       }
@@ -382,9 +385,8 @@ export class Game {
 
   onCast(spell: GameObject, recursive = false) {
     for (let ritual of game.rituals) {
-      if (!recursive || ritual.recursive !== false) {
-        ritual.onCast?.(spell);
-      }
+      if (recursive && ritual.recursive != false) continue;
+      ritual.onCast?.(spell);
     }
   }
 
