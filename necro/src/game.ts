@@ -20,6 +20,8 @@ declare global {
   }
 }
 
+export const MAX_STREAK = 10;
+
 export class GameObject {
   // Physics
   x = 0;
@@ -44,6 +46,7 @@ export class GameObject {
   corpseChance = 0;
   despawnOnCollision = false;
   despawnOnBounce = false;
+  groupId = 0;
 
   // Behaviours
   behaviours: Behaviour[] = [];
@@ -190,7 +193,6 @@ export interface Spell {
   casts: number;
   castRechargeRate: number;
   castRechargeTimer: number;
-  castStartTime: number;
 }
 
 export interface Ability {
@@ -244,14 +246,13 @@ export class Game {
   spell: Spell = {
     targetAngle: 0,
     targetRadius: 15,
-    basePower: 120,
+    basePower: 180,
     shotsPerRound: 1,
     shotOffsetAngle: 0.1,
     maxCasts: 3,
     casts: 3,
     castRechargeRate: 1000,
     castRechargeTimer: 0,
-    castStartTime: Infinity,
   };
 
   ability: Ability = {
@@ -274,11 +275,19 @@ export class Game {
   despawn(object: GameObject) {
     object.emitter?.remove();
 
-    for (let behaviour of object.behaviours) {
+    for (let behaviour of Array.from(object.behaviours)) {
       object.removeBehaviour(behaviour);
     }
 
     removeFromArray(this.objects, object);
+  }
+
+  getStreakMultiplier() {
+    return this.streak / MAX_STREAK;
+  }
+
+  addSouls(amount: number) {
+    this.souls += amount + amount * this.getStreakMultiplier();
   }
 
   addRitual(ritual: Ritual) {
@@ -385,7 +394,7 @@ export class Game {
 
   onCast(spell: GameObject, recursive = false) {
     for (let ritual of game.rituals) {
-      if (recursive && ritual.recursive != false) continue;
+      if (recursive && ritual.recursive == false) continue;
       ritual.onCast?.(spell);
     }
   }
@@ -398,10 +407,5 @@ export class Game {
       x: center.x + vx * spell.targetRadius,
       y: center.y + vy * spell.targetRadius,
     };
-  }
-
-  getCastingEnergy(): number {
-    let delta = Date.now() - this.spell.castStartTime;
-    return Math.min(delta / 1000, 1);
   }
 }

@@ -42,13 +42,14 @@ export function Die(object: GameObject, killer?: GameObject) {
       game.spawn(Corpse(), center.x, center.y);
     }
 
-    game.souls += death.souls;
+    game.addSouls(death.souls);
   }
 
   game.despawn(object);
 }
 
 let castAnimationTimeout = 0;
+let castGroupId = 1;
 
 export function Cast() {
   let { spell, player } = game;
@@ -60,8 +61,9 @@ export function Cast() {
   clearTimeout(castAnimationTimeout);
   castAnimationTimeout = setTimeout(() => player.sprite = sprites.norman_arms_down, 500);
 
-  let power = spell.basePower + game.getCastingEnergy() * 100;
+  let power = spell.basePower;
   let targetAngle = spell.targetAngle - (spell.shotsPerRound * spell.shotOffsetAngle / 2);
+  let groupId = castGroupId++;
 
   for (let j = 0; j < spell.shotsPerRound; j++) {
     let projectile = Spell();
@@ -72,11 +74,10 @@ export function Cast() {
     projectile.y = y - projectile.sprite[3] / 2;
     projectile.vx = vx * power;
     projectile.vy = vy * power;
+    projectile.groupId = groupId;
     game.spawn(projectile);
     game.onCast(projectile);
   }
-
-  spell.castStartTime = Infinity;
 }
 
 export function Resurrect() {
@@ -90,16 +91,21 @@ export function Resurrect() {
     ritual.onResurrect?.();
   }
 
-  for (let object of game.objects) {
-    if (object.is(CORPSE)) {
-      game.despawn(object);
-      let unit = Skeleton();
-      fx.cloud(unit.bounds(), [
-        [sprites.p_green_1, sprites.p_green_2, sprites.p_green_3],
-        [sprites.p_green_2, sprites.p_green_3, sprites.p_green_4],
-        [sprites.p_green_1, sprites.p_green_3, sprites.p_green_5],
-      ]).burst(10).remove();
-      game.spawn(unit, object.x, 0);
+  let corpses = game.objects.filter(object => object.is(CORPSE));
+
+  for (let corpse of corpses) {
+    game.despawn(corpse);
+
+    let unit = Skeleton();
+    game.spawn(unit, corpse.x, 0);
+    fx.cloud(unit.bounds(), [
+      [sprites.p_green_1, sprites.p_green_2, sprites.p_green_3],
+      [sprites.p_green_2, sprites.p_green_3, sprites.p_green_4],
+      [sprites.p_green_1, sprites.p_green_3, sprites.p_green_5],
+    ]).burst(10).remove();
+
+    for (let ritual of game.rituals) {
+      ritual.onResurrection?.(unit);
     }
   }
 }

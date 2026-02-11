@@ -5,7 +5,7 @@ import { Cast, Resurrect } from "./actions";
 import { angleBetweenPoints } from "./helpers";
 import { Player } from "./objects";
 import { isLevelFinished, updateLevel } from "./levels";
-import { Bleed, Bouncing, Broken, Ceiling, Drunkard, Explosive, Homing, Knockback, Meteoric, Pact, Piercing, Rain, Seance, SplitOnBounce, Splitshot, Triggerfinger, Weightless } from "./rituals";
+import { Bleed, Bouncing, Broken, Ceiling, Drunkard, Explosive, Homing, Knockback, Meteoric, Pact, Piercing, Rain, Seance, SplitOnBounce, Splitshot, Streak, Triggerfinger, Weightless } from "./rituals";
 import { buy, restockShop, selectShopIndex, shop } from "./shop";
 
 let player = Player();
@@ -17,10 +17,6 @@ const ARROW_DOWN = 40;
 const SPACE = 32;
 const ENTER = 13;
 const KEY_P = 80;
-
-onpointerdown = () => {
-  game.spell.castStartTime = Date.now();
-}
 
 onpointerup = () => {
   if (game.state === PLAYING) {
@@ -58,6 +54,8 @@ function update(dt: number) {
     restockShop();
   }
 }
+
+game.addRitual(Streak);
 
 shop.rituals = [
   Ceiling,
