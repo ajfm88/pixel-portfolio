@@ -152,7 +152,7 @@ export class Seeking extends Behaviour {
 
     if (target) {
       let currentAngle = vectorToAngle(projectile.vx, projectile.vy);
-      let desiredAngle = angleBetweenPoints(projectile, target);
+      let desiredAngle = angleBetweenPoints(projectile, target.center());
       let angle = currentAngle + (desiredAngle - currentAngle) / 4;
       let magnitude = Math.hypot(projectile.vx, projectile.vy);
       let [vx, vy] = vectorFromAngle(angle);
@@ -212,5 +212,13 @@ export class HitStreak extends Behaviour {
     } else {
       game.streak = 0;
     }
+  }
+}
+
+export class Invulnerable extends Behaviour {
+  sprite = sprites.status_shielded;
+
+  onDamage(damage: Dmg): void {
+    if (damage.amount > 0) damage.amount = 0;
   }
 }
